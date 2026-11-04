@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetMap - Diagrama de Red</title>
+    <style>
+        /* Estilos visuales limpios y relajados */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #ffffff;
+            padding: 15px 25px;
+            border-bottom: 1px solid #e1e4e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 1.2rem;
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        #lienzo-red {
+            width: 100vw;
+            height: calc(100vh - 60px);
+            position: relative;
+            background-color: #fafbfc;
+        }
+
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #ffffff;
+            padding: 15px 25px;
+            border-bottom: 1px solid #e1e4e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 1.2rem;
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        #lienzo-red {
+            width: 100vw;
+            height: calc(100vh - 60px);
+            position: relative;
+            background-color: #fafbfc;
+            overflow: hidden;
+            /* Mantiene todo ordenado dentro del área de trabajo */
+        }
+
+        /* --- NUEVOS ESTILOS PARA LAS TARJETAS DE EQUIPOS --- */
+        .equipo-card {
+            position: absolute;
+            background: #ffffff;
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            padding: 10px 14px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            min-width: 140px;
+            user-select: none;
+        }
+
+        .equipo-card:hover {
+            border-color: #3498db;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .equipo-titulo {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .equipo-sub {
+            color: #7f8c8d;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Barra Superior Limpia -->
+    <header>
+        <h1>NetMap: Diagrama de Infraestructura de Red</h1>
+        <div id="panel-ajustes">
+            <!-- Aquí colocaremos los ajustes de personalización más adelante -->
+            <span style="font-size: 0.9rem; color: #666;">Modo Visualización</span>
+        </div>
+    </header>
+
+    <!-- Lienzo principal de la red -->
+    <div id="lienzo-red">
+        <!-- Aquí JavaScript dibujará los equipos y las líneas de conexión -->
+    </div>
+
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+/* Sugerencias rápidas de puertos por tipo de equipo */
+.port-presets {
+    margin: 0 0 12px;
+    padding: 10px 12px;
+    border: 1px solid #dce3ec;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+.port-presets > strong {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 12px;
+    color: #334155;
+}
+.port-presets > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.port-presets button {
+    min-width: 42px;
+    padding: 6px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    background: #fff;
+    font-weight: 800;
+}
+.port-presets button:hover {
+    border-color: #2563eb;
+    background: #eff6ff;
+}

@@ -1,0 +1,57 @@
+/* Ajustes Fase 2: selección rápida, equipo existente y vista conjunta */
+.existing-item {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(130px, 1fr) minmax(200px, 2fr) auto;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    background: #fff;
+    border-top: 1px solid var(--line, #dce3ec);
+    border-radius: 0;
+    padding: 11px 14px;
+}
+.existing-item strong { color: #172033; font-size: 14px; font-weight: 800; }
+.existing-item span { color: #475569; font-size: 12px; }
+.existing-item b { color: #1d4ed8; white-space: nowrap; font-size: 12px; }
+.existing-item.is-selected { background: #eff6ff; box-shadow: inset 4px 0 #2563eb; }
+.existing-device-head {
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 12px 14px;
+    background: #f8fafc;
+}
+.existing-device-head strong { font-size: 20px; font-weight: 850; line-height: 1.25; color: #111827; }
+.existing-device-head small { font-size: 12px; }
+.locked-tag { border-radius: 999px; }
+.existing-device-card { border-radius: 16px; overflow: hidden; }
+.existing-device-card .port:disabled { cursor: not-allowed; opacity: .48; filter: grayscale(.25); }
+.existing-general-legend { margin-top: 10px; }
+.shared-net-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 0 0 12px;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    background: #fff;
+}
+.shared-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.shared-actions button { font-size: 14px; font-weight: 800; }
+#contenedor-tarjetas.combined .fields,
+#contenedor-tarjetas.combined .gfields,
+#contenedor-tarjetas.combined .addgroup,
+#contenedor-tarjetas.combined .previewactions,
+#contenedor-tarjetas.combined .legend { display: none !important; }
+#contenedor-tarjetas.combined .cardbody { display: block; }
+#contenedor-tarjetas.combined .preview { border: 0; background: transparent; padding: 10px; }
+#contenedor-tarjetas.combined .previewhead { font-size: 15px; }
+#contenedor-tarjetas.combined .device-card { margin-bottom: 3px; }
+@media (max-width: 650px) {
+    .existing-item { grid-template-columns: 1fr; gap: 5px; }
+    .existing-item b { justify-self: start; }
+    .existing-device-head strong { font-size: 19px; }
+}

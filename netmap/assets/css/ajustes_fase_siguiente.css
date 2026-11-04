@@ -1,0 +1,19 @@
+/* Ajustes adicionales: iconos, filtro y secciones de puertos existentes. */
+#existingStateFilter { min-width: 150px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 7px; background: #fff; }
+.existing-port-grid, .existing-sections { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 14px; }
+.existing-sections .section { min-width: max-content; }
+.existing-sections .section-rows { display: flex; flex-direction: column; gap: 5px; }
+.existing-sections .prow { display: flex; gap: 4px; justify-content: center; }
+.existing-sections .section-label { font-size: 10px; font-weight: 700; color: #64748b; margin-bottom: 5px; text-align: center; }
+.existing-device-card[hidden], .existing-device-card .group[hidden], .existing-device-card .port[hidden] { display: none !important; }
+.icon-suggestion { display: grid; place-items: center; }
+.icon-suggestion img { display: block !important; }
+@media(max-width:700px) { #existingStateFilter { width:100%; } }
+
+/* Líneas de enlaces guardados entre equipos existentes seleccionados. */
+#existingPorts { position: relative; }
+.saved-links-overlay { position: absolute; inset: 0 auto auto 0; z-index: 4; pointer-events: none; overflow: visible; }
+.saved-link-line { fill: none; stroke-width: 3; opacity: .9; vector-effect: non-scaling-stroke; }
+.saved-link-line.is-dashed { stroke-dasharray: 7 5; }
+.saved-link-line.is-solid { stroke-dasharray: none; }
+.existing-device-card { position: relative; z-index: 1; }
