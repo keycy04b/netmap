@@ -211,6 +211,7 @@
             .fila-equipo { break-inside: avoid; }
         }
     </style>
+    <link rel="stylesheet" href="assets/css/netmap_global.css">
 </head>
 <body>
 
@@ -571,7 +572,7 @@
                 let htmlPuertos = `${fechasHtml}
                     <strong style="font-size:0.9rem; color:#2c3e50; display:block; margin-bottom:6px;">Puertos y Enlaces Físicos:</strong>
                     <table class="tabla-puertos"><thead><tr>
-                        <th>N° Puerto / Tipo</th><th>Estado</th>
+                        <th>N° Puerto</th><th>Tipo de puerto</th><th>Alcance</th><th>Medio físico</th><th>Estado</th>
                         <th>Conectado a (Equipo Destino)</th><th>Puerto Destino</th>
                         <th>Creación del puerto</th><th>Modificación del puerto</th>
                     </tr></thead><tbody>`;
@@ -589,7 +590,10 @@
                         : `<span style="color:#94a3b8; font-style:italic;">Sin enlace</span>`;
                     const puertoDestinoInfo = p.puerto_destino ? `Puerto #${p.puerto_destino}` : "-";
                     htmlPuertos += `<tr>
-                        <td><strong>Puerto #${p.numero_puerto}</strong> <span class="badge" style="background:#e2e8f0; font-size:0.7rem;">${p.tipo_puerto || "N/D"}</span></td>
+                        <td><strong>Puerto #${p.numero_puerto}</strong></td>
+                        <td><span class="badge" style="background:#e2e8f0; font-size:0.7rem;">${p.tipo_puerto || "N/D"}</span></td>
+                        <td>${p.alcance || "LAN"}</td>
+                        <td>${String(p.medio || "UTP").toUpperCase() === "FIBRA" ? "Fibra óptica" : "Ethernet / UTP"}</td>
                         <td><span class="badge ${claseEstado}">${estado}</span></td>
                         <td>${destinoInfo}</td><td>${puertoDestinoInfo}</td>
                         <td>${formatearFecha(p.fecha_creacion) === "No disponible" ? "Pendiente de implementar" : formatearFecha(p.fecha_creacion)}</td>
@@ -655,6 +659,7 @@
 
         init();
     </script>
+    <script src="assets/js/netmap_global.js" defer></script>
 </body>
 </html>
 
