@@ -26,8 +26,11 @@
     const item=data.equipos.find(e=>Number(e.id_equipo)===currentId); if(!item)return;
     for(const [key,val] of Object.entries(item)){const input=form.elements[key];if(input)input.value=val??'';}
     form.elements.id_equipo.value=currentId; fillCatalogs(item);
-    $('#deviceIcon').src=item.icono||item.ruta_icono||'assets/img/iconos/switch.svg';
-    $('#deviceIcon').onerror=()=>{$('#deviceIcon').style.display='none';}; $('#deviceIcon').style.display='block';
+    $('#deviceIcon').onload=()=>{$('#deviceIcon').style.display='block';$('#devicePlaceholder').style.display='none';};
+    $('#deviceIcon').onerror=()=>{$('#deviceIcon').style.display='none';$('#devicePlaceholder').style.display='grid';};
+    $('#deviceIcon').src=item.icono||item.ruta_icono||'';
+    $('#deviceIcon').style.display='none';
+    $('#devicePlaceholder').style.display='grid';
     await loadPorts();
   }
   async function loadPorts(){
