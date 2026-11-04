@@ -99,10 +99,41 @@ button.danger { background: #55252b; border-color: #8f454b; }
 }
 
 .mini-ports {
-    display: grid;
+    display: flex;
     width: 100%;
-    grid-template-columns: repeat(6, minmax(24px, 1fr));
+    flex-direction: column;
+    gap: 12px;
+}
+
+.mini-group {
+    padding: 9px;
+    background: #101a2a;
+    border: 1px solid #293950;
+    border-radius: 8px;
+}
+
+.mini-group-title {
+    margin-bottom: 8px;
+    color: #bdc9d9;
+    font-size: .72rem;
+    font-weight: 700;
+}
+
+.mini-sections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.mini-section {
+    display: grid;
+    flex: 1 1 100px;
+    grid-template-columns: repeat(auto-fit, minmax(24px, 1fr));
     gap: 5px;
+    padding: 6px;
+    background: #0b1423;
+    border: 1px dashed #34465f;
+    border-radius: 6px;
 }
 
 .mini-port {
@@ -203,5 +234,5 @@ th {
 @media (max-width: 480px) {
     .twocol { grid-template-columns: 1fr; }
     .panel { padding: 13px; }
-    .mini-ports { grid-template-columns: repeat(4, minmax(24px, 1fr)); }
+     .mini-sections { flex-direction: column; }
 }
