@@ -72,3 +72,8 @@ html.netmap-dark #lienzo-red { background:#0b1220!important; }
 html.netmap-dark .equipo-card { background:#141f31!important; border-color:#34465f!important; color:#e8edf5!important; }
 html.netmap-dark .equipo-titulo { color:#e8edf5!important; }
 html.netmap-dark .equipo-sub { color:#a5b2c5!important; }
+
+.device-image .mini-sections { display:flex; flex-direction:column; gap:8px; }
+.device-image .mini-section { display:flex; flex-direction:column; flex:0 0 auto; gap:5px; min-width:0; }
+.device-image .mini-port-row { display:flex; flex-wrap:nowrap; justify-content:center; gap:5px; }
+.device-image .mini-port-row .mini-port { flex:1 1 0; min-width:25px; max-width:42px; }
