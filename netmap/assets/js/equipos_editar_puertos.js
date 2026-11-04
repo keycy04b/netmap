@@ -32,8 +32,8 @@
   }
   async function loadPorts(){
     const body=$('#portsBody');body.innerHTML='<tr><td colspan="8">Cargando puertos…</td></tr>';
-    try{const res=await fetch(`api/obtener_puertos_equipo.php?id_equipo=${currentId}`,{headers:{Accept:'application/json'}});const json=await res.json();if(!res.ok||!Array.isArray(json))throw new Error(json.mensaje||'Respuesta de puertos inválida.');ports=json;renderPorts();renderMiniPorts();}
-    catch(e){body.innerHTML=`<tr><td colspan="8">${esc(e.message)}. Verifica la API de puertos.</td></tr>`;}
+    try{const res=await fetch(`api/obtener_puertos_equipo.php?id_equipo=${currentId}`,{headers:{Accept:'application/json'}});const json=await res.json();if(!res.ok||!Array.isArray(json))throw new Error(json.mensaje||'Respuesta de puertos inválida.');ports=json;renderPorts();renderMiniPorts();drawEditLinks();}
+    catch(e){body.innerHTML=`<tr><td colspan="10">${esc(e.message)}. Verifica la API de puertos.</td></tr>`;}
   }
   function stateClass(p){if(Number(p.esta_enlazado)===1||p.equipo_destino)return 'linked';const s=String(p.estado||'').toUpperCase();if(s==='RESERVADO')return 'reserved';if(s==='DANADO'||s==='DAÑADO')return 'damaged';if(s==='NO_DISPONIBLE')return 'occupied';return 'available';}
   function renderPorts(){const body=$('#portsBody');if(!ports.length){body.innerHTML='<tr><td colspan="10">Este equipo no tiene puertos registrados.</td></tr>';return;}body.innerHTML=ports.map(p=>{const cls=stateClass(p);const status=cls==='linked'?'ENLAZADO':cls==='occupied'?'OCUPADO (SIN ENLACE)':cls==='reserved'?'RESERVADO':cls==='damaged'?'DAÑADO':'DISPONIBLE';const linked=Boolean(p.equipo_destino)||Number(p.esta_enlazado)===1;return `<tr><td><b>${esc(p.numero_puerto)}</b></td><td>${esc(p.tipo_puerto||'RED')}</td><td>${esc(p.alcance||'LAN')}</td><td>${String(p.medio||'UTP').toUpperCase()==='FIBRA'?'Fibra óptica':'Ethernet / UTP'}</td><td><span class="status ${cls}">${status}</span></td><td>${esc(p.equipo_destino||'—')}</td><td>${esc(p.puerto_destino||'—')}</td><td>${esc(p.fecha_creacion||'—')}</td><td>${esc(p.fecha_actualizacion||'—')}</td><td class="actions"><button data-action="state" data-id="${p.id_puerto}">Cambiar estado</button>${linked?`<button class="danger" data-action="unlink" data-id="${p.id_puerto}">Quitar enlace</button>`:''}</td></tr>`;}).join('');}
@@ -58,7 +58,7 @@
         if (!sectionPorts.length) continue;
 
         sections.push(`<div class="mini-section" aria-label="Sección física ${index + 1}">
-          ${sectionPorts.map(port => `<button type="button" title="Puerto ${esc(port.numero_puerto)} · ${esc(port.estado)}" class="mini-port ${stateClass(port)}${pendingEditPort?.id===Number(port.id_puerto)?' selected':''}" data-action="edit-source-port" data-port-id="${esc(port.id_puerto)}" data-medium="${esc(port.medio||port.tipo_puerto||'UTP')}">${esc(port.numero_puerto)}</button>`).join('')}
+          ${sectionPorts.map(port => `<button type="button" title="Puerto ${esc(port.numero_puerto)} · ${esc(port.estado)}" class="mini-port ${stateClass(port)}${pendingEditPort?.id===Number(port.id_puerto)?' selected':''}" data-action="edit-source-port" data-port-id="${esc(port.id_puerto)}" data-peer-port="${esc(port.id_puerto_conectado||'')}" data-peer-equipment="${esc(port.id_equipo_conectado||'')}" data-medium="${esc(port.medio||port.tipo_puerto||'UTP')}">${esc(port.numero_puerto)}</button>`).join('')}
         </div>`);
       }
 
@@ -102,10 +102,29 @@
         <header><strong>${esc(entry.item.nombre_equipo||entry.item.nombre_tipo)}</strong><button type="button" class="danger" data-action="target-remove" data-id="${id}">×</button></header>
         <div class="target-port-groups">${entry.ports.map(p=>{
           const cls=stateClass(p), linked=Number(p.esta_enlazado)===1;
-          return `<button type="button" class="mini-port ${cls}" data-action="target-port" data-equipment-id="${id}" data-port-id="${p.id_puerto}" data-port-number="${p.numero_puerto}" data-medium="${p.medio||p.tipo_puerto||'UTP'}" ${cls!=='available'?'disabled':''} title="${esc(p.alcance||'LAN')} · ${esc(p.medio||'UTP')}">#${p.numero_puerto}</button>`;
+          return `<button type="button" class="mini-port ${cls}" data-action="target-port" data-equipment-id="${id}" data-port-id="${p.id_puerto}" data-peer-port="${p.id_puerto_conectado||''}" data-port-number="${p.numero_puerto}" data-medium="${p.medio||p.tipo_puerto||'UTP'}" ${cls!=='available'?'disabled':''} title="${esc(p.alcance||'LAN')} · ${esc(p.medio||'UTP')}">#${p.numero_puerto}</button>`;
         }).join('')}</div>
       </article>`;
     }).join('');
+  }
+  function drawEditLinks(){
+    const root=$('#editor');if(!root)return;
+    root.querySelector('.edit-links-overlay')?.remove();
+    const width=Math.max(root.scrollWidth,root.clientWidth),height=Math.max(root.scrollHeight,root.clientHeight);
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('class','edit-links-overlay');svg.setAttribute('width',width);svg.setAttribute('height',height);svg.setAttribute('viewBox',`0 0 ${width} ${height}`);
+    const rect=root.getBoundingClientRect();
+    root.querySelectorAll('#miniPorts [data-peer-port]').forEach(source=>{
+      const peerId=source.dataset.peerPort;if(!peerId)return;
+      const target=root.querySelector(`#editExistingPorts [data-port-id="${CSS.escape(peerId)}"]`);
+      if(!target)return;
+      const a=source.getBoundingClientRect(),b=target.getBoundingClientRect();
+      const x1=a.left-rect.left+a.width/2,y1=a.top-rect.top+a.height/2,x2=b.left-rect.left+b.width/2,y2=b.top-rect.top+b.height/2,mid=(x1+x2)/2;
+      const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('d',`M ${x1} ${y1} C ${mid} ${y1}, ${mid} ${y2}, ${x2} ${y2}`);
+      path.setAttribute('class','edit-link-line');svg.append(path);
+    });
+    if(svg.childElementCount)root.prepend(svg);
   }
   async function createEditLink(a,b){
     const result=await post('api/guardar_enlace_existente.php',{id_puerto_origen:a,id_puerto_destino:b});
@@ -116,6 +135,7 @@
       entry.ports=await r.json();
     }
     renderTargetPorts();
+    drawEditLinks();
     alert(result.mensaje);
     pendingEditPort=null;pendingTargetPair=null;
   }
@@ -156,6 +176,8 @@
   $('#editExistingPair').addEventListener('click',()=>{editMode=editMode==='pair'?'link':'pair';pendingTargetPair=null;pendingEditPort=null;$('#editExistingPair').classList.toggle('active',editMode==='pair');});
   $('#editScrollPorts').addEventListener('click',()=>$('#portsAnchor').scrollIntoView({behavior:'smooth',block:'start'}));
   $('#editScrollTop').addEventListener('click',()=>$('#editor').scrollIntoView({behavior:'smooth',block:'start'}));
+  window.addEventListener('resize',drawEditLinks);
+  window.addEventListener('scroll',drawEditLinks,true);
   renderTargetSearch();
   // Respeta el equipo enviado desde el listado mediante ?id=...
   const initialId = Number(data.equipoInicial) || 0;
