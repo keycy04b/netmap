@@ -58,11 +58,14 @@ if (!is_array($payload)) {
 
 $equipmentData = $payload['equipos'] ?? $payload;
 $linkData = $payload['enlaces'] ?? [];
-if (!is_array($equipmentData) || !$equipmentData) {
-    jsonExit(400, ['estado' => 'error', 'mensaje' => 'No hay equipos para registrar.']);
+if (!is_array($equipmentData)) {
+    jsonExit(400, ['estado' => 'error', 'mensaje' => 'La lista de equipos no es válida.']);
 }
 if (!is_array($linkData)) {
     jsonExit(400, ['estado' => 'error', 'mensaje' => 'La lista de enlaces no es válida.']);
+}
+if (!$equipmentData && !$linkData) {
+    jsonExit(400, ['estado' => 'error', 'mensaje' => 'No hay equipos ni enlaces para guardar.']);
 }
 
 $newEquipmentIds = [];
