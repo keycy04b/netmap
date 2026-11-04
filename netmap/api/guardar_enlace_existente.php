@@ -26,7 +26,8 @@ $conexion->begin_transaction();
 
 try {
     $check = $conexion->prepare(
-        "SELECT p.id_puerto, p.id_equipo, p.estado, p.medio,
+        "SELECT p.id_puerto, p.id_equipo, p.estado,
+                COALESCE(NULLIF(p.medio,''), IF(p.tipo_puerto='FIBRA','FIBRA','UTP')) AS medio,
                 EXISTS(SELECT 1 FROM enlaces e
                        WHERE e.id_puerto_origen=p.id_puerto
                           OR e.id_puerto_destino=p.id_puerto) AS enlazado
