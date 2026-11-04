@@ -698,8 +698,8 @@
         if (!selectedExistingList.size) { box.replaceChildren(); return; }
         box.innerHTML = [...selectedExistingList.values()].map(entry => {
             const item = existingEquipment.find(e => Number(e.id_equipo) === entry.id) || {};
-            if (entry.loading) return `<article class="existing-device-card"><header class="existing-device-head"><div><strong>${esc(entry.name)}</strong></div><span class="locked-tag">Cargando puertos…</span></header></article>`;
-            if (!entry.ports.length) return `<article class="existing-device-card"><header class="existing-device-head"><div><strong>${esc(entry.name)}</strong><small>${esc(item.nombre_tipo || 'Equipo registrado')} · ${esc(item.nombre_sede || 'Sede —')} · Piso ${esc(item.numero_piso || '—')}</small></div><span class="locked-tag">Equipo bloqueado</span></header><p>Este equipo no tiene puertos registrados.</p></article>`;
+            if (entry.loading) return `<article class="existing-device-card"><header class="existing-device-head"><div><strong>${esc(entry.name)}</strong></div><button type="button" class="existing-remove" data-action="remove-existing" data-id="${entry.id}" aria-label="Quitar equipo">×</button><span class="locked-tag">Cargando puertos…</span></header></article>`;
+            if (!entry.ports.length) return `<article class="existing-device-card"><header class="existing-device-head"><div><strong>${esc(entry.name)}</strong><small>${esc(item.nombre_tipo || 'Equipo registrado')} · ${esc(item.nombre_sede || 'Sede —')} · Piso ${esc(item.numero_piso || '—')}</small></div><button type="button" class="existing-remove" data-action="remove-existing" data-id="${entry.id}" aria-label="Quitar equipo">×</button><span class="locked-tag">Equipo bloqueado</span></header><p>Este equipo no tiene puertos registrados.</p></article>`;
             const groups = new Map();
             entry.ports.forEach(port => {
                 const key = `${port.grupo_puerto ?? port.medio ?? port.tipo_puerto ?? 'RED'}|${port.alcance ?? 'LAN'}|${port.medio ?? port.tipo_puerto ?? 'UTP'}`;
