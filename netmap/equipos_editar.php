@@ -21,6 +21,8 @@ if (!$id || $id < 1) {
         .ports{margin-top:22px;border-top:1px solid #e2e8f0;padding-top:18px}.warning{background:#fff7ed;color:#9a3412;padding:12px;border-radius:10px;margin-top:12px;font-size:.9rem}
         @media(max-width:650px){.grid{grid-template-columns:1fr}.wide{grid-column:auto}.panel{padding:16px}}
     </style>
+    <link rel="stylesheet" href="assets/css/netmap_global.css">
+    <script src="assets/js/netmap_global.js" defer></script>
 </head>
 <body>
 <header class="top"><strong>◈ NetMap · Editar equipo</strong><a href="equipos_lista.php">← Volver al listado</a></header>
