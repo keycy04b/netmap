@@ -84,14 +84,14 @@
     </div>`).join('');
   }
   async function selectTarget(id){
-    if(selectedTargets.has(id)){selectedTargets.delete(id);renderTargetSearch();renderTargetPorts();return;}
+    if(selectedTargets.has(id)){selectedTargets.delete(id);renderTargetSearch();renderTargetPorts();drawEditLinks();return;}
     const item=data.equipos.find(e=>Number(e.id_equipo)===id);if(!item)return;
     selectedTargets.set(id,{item,ports:[],loading:true});
     renderTargetSearch();renderTargetPorts();
     try{
       const r=await fetch(`api/obtener_puertos_enlace.php?id_equipo=${id}`,{headers:{Accept:'application/json'}});
       const result=await r.json();if(!r.ok||!Array.isArray(result))throw new Error(result.mensaje||'No se pudieron cargar puertos.');
-      selectedTargets.get(id).ports=result;selectedTargets.get(id).loading=false;renderTargetPorts();
+      selectedTargets.get(id).ports=result;selectedTargets.get(id).loading=false;renderTargetPorts();drawEditLinks();
     }catch(error){selectedTargets.delete(id);renderTargetSearch();renderTargetPorts();alert(error.message);}
   }
   function renderTargetPorts(){
