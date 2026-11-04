@@ -132,6 +132,13 @@
         }
         .badge-enlazado { background-color: #e8f8f5; color: #1abc9c; }
         .badge-libre { background-color: #fef9e7; color: #f39c12; }
+        .badge-estado {
+            display: inline-block;
+            margin: 2px 3px 2px 0;
+            background: #edf2f7;
+            color: #334155;
+            white-space: nowrap;
+        }
        
         .fila-equipo { cursor: pointer; }
         .fila-equipo:hover { background-color: #f8fafc; }
@@ -576,13 +583,20 @@
                     </tr></thead><tbody>`;
 
                 puertos.forEach(p => {
+                    const enlazado = Number(p.esta_enlazado) === 1 || Boolean(p.equipo_destino);
+                    const estado = enlazado ? "ENLAZADO" : String(p.estado || "N/D").toUpperCase();
+                    const claseEstado = enlazado ? "badge-enlazado"
+                        : estado === "DISPONIBLE" ? "badge-libre"
+                        : estado === "RESERVADO" ? "badge-reservado"
+                        : estado === "DANADO" ? "badge-danado"
+                        : "badge-ocupado";
                     const destinoInfo = p.equipo_destino
                         ? `<span style="color:#27ae60; font-weight:600;">${p.equipo_destino}</span>`
-                        : `<span style="color:#94a3b8; font-style:italic;">Sin enlace (Libre)</span>`;
+                        : `<span style="color:#94a3b8; font-style:italic;">Sin enlace</span>`;
                     const puertoDestinoInfo = p.puerto_destino ? `Puerto #${p.puerto_destino}` : "-";
                     htmlPuertos += `<tr>
                         <td><strong>Puerto #${p.numero_puerto}</strong> <span class="badge" style="background:#e2e8f0; font-size:0.7rem;">${p.tipo_puerto || "N/D"}</span></td>
-                        <td><span class="badge" style="background:#f1f5f9; color:#334155;">${p.estado || "N/D"}</span></td>
+                        <td><span class="badge ${claseEstado}">${estado}</span></td>
                         <td>${destinoInfo}</td><td>${puertoDestinoInfo}</td>
                         <td>${formatearFecha(p.fecha_creacion) === "No disponible" ? "Pendiente de implementar" : formatearFecha(p.fecha_creacion)}</td>
                         <td>${formatearFecha(p.fecha_actualizacion) === "No disponible" ? "Pendiente de implementar" : formatearFecha(p.fecha_actualizacion)}</td>
