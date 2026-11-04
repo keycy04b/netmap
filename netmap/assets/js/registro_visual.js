@@ -1123,7 +1123,7 @@
 
     $('#form-lote').addEventListener('submit', async event => {
         event.preventDefault();
-        const cards = $('.device-card');
+        const cards = Array.from(document.querySelectorAll('.device-card'));
         const activeCards = cards.filter(card =>
             ['id_tipo_equipo','marca','modelo','serial','direccion_ip'].some(name => $(`[name="${name}"]`, card)?.value.trim()) ||
             $('.sede', card)?.value || $('.piso', card)?.value || $('[name="nombre_equipo"]', card)?.value.trim()
