@@ -459,18 +459,9 @@
             }
 
             equipos.forEach(eq => {
-                const resumenEstados = [
-                    ['Enlazados', eq.puertos_enlazados],
-                    ['Disponibles', eq.puertos_disponibles],
-                    ['Ocupados', eq.puertos_ocupados],
-                    ['Reservados', eq.puertos_reservados],
-                    ['Dañados', eq.puertos_danados]
-                ].filter(([, cantidad]) => Number(cantidad || 0) > 0);
-                let estadoHtml = resumenEstados.length
-                    ? resumenEstados.map(([nombre, cantidad]) =>
-                        `<span class="badge badge-estado">${nombre}: ${cantidad}</span>`
-                      ).join(' ')
-                    : `<span class="badge badge-libre">Sin puertos registrados</span>`;
+                let estadoHtml = eq.total_enlaces > 0
+                    ? `<span class="badge badge-enlazado">Enlazado (${eq.total_enlaces})</span>`
+                    : `<span class="badge badge-libre">Libre</span>`;
 
                 let nombreDisplay = eq.nombre_equipo ? eq.nombre_equipo : 'Sin nombre asignado';
 
