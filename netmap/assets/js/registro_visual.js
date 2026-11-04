@@ -715,6 +715,7 @@
             });
         }
         drawSavedExistingLinks();
+        drawWires();
     }
 
     function drawSavedExistingLinks() {
