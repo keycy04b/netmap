@@ -36,7 +36,7 @@ $conexion->close();
 <div id="searchResults" class="search-results"></div>
 <div id="editExistingPorts"></div>
 </section>
-<section class="panel" id="portsAnchor"><h2>Puertos del equipo</h2><div class="table-wrap"><table><thead><tr><th>Puerto</th><th>Tipo / medio</th><th>Estado</th><th>Equipo destino</th><th>Puerto destino</th><th>Creación</th><th>Actualización</th><th>Acciones</th></tr></thead><tbody id="portsBody"><tr><td colspan="8">Selecciona un equipo.</td></tr></tbody></table></div></section>
+<section class="panel" id="portsAnchor"><h2>Puertos del equipo</h2><div class="table-wrap"><table><thead><tr><th>Puerto</th><th>Tipo</th><th>Alcance</th><th>Medio físico</th><th>Estado</th><th>Equipo destino</th><th>Puerto destino</th><th>Creación</th><th>Actualización</th><th>Acciones</th></tr></thead><tbody id="portsBody"><tr><td colspan="10">Selecciona un equipo.</td></tr></tbody></table></div></section>
 </div></main>
 <div class="floating-navigation"><button type="button" id="editScrollPorts">↓ Puertos</button><button type="button" id="editScrollTop">↑ Equipo</button></div>
 <script>window.NETMAP_EDIT_DATA={equipoInicial:<?= isset($_GET['id']) ? (int)$_GET['id'] : 0 ?>,equipos:<?= json_encode($equipos,JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP) ?>,tipos:<?= json_encode($tipos,JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP) ?>,sedes:<?= json_encode($sedes,JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP) ?>,pisos:<?= json_encode($pisos,JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP) ?>};</script><script src="assets/js/equipos_editar_puertos.js" defer></script></body></html>
