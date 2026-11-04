@@ -112,7 +112,7 @@
         <header><strong>${esc(entry.item.nombre_equipo||entry.item.nombre_tipo)}</strong><button type="button" class="danger" data-action="target-remove" data-id="${id}">×</button></header>
         <div class="target-port-groups">${entry.ports.map(p=>{
           const cls=stateClass(p), linked=Number(p.esta_enlazado)===1;
-          return `<button type="button" class="mini-port ${cls}" data-action="target-port" data-equipment-id="${id}" data-port-id="${p.id_puerto}" data-peer-port="${p.id_puerto_conectado||''}" data-port-number="${p.numero_puerto}" data-medium="${p.medio||p.tipo_puerto||'UTP'}" ${cls!=='available'?'disabled':''} title="${esc(p.alcance||'LAN')} · ${esc(p.medio||'UTP')}">#${p.numero_puerto}</button>`;
+          return `<button type="button" class="mini-port ${cls}" data-action="target-port" data-equipment-id="${id}" data-port-id="${p.id_puerto}" data-peer-port="${p.id_puerto_conectado||''}" data-port-number="${p.numero_puerto}" data-medium="${p.medio||p.tipo_puerto||'UTP'}" ${editMode!=='state' && cls!=='available'?'disabled':''} title="${esc(p.alcance||'LAN')} · ${esc(p.medio||'UTP')}">#${p.numero_puerto}</button>`;
         }).join('')}</div>
       </article>`;
     }).join('');
@@ -155,6 +155,16 @@
     const id=Number(button.dataset.equipmentId), portId=Number(button.dataset.portId);
     if(editMode==='state'){
       const p=selectedTargets.get(id)?.ports.find(x=>Number(x.id_puerto)===portId);if(!p)return;
+      if(Number(p.esta_enlazado)===1){
+        if(!confirm('Este puerto tiene un enlace guardado. ¿Eliminar el enlace y liberar ambos puertos?'))return;
+        await post('api/eliminar_enlace_puerto.php',{id_puerto:portId});
+        await loadPorts();
+        for(const targetId of selectedTargets.keys()){
+          const refreshed=await fetch(`api/obtener_puertos_enlace.php?id_equipo=${targetId}`);
+          selectedTargets.get(targetId).ports=await refreshed.json();
+        }
+        renderTargetPorts();drawEditLinks();return;
+      }
       const choices=[['DISPONIBLE','Disponible'],['NO_DISPONIBLE','Ocupado'],['RESERVADO','Reservado'],['DANADO','Dañado']];
       const chosen=prompt('Estado nuevo:\\n1 Disponible\\n2 Ocupado\\n3 Reservado\\n4 Dañado',String(Math.max(1,choices.findIndex(x=>x[0]===p.estado)+1)));
       if(chosen===null)return;const opt=choices[Number(chosen)-1];if(!opt){alert('Selecciona 1, 2, 3 o 4.');return;}
@@ -178,7 +188,12 @@
   });
   $('#miniPorts').addEventListener('click',e=>{
     const b=e.target.closest('[data-action="edit-source-port"]');if(!b)return;
-    if(editMode==='state'){const p=ports.find(x=>Number(x.id_puerto)===Number(b.dataset.portId));if(!p)return;const choices=[['DISPONIBLE','Disponible'],['NO_DISPONIBLE','Ocupado'],['RESERVADO','Reservado'],['DANADO','Dañado']];const chosen=prompt('Estado nuevo:\\n1 Disponible\\n2 Ocupado\\n3 Reservado\\n4 Dañado',String(Math.max(1,choices.findIndex(x=>x[0]===p.estado)+1)));if(chosen===null)return;const opt=choices[Number(chosen)-1];if(!opt)return;post('api/cambiar_estado_puerto.php',{id_puerto:p.id_puerto,estado:opt[0]}).then(loadPorts).catch(err=>alert(err.message));return;}
+    const sourcePort=ports.find(x=>Number(x.id_puerto)===Number(b.dataset.portId));if(!sourcePort)return;
+    if(editMode==='state'){
+      if(Number(sourcePort.esta_enlazado)===1){if(!confirm('Este puerto tiene un enlace guardado. ¿Eliminar el enlace y liberar ambos puertos?'))return;post('api/eliminar_enlace_puerto.php',{id_puerto:sourcePort.id_puerto}).then(loadPorts).catch(err=>alert(err.message));return;}
+      const choices=[['DISPONIBLE','Disponible'],['NO_DISPONIBLE','Ocupado'],['RESERVADO','Reservado'],['DANADO','Dañado']];const chosen=prompt('Estado nuevo:\\n1 Disponible\\n2 Ocupado\\n3 Reservado\\n4 Dañado',String(Math.max(1,choices.findIndex(x=>x[0]===sourcePort.estado)+1)));if(chosen===null)return;const opt=choices[Number(chosen)-1];if(!opt)return;post('api/cambiar_estado_puerto.php',{id_puerto:sourcePort.id_puerto,estado:opt[0]}).then(loadPorts).catch(err=>alert(err.message));return;
+    }
+    if(stateClass(sourcePort)!=='available'){alert('Solo puedes iniciar un enlace desde un puerto disponible.');return;}
     pendingEditPort={id:Number(b.dataset.portId),medium:b.dataset.medium};
     $('#editExistingPorts').scrollIntoView({behavior:'smooth',block:'center'});
     alert('Puerto de origen seleccionado. Elige el puerto destino en un equipo buscado.');
