@@ -77,3 +77,14 @@ html.netmap-dark .equipo-sub { color:#a5b2c5!important; }
 .device-image .mini-section { display:flex; flex-direction:column; flex:0 0 auto; gap:5px; min-width:0; }
 .device-image .mini-port-row { display:flex; flex-wrap:nowrap; justify-content:center; gap:5px; }
 .device-image .mini-port-row .mini-port { flex:1 1 0; min-width:25px; max-width:42px; }
+
+.netmap-dark .device-image { background:#0b1423!important; border-color:#34465f!important; }
+.netmap-dark .device-image .mini-group { background:#101a2a!important; border-color:#34465f!important; }
+.netmap-dark .device-image .mini-section { background:#0b1423!important; border-color:#34465f!important; }
+.netmap-dark .device-image .mini-group-title { color:#e2e8f0!important; }
+.netmap-dark .device-image .mini-port { color:#fff!important; }
+.netmap-dark .device-image .mini-port.available { background:#207a54!important; }
+.netmap-dark .device-image .mini-port.linked { background:#9a5d21!important; }
+.netmap-dark .device-image .mini-port.occupied { background:#596579!important; }
+.netmap-dark .device-image .mini-port.reserved { background:#7355a5!important; }
+.netmap-dark .device-image .mini-port.damaged { background:#a63c47!important; }
