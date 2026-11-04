@@ -1,0 +1,35 @@
+/* Estilos compartidos NetMap: navegación, modo oscuro y utilidades. */
+:root { --netmap-bg:#f3f6fa; --netmap-surface:#fff; --netmap-text:#172033; --netmap-muted:#64748b; --netmap-border:#dce3ec; }
+body { background:var(--netmap-bg); color:var(--netmap-text); transition:background .2s,color .2s; }
+.netmap-nav { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 18px; background:#111b2d; color:#fff; border-bottom:1px solid #2d3a50; }
+.netmap-nav .brand { font-weight:850; margin-right:10px; color:#fff; text-decoration:none; }
+.netmap-nav a,.netmap-nav button { color:#e5edf9; text-decoration:none; border:1px solid #52627a; background:#1c2a40; border-radius:8px; padding:7px 10px; font:inherit; cursor:pointer; }
+.netmap-nav a:hover,.netmap-nav button:hover { background:#2b405e; }
+.netmap-nav .spacer { flex:1; }
+.netmap-dark { --netmap-bg:#0b1220; --netmap-surface:#141f31; --netmap-text:#e8edf5; --netmap-muted:#a5b2c5; --netmap-border:#2b3b52; color-scheme:dark; }
+.netmap-dark body { background:var(--netmap-bg)!important; color:var(--netmap-text)!important; }
+.netmap-dark .container,.netmap-dark .panel,.netmap-dark .existing-panel,.netmap-dark .device-card,.netmap-dark .preview,.netmap-dark .filtros-container,.netmap-dark .existing-device-head { background:var(--netmap-surface)!important; color:var(--netmap-text)!important; border-color:var(--netmap-border)!important; }
+.netmap-dark input,.netmap-dark select,.netmap-dark textarea { background:#0d1728!important; color:#edf3fb!important; border-color:#40516a!important; }
+.netmap-dark table,.netmap-dark td,.netmap-dark th { color:var(--netmap-text); border-color:var(--netmap-border); }
+.netmap-dark th,.netmap-dark .cardhead,.netmap-dark .puertos-detalles { background:#18263a!important; color:var(--netmap-text)!important; }
+.netmap-dark .existing-item,.netmap-dark .group-settings-item,.netmap-dark .icon-preview,.netmap-dark .icon-drop { background:#172438!important; color:var(--netmap-text)!important; border-color:var(--netmap-border)!important; }
+.netmap-dark .existing-item strong,.netmap-dark .existing-item span,.netmap-dark .existing-device-head strong,.netmap-dark .existing-device-head small { color:var(--netmap-text)!important; }
+.netmap-dark .section { background:#0b1423!important; border-color:#43536a!important; }
+.netmap-dark .group { background:#172438!important; }
+.netmap-dark .badge { filter:brightness(.82); }
+.floating-navigation { position:fixed; right:18px; bottom:18px; z-index:1000; display:grid; gap:8px; }
+.floating-navigation button { border:1px solid #51647e; border-radius:999px; padding:10px 14px; background:#172a43; color:#fff; box-shadow:0 4px 16px #0003; cursor:pointer; font-weight:700; }
+.shared-net-controls { position:relative; z-index:6; display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; margin:12px 0; padding:12px; border:1px solid var(--netmap-border); border-radius:12px; background:var(--netmap-surface); }
+.shared-actions { display:flex; gap:8px; flex-wrap:wrap; }
+.shared-actions button.active { outline:3px solid #8b5cf6; }
+.existing-device-card { position:relative; z-index:1; }
+.existing-device-head { display:flex; align-items:center; gap:12px; }
+.existing-device-head > div { flex:1; min-width:0; }
+.existing-remove { width:32px; height:32px; flex:0 0 32px; border:0; border-radius:50%; background:#fee2e2; color:#b42318; font-size:22px; font-weight:800; cursor:pointer; }
+.existing-ports { position:relative; }
+.draft-wires { position:absolute; inset:0 auto auto 0; z-index:5; pointer-events:none; overflow:visible; }
+.draft-wire { fill:none; stroke:#e23a3a; stroke-width:2.8; stroke-dasharray:7 5; vector-effect:non-scaling-stroke; }
+.draft-wire.wire-fiber { stroke:#2563eb; stroke-dasharray:none; }
+#existingPanel { position:relative; }
+#portsAnchor { scroll-margin-top:18px; }
+@media(max-width:650px){ .netmap-nav { gap:6px; padding:9px; } .netmap-nav a,.netmap-nav button { font-size:12px; padding:6px 8px; } .floating-navigation { right:9px; bottom:10px; } }
