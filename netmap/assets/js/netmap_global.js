@@ -4,7 +4,8 @@
         ['Inicio','index.html'],
         ['Inventario','equipos_lista.php'],
         ['Registrar','equipos_agregar.php'],
-        ['Editar puertos','equipos_editar_puertos.php']
+        ['Editar puertos','equipos_editar_puertos.php'],
+        ['Presets','ajustes_presets.php']
     ];
     const init = () => {
         let nav = document.querySelector('.netmap-nav');
