@@ -139,6 +139,9 @@
             color: #334155;
             white-space: nowrap;
         }
+        .badge-reservado { background: #f1eafe; color: #6941a5; }
+        .badge-danado { background: #fee2e2; color: #b42318; }
+        .badge-ocupado { background: #e2e8f0; color: #475569; }
        
         .fila-equipo { cursor: pointer; }
         .fila-equipo:hover { background-color: #f8fafc; }
