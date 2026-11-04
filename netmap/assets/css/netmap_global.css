@@ -194,3 +194,66 @@ html.netmap-dark .equipo-sub { color:#a5b2c5!important; }
     .device-image #deviceIcon { height: 230px !important; max-height: 230px !important; }
     .device-image #miniPorts { max-height: 255px !important; }
 }
+
+
+/* Vista de equipos destino: conserva grupos y secciones sin bloquear el modo de estados. */
+.target-port-groups {
+    display: grid !important;
+    gap: 12px !important;
+}
+.target-port-groups .mini-group {
+    min-width: 0;
+    background: #172438;
+    border-color: #40536d;
+}
+.target-port-groups .mini-group-title {
+    color: #e4edf8;
+}
+.target-port-groups .mini-sections {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 9px;
+}
+.target-port-groups .mini-section {
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: column;
+    gap: 5px;
+    padding: 7px;
+    background: #0b1423;
+    border: 1px dashed #52647d;
+    border-radius: 7px;
+}
+.target-port-groups .mini-section::before {
+    content: attr(aria-label);
+    color: #b9c9dc;
+    font-size: .65rem;
+    font-weight: 700;
+    text-align: center;
+}
+.target-port-groups .mini-port-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+}
+.target-port-groups .mini-port-row .mini-port {
+    flex: 0 0 34px;
+    min-width: 34px;
+    min-height: 30px;
+    padding: 4px 2px;
+}
+.link-actions button.active {
+    outline: 3px solid #8b5cf6;
+    box-shadow: 0 0 0 2px #8b5cf633;
+}
+.target-port-groups .mini-port:disabled {
+    cursor: not-allowed;
+    opacity: .55;
+    filter: grayscale(.35);
+}
+.target-port-groups .mini-port:not(:disabled) {
+    cursor: pointer;
+    opacity: 1;
+}
