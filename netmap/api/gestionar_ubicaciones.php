@@ -11,7 +11,8 @@ function responder(array $datos, int $codigo = 200): void {
 
 function texto(string $campo, int $maximo): string {
     $valor = trim((string)($_POST[$campo] ?? ''));
-    if ($valor === '' || mb_strlen($valor) > $maximo) {
+    $longitud = function_exists('mb_strlen') ? mb_strlen($valor, 'UTF-8') : strlen($valor);
+    if ($valor === '' || $longitud > $maximo) {
         responder(['estado' => 'error', 'mensaje' => "El campo {$campo} es obligatorio y admite hasta {$maximo} caracteres."], 422);
     }
     return $valor;
