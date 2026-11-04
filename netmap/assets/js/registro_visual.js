@@ -1049,7 +1049,8 @@
     $('#existingSite').addEventListener('change', renderExistingResults);
     $('#existingFloor').addEventListener('change', renderExistingResults);
     $('#existingStateFilter')?.addEventListener('change', renderExistingPorts);
-    $('#linkExistingPair')?.addEventListener('click', () => {
+    document.addEventListener('click', event => {
+        if (!event.target.closest('#linkExistingPair')) return;
         window.netmapExistingPairMode = !window.netmapExistingPairMode;
         pendingExistingSource = null;
         pendingSource = null;
