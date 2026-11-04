@@ -18,7 +18,8 @@ $resultado = $conexion->query($sql);
 if ($resultado) {
     while ($fila = $resultado->fetch_assoc()) {
         $icono = trim((string)($fila['icono'] ?: $fila['ruta_icono']));
-        if ($icono === '' || !is_file(__DIR__ . '/' . ltrim($icono, '/'))) {
+        $esUrl = (bool)preg_match('#^https?://#i', $icono);
+        if ($icono === '' || (!$esUrl && !is_file(__DIR__ . '/' . ltrim($icono, '/')))) {
             $tipo = mb_strtolower((string)$fila['nombre_tipo']);
             $icono = str_contains($tipo, 'comput') ? 'assets/icons/computer.svg'
                 : (str_contains($tipo, 'router') ? 'assets/icons/router.svg'
