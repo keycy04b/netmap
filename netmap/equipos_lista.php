@@ -624,8 +624,15 @@
         async function eliminarEquipo(id) {
             if (confirm("¿Estás seguro de eliminar este equipo? Se borrarán también sus puertos y conexiones asociadas.")) {
                 try {
-                    let res = await fetch(`api/eliminar_equipo.php?id=${id}`);
+                    let res = await fetch("api/eliminar_equipo.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                        body: JSON.stringify({ id_equipo: Number(id) })
+                    });
                     let resultado = await res.json();
+                    if (!res.ok || resultado.estado !== "ok") {
+                        throw new Error(resultado.mensaje || "No se pudo eliminar el equipo.");
+                    }
                     if (resultado.estado === "ok") {
                         alert(resultado.mensaje);
                         cargarListadoEquipos();
