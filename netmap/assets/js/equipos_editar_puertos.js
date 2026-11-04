@@ -58,12 +58,12 @@
         if (!sectionPorts.length) continue;
 
         sections.push(`<div class="mini-section" aria-label="Sección física ${index + 1}">
-          ${sectionPorts.map(port => `<button type="button" title="Puerto ${esc(port.numero_puerto)} · ${esc(port.estado)}" class="mini-port ${stateClass(port)}" data-action="edit-source-port" data-port-id="${esc(port.id_puerto)}" data-medium="${esc(port.medio||port.tipo_puerto||'UTP')}">${esc(port.numero_puerto)}</button>`).join('')}
+          ${sectionPorts.map(port => `<button type="button" title="Puerto ${esc(port.numero_puerto)} · ${esc(port.estado)}" class="mini-port ${stateClass(port)}${pendingEditPort?.id===Number(port.id_puerto)?' selected':''}" data-action="edit-source-port" data-port-id="${esc(port.id_puerto)}" data-medium="${esc(port.medio||port.tipo_puerto||'UTP')}">${esc(port.numero_puerto)}</button>`).join('')}
         </div>`);
       }
 
       return `<div class="mini-group">
-        <div class="mini-group-title">Grupo ${groupId} · ${esc(first.alcance || 'LAN')} · ${esc(first.medio || first.tipo_puerto || 'RED')}</div>
+        <div class="mini-group-title">Grupo ${groupId} · ${esc(first.alcance || 'LAN')} · ${esc(first.tipo_puerto || 'RED')} · ${esc(first.medio || 'UTP')}</div>
         <div class="mini-sections">${sections.join('')}</div>
       </div>`;
     }).join('');
@@ -126,7 +126,7 @@
       const choices=[['DISPONIBLE','Disponible'],['NO_DISPONIBLE','Ocupado'],['RESERVADO','Reservado'],['DANADO','Dañado']];
       const chosen=prompt('Estado nuevo:\\n1 Disponible\\n2 Ocupado\\n3 Reservado\\n4 Dañado',String(Math.max(1,choices.findIndex(x=>x[0]===p.estado)+1)));
       if(chosen===null)return;const opt=choices[Number(chosen)-1];if(!opt){alert('Selecciona 1, 2, 3 o 4.');return;}
-      await post('api/cambiar_estado_puerto.php',{id_puerto:portId,estado:opt[0]});await selectTarget(id);return;
+      await post('api/cambiar_estado_puerto.php',{id_puerto:portId,estado:opt[0]});const refreshed=await fetch(`api/obtener_puertos_enlace.php?id_equipo=${id}`);selectedTargets.get(id).ports=await refreshed.json();renderTargetPorts();return;
     }
     if(editMode==='pair'){
       if(!pendingTargetPair){pendingTargetPair={id,portId,medium:button.dataset.medium};button.classList.add('selected');return;}
