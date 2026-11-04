@@ -10,16 +10,14 @@
     const init = () => {
         let nav = document.querySelector('.netmap-nav');
         if (!nav) {
-            nav = document.createElement('nav');
+            nav = document.querySelector('header') || document.createElement('nav');
             nav.className = 'netmap-nav';
             nav.setAttribute('aria-label','Navegación principal');
-            nav.innerHTML = '<a class="brand" href="index.html">◈ NetMap</a>' +
-                links.map(([label,url]) => '<a href="' + url + '">' + label + '</a>').join('') +
-                '<span class="spacer"></span><button type="button" id="netmapThemeToggle">☾ Modo oscuro</button>';
-            const header = document.querySelector('header');
-            if (header) header.insertAdjacentElement('afterend', nav);
-            else document.body.prepend(nav);
+            if (!nav.parentElement) document.body.prepend(nav);
         }
+        nav.innerHTML = '<a class="brand" href="index.html">◈ NetMap</a>' +
+            links.map(([label,url]) => '<a href="' + url + '">' + label + '</a>').join('') +
+            '<span class="spacer"></span><button type="button" id="netmapThemeToggle">☾ Modo oscuro</button>';
         const key = 'netmap-theme';
         const apply = dark => {
             document.documentElement.classList.toggle('netmap-dark', dark);
