@@ -460,8 +460,8 @@
             }
 
             equipos.forEach(eq => {
-                let estadoHtml = eq.total_enlaces > 0
-                    ? `<span class="badge badge-enlazado">Enlazado (${eq.total_enlaces})</span>`
+                let estadoHtml = Number(eq.total_enlaces) > 0
+                    ? `<span class="badge badge-enlazado">Enlazado</span>`
                     : `<span class="badge badge-libre">Libre</span>`;
 
                 let nombreDisplay = eq.nombre_equipo ? eq.nombre_equipo : 'Sin nombre asignado';
