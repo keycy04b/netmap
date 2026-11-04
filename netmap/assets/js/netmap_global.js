@@ -26,8 +26,11 @@
             const button = document.getElementById('netmapThemeToggle');
             if (button) button.textContent = dark ? '☀ Modo claro' : '☾ Modo oscuro';
         };
-        let dark = false;
-        try { dark = localStorage.getItem(key) === 'dark'; } catch (_) {}
+        let dark = true;
+        try {
+            const savedTheme = localStorage.getItem(key);
+            if (savedTheme !== null) dark = savedTheme === 'dark';
+        } catch (_) {}
         apply(dark);
         document.getElementById('netmapThemeToggle')?.addEventListener('click', () => {
             dark = !document.documentElement.classList.contains('netmap-dark');
