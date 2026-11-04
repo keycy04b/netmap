@@ -18,14 +18,25 @@ $pisos=[]; if ($r=$conexion->query("SELECT id_piso,id_sede,numero_piso FROM piso
 $conexion->close();
 ?>
 <!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NetMap · Editar equipo</title>
-<link rel="stylesheet" href="assets/css/equipos_editar_puertos.css"></head><body>
+<link rel="stylesheet" href="assets/css/equipos_editar_puertos.css"><link rel="stylesheet" href="assets/css/netmap_global.css"><script src="assets/js/netmap_global.js" defer></script></head><body>
 <header><b>◈ NetMap</b><span>Edición de equipo y puertos</span><a href="equipos_lista.php">Volver al listado</a></header>
 <main><h1>Editar equipo</h1><p class="muted">Selecciona un equipo para editar sus datos y administrar cada puerto.</p>
 <section class="panel"><label for="equipoSelect">Equipo</label><select id="equipoSelect"><option value="">Seleccionar equipo…</option><?php foreach($equipos as $e): ?><option value="<?= (int)$e['id_equipo'] ?>"><?= htmlspecialchars(($e['nombre_equipo'] ?: $e['nombre_tipo'].' '.$e['id_equipo']).' · '.($e['nombre_sede']??'Sin sede').' · Piso '.($e['numero_piso']??'—'),ENT_QUOTES,'UTF-8') ?></option><?php endforeach ?></select></section>
 <div id="editor" hidden>
 <section class="topgrid"><div class="panel device"><div class="device-image"><img id="deviceIcon" alt="Icono del equipo"><div id="miniPorts" class="mini-ports"></div></div><div class="legend"><span><i class="available"></i>Disponible</span><span><i class="linked"></i>Enlazado</span><span><i class="occupied"></i>Ocupado sin enlace</span><span><i class="reserved"></i>Reservado</span><span><i class="damaged"></i>Dañado</span></div></div>
 <form id="formEquipo" class="panel fields"><h2>Datos del equipo</h2><input type="hidden" name="id_equipo"><label>Nombre<input name="nombre_equipo" required></label><div class="twocol"><label>Tipo<select name="id_tipo_equipo" required></select></label><label>Marca<input name="marca"></label><label>Modelo<input name="modelo"></label><label>Serial<input name="serial"></label><label>Dirección IP<input name="direccion_ip"></label><label>Sede<select id="sede" required></select></label><label>Piso<select name="id_piso" id="piso" required></select></label></div><label>Observaciones<textarea name="observaciones" rows="2"></textarea></label><label>Ruta del icono<input name="icono" id="iconoPath" placeholder="assets/img/iconos/switch.svg"></label><button type="submit">Guardar datos</button><span id="saveMessage" class="message"></span></form></section>
-<section class="panel"><h2>Buscar otro equipo para enlazar</h2><input id="searchEquipment" placeholder="Buscar por nombre, marca, IP o serial"><div id="searchResults" class="search-results"></div><p class="muted">Esta sección permite localizar equipos; la creación/eliminación de enlaces se mantiene en el flujo de enlaces existente.</p></section>
-<section class="panel"><h2>Puertos del equipo</h2><div class="table-wrap"><table><thead><tr><th>Puerto</th><th>Tipo / medio</th><th>Estado</th><th>Equipo destino</th><th>Puerto destino</th><th>Creación</th><th>Actualización</th><th>Acciones</th></tr></thead><tbody id="portsBody"><tr><td colspan="8">Selecciona un equipo.</td></tr></tbody></table></div></section>
+<section class="panel" id="existingLinkPanel">
+<h2>Equipos existentes y enlaces</h2>
+<div class="link-actions">
+<button type="button" id="editLinkMode">↔ Enlazar</button>
+<button type="button" id="editStateMode">● Cambiar estado</button>
+<button type="button" id="editExistingPair">↔ Enlazar equipos existentes</button>
+</div>
+<input id="searchEquipment" placeholder="Buscar por nombre, marca, IP o serial">
+<div id="searchResults" class="search-results"></div>
+<div id="editExistingPorts"></div>
+</section>
+<section class="panel" id="portsAnchor"><h2>Puertos del equipo</h2><div class="table-wrap"><table><thead><tr><th>Puerto</th><th>Tipo / medio</th><th>Estado</th><th>Equipo destino</th><th>Puerto destino</th><th>Creación</th><th>Actualización</th><th>Acciones</th></tr></thead><tbody id="portsBody"><tr><td colspan="8">Selecciona un equipo.</td></tr></tbody></table></div></section>
 </div></main>
+<div class="floating-navigation"><button type="button" id="editScrollPorts">↓ Puertos</button><button type="button" id="editScrollTop">↑ Equipo</button></div>
 <script>window.NETMAP_EDIT_DATA={equipoInicial:<?= isset($_GET['id']) ? (int)$_GET['id'] : 0 ?>,equipos:<?= json_encode($equipos,JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP) ?>,tipos:<?= json_encode($tipos,JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP) ?>,sedes:<?= json_encode($sedes,JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP) ?>,pisos:<?= json_encode($pisos,JSON_UNESCAPED_UNICODE|JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP) ?>};</script><script src="assets/js/equipos_editar_puertos.js" defer></script></body></html>
