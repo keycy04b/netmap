@@ -15,7 +15,8 @@ if($method==='POST'){
  $id=filter_var($data['id_tipo_equipo']??null,FILTER_VALIDATE_INT);
  $name=trim((string)($data['nombre_tipo']??''));
  $icon=trim((string)($data['ruta_icono']??''));
- if($name===''||mb_strlen($name)>100)responderTipo(400,['estado'=>'error','mensaje'=>'El nombre debe tener entre 1 y 100 caracteres.']);
+ $nameLength = function_exists('mb_strlen') ? mb_strlen($name, 'UTF-8') : strlen($name);
+ if($name===''||$nameLength>100)responderTipo(400,['estado'=>'error','mensaje'=>'El nombre debe tener entre 1 y 100 caracteres.']);
  if($id){
   $s=$conexion->prepare('UPDATE tipos_equipo SET nombre_tipo=?,ruta_icono=? WHERE id_tipo_equipo=?');
   $s->bind_param('ssi',$name,$icon,$id);
