@@ -1041,13 +1041,10 @@
         renderExistingPorts();
         toast(window.netmapExistingPairMode ? 'Selecciona origen y destino entre los equipos registrados.' : 'Modo desactivado.');
     });
-    $('#existingPanel').addEventListener('toggle', () => {
-        if ($('#existingPanel').open && !existingEquipment.length) searchExisting();
-    });
     $('#searchExisting').addEventListener('click', searchExisting);
     $('#toggleExisting').addEventListener('click', () => {
-        $('#existingPanel').open = !$('#existingPanel').open;
-        if ($('#existingPanel').open && !existingEquipment.length) searchExisting();
+        $('#existingPanel').scrollIntoView({behavior:'smooth', block:'start'});
+        if (!existingEquipment.length) searchExisting();
     });
     $('#btn-add-card').addEventListener('click', addCard);
     const sharedPanel = document.createElement('section');
@@ -1059,6 +1056,7 @@
         <button type="button" id="linkExistingPair">↔ Enlazar equipos existentes</button>
     </div><div class="legend"><span><i style="background:#22c55e"></i>Disponible</span><span><i style="background:#2563eb"></i>Ocupado / enlazado</span><span><i style="background:#f59e0b"></i>Reservado</span><span><i style="background:#dc2626"></i>Dañado</span></div>`;
     $('#existingPorts').before(sharedPanel);
+    sharedPanel.hidden = false;
 
     $('#toggleView').addEventListener('click', () => {
         joint = !joint;
@@ -1166,6 +1164,8 @@
     });
     window.addEventListener('resize', drawWires);
     window.addEventListener('scroll', drawWires, true);
+    $('#scrollToPorts')?.addEventListener('click', () => $('#portsAnchor')?.scrollIntoView({behavior:'smooth',block:'start'}));
+    $('#scrollToEditor')?.addEventListener('click', () => $('#contenedor-tarjetas')?.scrollIntoView({behavior:'smooth',block:'start'}));
     init();
 })();
 
