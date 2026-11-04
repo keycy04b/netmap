@@ -26,6 +26,18 @@ $sql = "
         pt.fecha_actualizacion,
         en.id_enlace,
         CASE
+            WHEN en.id_puerto_origen = pt.id_puerto THEN pt_dest.id_puerto
+            WHEN en.id_puerto_destino = pt.id_puerto THEN pt_orig.id_puerto
+            ELSE NULL
+        END AS id_puerto_conectado,
+        CASE
+            WHEN en.id_puerto_origen = pt.id_puerto THEN pt_dest.id_equipo
+            WHEN en.id_puerto_destino = pt.id_puerto THEN pt_orig.id_equipo
+            ELSE NULL
+        END AS id_equipo_conectado,
+        en.estilo_linea,
+        en.color_linea,
+        CASE
             WHEN en.id_puerto_origen = pt.id_puerto THEN eq_dest.nombre_equipo
             WHEN en.id_puerto_destino = pt.id_puerto THEN eq_orig.nombre_equipo
             ELSE NULL
