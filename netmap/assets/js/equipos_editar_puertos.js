@@ -264,9 +264,34 @@
     $('#editExistingPorts').scrollIntoView({behavior:'smooth',block:'center'});
     alert('Puerto de origen seleccionado. Elige el puerto destino en un equipo buscado.');
   });
-  $('#editLinkMode').addEventListener('click',()=>{editMode='link';pendingEditPort=null;pendingTargetPair=null;});
-  $('#editStateMode').addEventListener('click',()=>{editMode='state';pendingEditPort=null;pendingTargetPair=null;});
-  $('#editExistingPair').addEventListener('click',()=>{editMode=editMode==='pair'?'link':'pair';pendingTargetPair=null;pendingEditPort=null;$('#editExistingPair').classList.toggle('active',editMode==='pair');});
+  function refreshEditMode() {
+    $('#editLinkMode').classList.toggle('active', editMode === 'link');
+    $('#editStateMode').classList.toggle('active', editMode === 'state');
+    $('#editExistingPair').classList.toggle('active', editMode === 'pair');
+    renderTargetPorts();
+    drawEditLinks();
+  }
+
+  $('#editLinkMode').addEventListener('click', () => {
+    editMode = 'link';
+    pendingEditPort = null;
+    pendingTargetPair = null;
+    refreshEditMode();
+  });
+
+  $('#editStateMode').addEventListener('click', () => {
+    editMode = 'state';
+    pendingEditPort = null;
+    pendingTargetPair = null;
+    refreshEditMode();
+  });
+
+  $('#editExistingPair').addEventListener('click', () => {
+    editMode = editMode === 'pair' ? 'link' : 'pair';
+    pendingTargetPair = null;
+    pendingEditPort = null;
+    refreshEditMode();
+  });
   $('#editScrollPorts').addEventListener('click',()=>$('#portsAnchor').scrollIntoView({behavior:'smooth',block:'start'}));
   $('#editScrollTop').addEventListener('click',()=>$('#editor').scrollIntoView({behavior:'smooth',block:'start'}));
   window.addEventListener('resize',drawEditLinks);
