@@ -117,10 +117,12 @@
     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
     svg.setAttribute('class','edit-links-overlay');svg.setAttribute('width',width);svg.setAttribute('height',height);svg.setAttribute('viewBox',`0 0 ${width} ${height}`);
     const rect=root.getBoundingClientRect();
-    root.querySelectorAll('#miniPorts [data-peer-port]').forEach(source=>{
+    const drawn=new Set();
+    root.querySelectorAll('#miniPorts [data-peer-port], #editExistingPorts [data-peer-port]').forEach(source=>{
       const peerId=source.dataset.peerPort;if(!peerId)return;
-      const target=root.querySelector(`#editExistingPorts [data-port-id="${CSS.escape(peerId)}"]`);
+      const target=root.querySelector(`[data-port-id="${CSS.escape(peerId)}"]`);
       if(!target)return;
+      const key=[source.dataset.portId,peerId].sort().join(':');if(drawn.has(key))return;drawn.add(key);
       const a=source.getBoundingClientRect(),b=target.getBoundingClientRect();
       const x1=a.left-rect.left+a.width/2,y1=a.top-rect.top+a.height/2,x2=b.left-rect.left+b.width/2,y2=b.top-rect.top+b.height/2,mid=(x1+x2)/2;
       const path=document.createElementNS('http://www.w3.org/2000/svg','path');
