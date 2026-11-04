@@ -1093,7 +1093,7 @@
         <button type="button" data-action="state-mode">● Cambiar estado</button>
         <button type="button" id="linkExistingPair">↔ Enlazar equipos existentes</button>
     </div><div class="legend"><span><i style="background:#22c55e"></i>Disponible</span><span><i style="background:#2563eb"></i>Ocupado / enlazado</span><span><i style="background:#f59e0b"></i>Reservado</span><span><i style="background:#dc2626"></i>Dañado</span></div>`;
-    $('#existingPorts').before(sharedPanel);
+    $('#existingPanel h2').after(sharedPanel);
     sharedPanel.hidden = false;
 
     $('#toggleView').addEventListener('click', () => {
