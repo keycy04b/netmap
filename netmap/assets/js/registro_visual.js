@@ -1191,7 +1191,14 @@
             dirty = false;
             $('#formStatus').textContent = 'Guardado correctamente.';
             alert(result.mensaje || 'Equipos registrados correctamente.');
-            location.href = 'equipos_lista.php';
+            if (activeCards.length) location.href = 'equipos_lista.php';
+            else {
+                links = [];
+                pendingExistingSource = null;
+                window.netmapExistingPairMode = false;
+                for (const id of selectedExistingList.keys()) await reloadExistingPorts(id);
+                toast('Enlaces existentes guardados correctamente.');
+            }
         } catch (error) {
             toast(`No se guardó: ${error.message}`);
             console.error(error);
