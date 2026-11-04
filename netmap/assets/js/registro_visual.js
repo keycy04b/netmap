@@ -26,6 +26,7 @@
     const selectedExistingList = new Map();
     let globalMode = 'link';
     let pendingSource = null;
+    let pendingExistingSource = null;
     let links = [];
     let toastTimer = null;
 
@@ -546,7 +547,7 @@
     }
 
     function drawWires() {
-        const root = $('#contenedor-tarjetas');
+        const root = $('.page') || document.querySelector('main') || document.body;
         if (!root) return;
         let svg = $('#draftWires');
         if (!svg) {
@@ -555,30 +556,36 @@
             svg.classList.add('draft-wires');
             root.prepend(svg);
         }
-        svg.setAttribute('width', root.scrollWidth);
-        svg.setAttribute('height', root.scrollHeight);
-        svg.setAttribute('viewBox', `0 0 ${root.scrollWidth} ${root.scrollHeight}`);
+        const rootRect = root.getBoundingClientRect();
+        const width = Math.max(root.scrollWidth, root.clientWidth);
+        const height = Math.max(root.scrollHeight, root.clientHeight);
+        svg.setAttribute('width', width);
+        svg.setAttribute('height', height);
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
         svg.innerHTML = '';
+        const findPort = endpoint => endpoint.kind === 'new'
+            ? portButton(endpoint.cardId, endpoint.group, endpoint.port)
+            : $(`#existingPorts .port[data-port-id="${endpoint.portId}"]`);
         for (const link of links) {
-            if (link.source.kind !== 'new' || link.destination.kind !== 'new') continue;
-            const a = portButton(link.source.cardId, link.source.group, link.source.port);
-            const b = portButton(link.destination.cardId, link.destination.group, link.destination.port);
+            const a = findPort(link.source), b = findPort(link.destination);
             if (!a || !b) continue;
-            const rootRect = root.getBoundingClientRect();
-            const aRect = a.getBoundingClientRect();
-            const bRect = b.getBoundingClientRect();
-            const x1 = aRect.left + aRect.width / 2 - rootRect.left;
-            const y1 = aRect.top + aRect.height / 2 - rootRect.top;
-            const x2 = bRect.left + bRect.width / 2 - rootRect.left;
-            const y2 = bRect.top + bRect.height / 2 - rootRect.top;
-            const lift = Math.min(y1, y2) - 34;
+            const ar = a.getBoundingClientRect(), br = b.getBoundingClientRect();
+            const x1 = ar.left + ar.width / 2 - rootRect.left + root.scrollLeft;
+            const y1 = ar.top + ar.height / 2 - rootRect.top + root.scrollTop;
+            const x2 = br.left + br.width / 2 - rootRect.left + root.scrollLeft;
+            const y2 = br.top + br.height / 2 - rootRect.top + root.scrollTop;
+            const mid = (x1 + x2) / 2;
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            path.setAttribute('d', `M ${x1} ${y1} C ${x1} ${lift}, ${x2} ${lift}, ${x2} ${y2}`);
-            const sourceCard = $(`.device-card[data-id="${link.source.cardId}"]`);
-            const sourceGroup = sourceCard ? getGroups(sourceCard)[link.source.group] : null;
-            const isFiber = sourceGroup?.medio === 'FIBRA';
-            path.setAttribute('class', `draft-wire ${isFiber ? 'wire-fiber' : 'wire-ethernet'}`);
-            path.dataset.linkKey = `${link.source.cardId}:${link.source.group}:${link.source.port}-${link.destination.cardId}:${link.destination.group}:${link.destination.port}`;
+            path.setAttribute('d', `M ${x1} ${y1} C ${mid} ${y1}, ${mid} ${y2}, ${x2} ${y2}`);
+            let medium = 'UTP';
+            if (link.source.kind === 'new') {
+                const card = $(`.device-card[data-id="${link.source.cardId}"]`);
+                medium = getGroups(card)[link.source.group]?.medio || 'UTP';
+            } else {
+                const port = selectedExistingList.get(Number(link.source.equipmentId))?.ports.find(p => Number(p.id_puerto) === Number(link.source.portId));
+                medium = port?.medio || port?.tipo_puerto || 'UTP';
+            }
+            path.setAttribute('class', `draft-wire ${String(medium).toUpperCase().includes('FIBRA') ? 'wire-fiber' : 'wire-ethernet'}`);
             path.style.pointerEvents = 'stroke';
             path.style.cursor = 'pointer';
             path.addEventListener('click', () => removeDraftLink(link));
@@ -692,7 +699,7 @@
                 }
                 return `<section class="group ${medium === 'FIBRA' ? 'medium-fiber' : 'medium-utp'}"><div class="gtitle"><span>${esc(group.alcance)} · ${medium === 'FIBRA' ? 'Fibra óptica' : 'Ethernet / UTP'}</span><small>${group.ports.length} puertos · ${sectionCount} sección(es)</small></div><div class="sections existing-sections">${sectionMarkup.join('')}</div></section>`;
             }).join('');
-            return `<article class="existing-device-card" data-existing-equipment="${entry.id}"><header class="existing-device-head"><div><strong>${esc(entry.name)}</strong><small>${esc(item.nombre_tipo || 'Equipo registrado')} · ${esc(item.nombre_sede || 'Sede —')} · Piso ${esc(item.numero_piso || '—')} · ${esc(item.direccion_ip || 'Sin IP')}</small></div><span class="locked-tag">Equipo bloqueado</span></header><div class="existing-device-rack"><div class="groups">${groupMarkup}</div></div></article>`;
+            return `<article class="existing-device-card" data-existing-equipment="${entry.id}"><header class="existing-device-head"><div><strong>${esc(entry.name)}</strong><small>${esc(item.nombre_tipo || 'Equipo registrado')} · ${esc(item.nombre_sede || 'Sede —')} · Piso ${esc(item.numero_piso || '—')} · ${esc(item.direccion_ip || 'Sin IP')}</small></div><button type="button" class="existing-remove" data-action="remove-existing" data-id="${entry.id}" aria-label="Quitar equipo">×</button><span class="locked-tag">Equipo bloqueado</span></header><div class="existing-device-rack"><div class="groups">${groupMarkup}</div></div></article>`;
         }).join('');
         const stateFilter = $('#existingStateFilter')?.value || 'all';
         if (stateFilter !== 'all') {
@@ -761,6 +768,13 @@
         const equipmentId = Number(button.dataset.equipmentId);
         const entry = selectedExistingList.get(equipmentId);
         const portId = Number(button.dataset.portId);
+        if (window.netmapExistingPairMode && globalMode === 'link' && !pendingSource && !pendingExistingSource) {
+            if (button.dataset.state !== 'available' || button.disabled) { toast('Solo puedes iniciar desde un puerto disponible.'); return; }
+            pendingExistingSource = {equipmentId, portId};
+            renderExistingPorts();
+            toast('Origen seleccionado. Elige un puerto disponible de otro equipo existente.');
+            return;
+        }
         if (globalMode === 'state') {
             if (button.dataset.linked === '1') {
                 if (!confirm('Este puerto tiene un enlace guardado. ¿Quieres eliminar el enlace y liberar ambos puertos?')) return;
@@ -784,10 +798,20 @@
             } catch (error) { toast(error.message); }
             return;
         }
-        if (!pendingSource) {
-            toast('Primero pulsa un puerto disponible de un equipo nuevo.');
+        if (pendingExistingSource) {
+            const state = button.dataset.state;
+            if (state !== 'available' || button.dataset.linked === '1' || button.disabled) { toast('El puerto destino debe estar disponible y sin enlace.'); return; }
+            if (pendingExistingSource.equipmentId === equipmentId && pendingExistingSource.portId === portId) { pendingExistingSource = null; renderExistingPorts(); toast('Selección cancelada.'); return; }
+            const sourcePort = selectedExistingList.get(pendingExistingSource.equipmentId)?.ports.find(p => Number(p.id_puerto) === pendingExistingSource.portId);
+            const sourceMedium = String(sourcePort?.medio || sourcePort?.tipo_puerto || 'UTP').toUpperCase();
+            const targetMedium = String(button.dataset.medium || 'UTP').toUpperCase();
+            if (sourceMedium.includes('FIBRA') !== targetMedium.includes('FIBRA')) { toast('Los medios físicos deben coincidir.'); return; }
+            addLink({kind:'existing',equipmentId:pendingExistingSource.equipmentId,portId:pendingExistingSource.portId},{kind:'existing',equipmentId,portId,port:Number(button.dataset.portNumber)});
+            pendingExistingSource = null;
+            renderExistingPorts();
             return;
         }
+        if (!pendingSource) { toast('Primero pulsa un puerto nuevo o activa «Enlazar equipos existentes».'); return; }
         const state = button.dataset.state;
         if (state !== 'available' || button.dataset.linked === '1' || button.disabled) {
             toast('Ese puerto no está disponible. Solo se pueden enlazar puertos disponibles y sin enlace.');
@@ -988,6 +1012,15 @@
     });
 
     $('#existingPorts').addEventListener('click', event => {
+        const remove = event.target.closest('[data-action="remove-existing"]');
+        if (remove) {
+            const id = Number(remove.dataset.id);
+            if (links.some(link => [link.source,link.destination].some(ep => ep.kind === 'existing' && ep.equipmentId === id))) { toast('Quita primero los enlaces preparados de este equipo.'); return; }
+            selectedExistingList.delete(id);
+            selectedExisting = [...selectedExistingList.values()].at(-1) || null;
+            renderExistingResults(); renderExistingPorts(); drawWires();
+            return;
+        }
         const button = event.target.closest('[data-action="choose-existing-port"]');
         if (button) chooseExistingPort(button);
     });
@@ -999,6 +1032,15 @@
     $('#existingSite').addEventListener('change', renderExistingResults);
     $('#existingFloor').addEventListener('change', renderExistingResults);
     $('#existingStateFilter')?.addEventListener('change', renderExistingPorts);
+    $('#linkExistingPair')?.addEventListener('click', () => {
+        window.netmapExistingPairMode = !window.netmapExistingPairMode;
+        pendingExistingSource = null;
+        pendingSource = null;
+        $('#linkExistingPair').classList.toggle('active', window.netmapExistingPairMode);
+        $('#linkExistingPair').textContent = window.netmapExistingPairMode ? 'Cancelar enlace entre existentes' : '↔ Enlazar equipos existentes';
+        renderExistingPorts();
+        toast(window.netmapExistingPairMode ? 'Selecciona origen y destino entre los equipos registrados.' : 'Modo desactivado.');
+    });
     $('#existingPanel').addEventListener('toggle', () => {
         if ($('#existingPanel').open && !existingEquipment.length) searchExisting();
     });
@@ -1008,6 +1050,16 @@
         if ($('#existingPanel').open && !existingEquipment.length) searchExisting();
     });
     $('#btn-add-card').addEventListener('click', addCard);
+    const sharedPanel = document.createElement('section');
+    sharedPanel.id = 'sharedNetControls';
+    sharedPanel.className = 'shared-net-controls';
+    sharedPanel.innerHTML = `<div class="shared-actions">
+        <button type="button" data-action="link-mode">↔ Enlazar</button>
+        <button type="button" data-action="state-mode">● Cambiar estado</button>
+        <button type="button" id="linkExistingPair">↔ Enlazar equipos existentes</button>
+    </div><div class="legend"><span><i style="background:#22c55e"></i>Disponible</span><span><i style="background:#2563eb"></i>Ocupado / enlazado</span><span><i style="background:#f59e0b"></i>Reservado</span><span><i style="background:#dc2626"></i>Dañado</span></div>`;
+    $('#existingPorts').before(sharedPanel);
+
     $('#toggleView').addEventListener('click', () => {
         joint = !joint;
         $('#contenedor-tarjetas').classList.toggle('combined', joint);
@@ -1018,14 +1070,7 @@
         drawWires();
     });
 
-    function ensureSharedControls() {
-        if ($('#sharedNetControls')) return;
-        const panel = document.createElement('section');
-        panel.id = 'sharedNetControls';
-        panel.className = 'shared-net-controls';
-        panel.innerHTML = `<div class="shared-actions"><button type="button" data-action="link-mode">↔ Enlazar</button><button type="button" data-action="state-mode">● Cambiar estado</button></div><div class="legend"><span><i style="background:#22c55e"></i>Disponible</span><span><i style="background:#2563eb"></i>Ocupado / enlazado</span><span><i style="background:#f59e0b"></i>Reservado</span><span><i style="background:#dc2626"></i>Dañado</span></div>`;
-        $('#contenedor-tarjetas').before(panel);
-    }
+    function ensureSharedControls() { return; }
     document.addEventListener('click', event => {
         const button = event.target.closest('#sharedNetControls [data-action]');
         if (!button) return;
@@ -1042,9 +1087,11 @@
 
     $('#form-lote').addEventListener('submit', async event => {
         event.preventDefault();
-        const cards = $$('.device-card');
-        if (!cards.length) { toast('Añade al menos un equipo.'); return; }
-
+        const cards = $('.device-card');
+        if (!cards.length && !links.some(link => link.source.kind === 'existing' && link.destination.kind === 'existing')) {
+            toast('Añade un equipo nuevo o prepara un enlace entre equipos existentes.');
+            return;
+        }
         const payload = { equipos: [], enlaces: [] };
         for (const card of cards) {
             const value = name => $(`[name="${name}"]`, card)?.value.trim() || '';
