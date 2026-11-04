@@ -63,3 +63,6 @@ body { background:var(--netmap-bg); color:var(--netmap-text); transition:backgro
 #editor { position:relative; }
 .edit-links-overlay { position:absolute; inset:0 auto auto 0; z-index:5; pointer-events:none; overflow:visible; }
 .edit-link-line { fill:none; stroke:#e23a3a; stroke-width:3; stroke-dasharray:7 5; vector-effect:non-scaling-stroke; }
+
+.device-image #devicePlaceholder { position:absolute; top:28px; left:50%; transform:translateX(-50%); width:250px; height:185px; display:grid; place-content:center; justify-items:center; gap:8px; color:#94a3b8; font-size:5rem; border:2px dashed #607089; border-radius:18px; background:linear-gradient(145deg,#172438,#0b1423); }
+.device-image #devicePlaceholder small { font-size:14px; color:#c3cfde; }
