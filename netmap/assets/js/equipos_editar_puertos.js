@@ -34,7 +34,7 @@
     await loadPorts();
   }
   async function loadPorts(){
-    const body=$('#portsBody');body.innerHTML='<tr><td colspan="8">Cargando puertos…</td></tr>';
+    const body=$('#portsBody');body.innerHTML='<tr><td colspan="10">Cargando puertos…</td></tr>';
     try{const res=await fetch(`api/obtener_puertos_equipo.php?id_equipo=${currentId}`,{headers:{Accept:'application/json'}});const json=await res.json();if(!res.ok||!Array.isArray(json))throw new Error(json.mensaje||'Respuesta de puertos inválida.');ports=json;renderPorts();renderMiniPorts();drawEditLinks();}
     catch(e){body.innerHTML=`<tr><td colspan="10">${esc(e.message)}. Verifica la API de puertos.</td></tr>`;}
   }
