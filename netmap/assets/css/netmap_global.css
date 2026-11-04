@@ -88,3 +88,109 @@ html.netmap-dark .equipo-sub { color:#a5b2c5!important; }
 .netmap-dark .device-image .mini-port.occupied { background:#596579!important; }
 .netmap-dark .device-image .mini-port.reserved { background:#7355a5!important; }
 .netmap-dark .device-image .mini-port.damaged { background:#a63c47!important; }
+
+
+/* Navegación común: jerarquía, estado activo y adaptación a pantallas pequeñas. */
+.netmap-nav a[aria-current="page"] {
+    background: #315477;
+    border-color: #8bb8e5;
+    color: #ffffff;
+    box-shadow: inset 0 -2px 0 #93c5fd;
+}
+.netmap-nav .brand {
+    font-size: 1.05rem;
+    letter-spacing: .02em;
+}
+.netmap-nav {
+    position: relative;
+    z-index: 30;
+    box-shadow: 0 3px 14px #0002;
+}
+.netmap-nav .spacer { min-width: 12px; }
+
+/* Editor: portada amplia y grupos físicos en una banda desplazable. */
+.device-image {
+    min-height: 560px !important;
+    background: linear-gradient(145deg, #1a2a40, #0b1423) !important;
+}
+.device-image #deviceIcon {
+    top: 18px !important;
+    width: min(92%, 390px) !important;
+    max-width: 390px !important;
+    height: 285px !important;
+    max-height: 285px !important;
+    object-fit: contain !important;
+}
+.device-image #devicePlaceholder {
+    top: 30px !important;
+    width: min(82%, 330px) !important;
+    height: 230px !important;
+}
+.device-image #miniPorts {
+    max-height: 300px !important;
+    bottom: 12px !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+}
+.device-image .mini-sections {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    overflow-x: auto !important;
+    padding: 2px 2px 7px;
+}
+.device-image .mini-section {
+    display: flex !important;
+    flex: 0 0 auto !important;
+    flex-direction: column !important;
+    min-width: 0;
+    padding: 7px !important;
+}
+.device-image .mini-section::before {
+    content: attr(aria-label);
+    color: #b9c9dc;
+    font-size: .65rem;
+    font-weight: 700;
+    text-align: center;
+}
+.device-image .mini-port-row {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: center;
+    gap: 5px !important;
+}
+.device-image .mini-port-row .mini-port {
+    flex: 0 0 29px !important;
+    min-width: 29px !important;
+    max-width: 29px !important;
+    min-height: 27px;
+    padding: 4px 1px !important;
+}
+.device-image .mini-group {
+    min-width: max-content;
+}
+.device-image .mini-group-title {
+    position: sticky;
+    left: 0;
+}
+.device-image .mini-port {
+    font-weight: 800;
+    font-size: .7rem !important;
+}
+.device-image .mini-port:hover {
+    outline: 2px solid #dbeafe;
+    outline-offset: 1px;
+}
+@media (max-width: 850px) {
+    .device-image { min-height: 520px !important; }
+    .device-image #miniPorts { max-height: 275px !important; }
+}
+@media (max-width: 520px) {
+    .netmap-nav { align-items: stretch; }
+    .netmap-nav .brand { flex-basis: 100%; }
+    .device-image { min-height: 490px !important; }
+    .device-image #deviceIcon { height: 230px !important; max-height: 230px !important; }
+    .device-image #miniPorts { max-height: 255px !important; }
+}
