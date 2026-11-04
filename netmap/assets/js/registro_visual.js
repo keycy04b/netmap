@@ -1124,12 +1124,19 @@
     $('#form-lote').addEventListener('submit', async event => {
         event.preventDefault();
         const cards = $('.device-card');
-        if (!cards.length && !links.some(link => link.source.kind === 'existing' && link.destination.kind === 'existing')) {
-            toast('Añade un equipo nuevo o prepara un enlace entre equipos existentes.');
+        const activeCards = cards.filter(card =>
+            ['id_tipo_equipo','marca','modelo','serial','direccion_ip'].some(name => $(`[name="${name}"]`, card)?.value.trim()) ||
+            $('.sede', card)?.value || $('.piso', card)?.value || $('[name="nombre_equipo"]', card)?.value.trim()
+        );
+        const onlyExistingLinks = links.length > 0 && links.every(link =>
+            link.source.kind === 'existing' && link.destination.kind === 'existing'
+        );
+        if (!activeCards.length && !onlyExistingLinks) {
+            toast('Completa un equipo nuevo o prepara un enlace entre equipos existentes.');
             return;
         }
         const payload = { equipos: [], enlaces: [] };
-        for (const card of cards) {
+        for (const card of activeCards) {
             const value = name => $(`[name="${name}"]`, card)?.value.trim() || '';
             const required = ['id_tipo_equipo', 'marca', 'modelo', 'serial', 'direccion_ip'];
             if (!$('.sede', card).value || !$('.piso', card).value || required.some(name => !value(name))) {
