@@ -1101,7 +1101,7 @@
         $('#contenedor-tarjetas').classList.toggle('combined', joint);
         if (joint) ensureSharedControls();
         const shared = $('#sharedNetControls');
-        if (shared) shared.hidden = !joint;
+        if (shared) shared.hidden = false;
         $('#toggleView').textContent = joint ? 'Vista por tarjetas' : 'Vista previa conjunta';
         drawWires();
     });
