@@ -17,6 +17,11 @@ body { background:var(--netmap-bg); color:var(--netmap-text); transition:backgro
 .netmap-dark .section { background:#0b1423!important; border-color:#43536a!important; }
 .netmap-dark .group { background:#172438!important; }
 .netmap-dark .badge { filter:brightness(.82); }
+.page { position:relative; }
+.existing-panel { display:block; }
+.existing-panel > h2 { margin:0 0 12px; }
+#existingResults:empty { display:none; }
+#existingResults { display:grid; gap:7px; margin-top:12px; }
 .floating-navigation { position:fixed; right:18px; bottom:18px; z-index:1000; display:grid; gap:8px; }
 .floating-navigation button { border:1px solid #51647e; border-radius:999px; padding:10px 14px; background:#172a43; color:#fff; box-shadow:0 4px 16px #0003; cursor:pointer; font-weight:700; }
 .shared-net-controls { position:relative; z-index:6; display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; margin:12px 0; padding:12px; border:1px solid var(--netmap-border); border-radius:12px; background:var(--netmap-surface); }
