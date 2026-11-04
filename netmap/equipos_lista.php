@@ -242,9 +242,12 @@
             <div class="filtro-group">
                 <label>Estado</label>
                 <select id="filtro-estado" class="input-control" onchange="filtrarYMostrar()">
-                    <option value="">Todos</option>
-                    <option value="enlazado">Enlazados</option>
-                    <option value="libre">Libres</option>
+                    <option value="">Todos los estados</option>
+                    <option value="enlazado">Enlazado</option>
+                    <option value="disponible">Disponible</option>
+                    <option value="ocupado">Ocupado (sin enlace)</option>
+                    <option value="reservado">Reservado</option>
+                    <option value="danado">Dañado</option>
                 </select>
             </div>
             <div class="filtro-group">
@@ -374,10 +377,14 @@
                     && String(eq.numero_piso).toLowerCase() === pisoSel);
                 let matchTipo = !tipoSel || (eq.nombre_tipo && String(eq.nombre_tipo).toLowerCase() === tipoSel);
 
-                let esEnlazado = parseInt(eq.total_enlaces) > 0;
-                let matchEstado = true;
-                if (estadoSel === 'enlazado') matchEstado = esEnlazado;
-                if (estadoSel === 'libre') matchEstado = !esEnlazado;
+                const estadosEquipo = {
+                    enlazado: Number(eq.puertos_enlazados || 0),
+                    disponible: Number(eq.puertos_disponibles || 0),
+                    ocupado: Number(eq.puertos_ocupados || 0),
+                    reservado: Number(eq.puertos_reservados || 0),
+                    danado: Number(eq.puertos_danados || 0)
+                };
+                const matchEstado = !estadoSel || estadosEquipo[estadoSel] > 0;
 
                 const fechaCreacion = obtenerFechaComparable(eq.fecha_creacion);
                 const fechaModificacion = obtenerFechaComparable(eq.fecha_actualizacion);
@@ -442,9 +449,18 @@
             }
 
             equipos.forEach(eq => {
-                let estadoHtml = eq.total_enlaces > 0
-                    ? `<span class="badge badge-enlazado">Enlazado (${eq.total_enlaces})</span>`
-                    : `<span class="badge badge-libre">Libre</span>`;
+                const resumenEstados = [
+                    ['Enlazados', eq.puertos_enlazados],
+                    ['Disponibles', eq.puertos_disponibles],
+                    ['Ocupados', eq.puertos_ocupados],
+                    ['Reservados', eq.puertos_reservados],
+                    ['Dañados', eq.puertos_danados]
+                ].filter(([, cantidad]) => Number(cantidad || 0) > 0);
+                let estadoHtml = resumenEstados.length
+                    ? resumenEstados.map(([nombre, cantidad]) =>
+                        `<span class="badge badge-estado">${nombre}: ${cantidad}</span>`
+                      ).join(' ')
+                    : `<span class="badge badge-libre">Sin puertos registrados</span>`;
 
                 let nombreDisplay = eq.nombre_equipo ? eq.nombre_equipo : 'Sin nombre asignado';
 
