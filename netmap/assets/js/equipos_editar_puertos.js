@@ -33,7 +33,37 @@
   }
   function stateClass(p){if(Number(p.esta_enlazado)===1||p.equipo_destino)return 'linked';const s=String(p.estado||'').toUpperCase();if(s==='RESERVADO')return 'reserved';if(s==='DANADO'||s==='DAÑADO')return 'damaged';if(s==='NO_DISPONIBLE')return 'occupied';return 'available';}
   function renderPorts(){const body=$('#portsBody');if(!ports.length){body.innerHTML='<tr><td colspan="8">Este equipo no tiene puertos registrados.</td></tr>';return;}body.innerHTML=ports.map(p=>{const cls=stateClass(p);const status=cls==='linked'?'ENLAZADO':cls==='occupied'?'OCUPADO (SIN ENLACE)':cls==='reserved'?'RESERVADO':cls==='damaged'?'DAÑADO':'DISPONIBLE';const linked=Boolean(p.equipo_destino)||Number(p.esta_enlazado)===1;return `<tr><td><b>${esc(p.numero_puerto)}</b></td><td>${esc(p.tipo_puerto||p.medio||'—')}${p.medio&&p.tipo_puerto?' · '+esc(p.medio):''}</td><td><span class="status ${cls}">${status}</span></td><td>${esc(p.equipo_destino||'—')}</td><td>${esc(p.puerto_destino||'—')}</td><td>${esc(p.fecha_creacion||'—')}</td><td>${esc(p.fecha_actualizacion||'—')}</td><td class="actions"><button data-action="state" data-id="${p.id_puerto}">Cambiar estado</button>${linked?`<button class="danger" data-action="unlink" data-id="${p.id_puerto}">Quitar enlace</button>`:''}</td></tr>`;}).join('');}
-  function renderMiniPorts(){const box=$('#miniPorts');box.innerHTML=ports.map(p=>`<span title="Puerto ${esc(p.numero_puerto)} · ${esc(p.estado)}" class="mini-port ${stateClass(p)}">${esc(p.numero_puerto)}</span>`).join('');}
+  function renderMiniPorts(){
+    const box = $('#miniPorts');
+    const groups = new Map();
+
+    ports.forEach(port => {
+      const groupId = Number(port.grupo_puerto) || 1;
+      if (!groups.has(groupId)) groups.set(groupId, []);
+      groups.get(groupId).push(port);
+    });
+
+    box.innerHTML = Array.from(groups.entries()).map(([groupId, groupPorts]) => {
+      const first = groupPorts[0];
+      const sectionCount = Math.max(1, Number(first.secciones_fisicas) || 1);
+      const sectionSize = Math.ceil(groupPorts.length / sectionCount);
+      const sections = [];
+
+      for (let index = 0; index < sectionCount; index++) {
+        const sectionPorts = groupPorts.slice(index * sectionSize, (index + 1) * sectionSize);
+        if (!sectionPorts.length) continue;
+
+        sections.push(`<div class="mini-section" aria-label="Sección física ${index + 1}">
+          ${sectionPorts.map(port => `<span title="Puerto ${esc(port.numero_puerto)} · ${esc(port.estado)}" class="mini-port ${stateClass(port)}">${esc(port.numero_puerto)}</span>`).join('')}
+        </div>`);
+      }
+
+      return `<div class="mini-group">
+        <div class="mini-group-title">Grupo ${groupId} · ${esc(first.alcance || 'LAN')} · ${esc(first.medio || first.tipo_puerto || 'RED')}</div>
+        <div class="mini-sections">${sections.join('')}</div>
+      </div>`;
+    }).join('');
+  }
   $('#portsBody').addEventListener('click',async e=>{const b=e.target.closest('button[data-action]');if(!b)return;const id=Number(b.dataset.id);try{if(b.dataset.action==='state'){const p=ports.find(x=>Number(x.id_puerto)===id);if(!p)return;const choices=[['DISPONIBLE','Disponible'],['NO_DISPONIBLE','Ocupado'],['RESERVADO','Reservado'],['DANADO','Dañado']];const chosen=prompt('Estado nuevo:\n1 Disponible\n2 Ocupado\n3 Reservado\n4 Dañado',String(Math.max(1,choices.findIndex(x=>x[0]===p.estado)+1)));if(chosen===null)return;const opt=choices[Number(chosen)-1];if(!opt){alert('Selecciona 1, 2, 3 o 4.');return;}if((Number(p.esta_enlazado)===1||p.equipo_destino)&&opt[0]!=='NO_DISPONIBLE'){alert('Primero quita el enlace de este puerto.');return;}await post('api/cambiar_estado_puerto.php',{id_puerto:id,estado:opt[0]});}else{if(!confirm('¿Eliminar el enlace guardado y liberar ambos puertos?'))return;await post('api/eliminar_enlace_puerto.php',{id_puerto:id});}await loadPorts();}catch(err){alert(err.message);}});
   async function post(url,payload){const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)});const d=await r.json();if(!r.ok||d.estado!=='ok')throw new Error(d.mensaje||'La operación falló.');return d;}
   form.addEventListener('input',e=>{if(e.target.name==='serial'){const pos=e.target.selectionStart;e.target.value=e.target.value.toUpperCase();e.target.setSelectionRange(pos,pos);}else if(['nombre_equipo','marca','modelo'].includes(e.target.name)&&e.target.value){const pos=e.target.selectionStart;e.target.value=e.target.value.charAt(0).toUpperCase()+e.target.value.slice(1);e.target.setSelectionRange(pos,pos);}});
