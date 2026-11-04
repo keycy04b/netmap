@@ -31,6 +31,8 @@ if(typeForm){
   const r=await fetch('api/gestionar_tipos_equipo.php',{headers:{Accept:'application/json'}});
   const d=await r.json();if(!r.ok||!Array.isArray(d.tipos))throw new Error(d.mensaje||'No se pudieron cargar tipos.');
   typeRows.innerHTML=d.tipos.map(t=>`<tr><td>${esc(t.nombre_tipo)}</td><td>${esc(t.ruta_icono||'—')}</td><td><button data-edit="${t.id_tipo_equipo}" data-name="${esc(t.nombre_tipo)}" data-icon="${esc(t.ruta_icono||'')}">Editar</button> <button class="delete" data-delete="${t.id_tipo_equipo}">Eliminar</button></td></tr>`).join('');
+  const presetType=document.querySelector('#presetForm select[name="id_tipo_equipo"]');
+  if(presetType){const selected=presetType.value;presetType.replaceChildren(...d.tipos.map(t=>new Option(t.nombre_tipo,t.id_tipo_equipo)));if(d.tipos.some(t=>String(t.id_tipo_equipo)===selected))presetType.value=selected;}
  }
  typeForm.addEventListener('submit',async e=>{
   e.preventDefault();const data=Object.fromEntries(new FormData(typeForm));
