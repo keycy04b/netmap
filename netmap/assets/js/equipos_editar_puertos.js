@@ -190,7 +190,7 @@
     const b=e.target.closest('[data-action="edit-source-port"]');if(!b)return;
     const sourcePort=ports.find(x=>Number(x.id_puerto)===Number(b.dataset.portId));if(!sourcePort)return;
     if(editMode==='state'){
-      if(Number(sourcePort.esta_enlazado)===1){if(!confirm('Este puerto tiene un enlace guardado. ¿Eliminar el enlace y liberar ambos puertos?'))return;post('api/eliminar_enlace_puerto.php',{id_puerto:sourcePort.id_puerto}).then(loadPorts).catch(err=>alert(err.message));return;}
+      if(Number(sourcePort.esta_enlazado)===1){if(!confirm('Este puerto tiene un enlace guardado. ¿Eliminar el enlace y liberar ambos puertos?'))return;post('api/eliminar_enlace_puerto.php',{id_puerto:sourcePort.id_puerto}).then(async()=>{await loadPorts();for(const targetId of selectedTargets.keys()){const refreshed=await fetch(`api/obtener_puertos_enlace.php?id_equipo=${targetId}`);selectedTargets.get(targetId).ports=await refreshed.json();}renderTargetPorts();drawEditLinks();}).catch(err=>alert(err.message));return;}
       const choices=[['DISPONIBLE','Disponible'],['NO_DISPONIBLE','Ocupado'],['RESERVADO','Reservado'],['DANADO','Dañado']];const chosen=prompt('Estado nuevo:\\n1 Disponible\\n2 Ocupado\\n3 Reservado\\n4 Dañado',String(Math.max(1,choices.findIndex(x=>x[0]===sourcePort.estado)+1)));if(chosen===null)return;const opt=choices[Number(chosen)-1];if(!opt)return;post('api/cambiar_estado_puerto.php',{id_puerto:sourcePort.id_puerto,estado:opt[0]}).then(loadPorts).catch(err=>alert(err.message));return;
     }
     if(stateClass(sourcePort)!=='available'){alert('Solo puedes iniciar un enlace desde un puerto disponible.');return;}
