@@ -43,7 +43,6 @@
   function renderMiniPorts(){
     const box = $('#miniPorts');
     const groups = new Map();
-
     ports.forEach(port => {
       const groupId = Number(port.grupo_puerto) || 1;
       if (!groups.has(groupId)) groups.set(groupId, []);
@@ -52,17 +51,25 @@
 
     box.innerHTML = Array.from(groups.entries()).map(([groupId, groupPorts]) => {
       const first = groupPorts[0];
-      const sectionCount = Math.max(1, Number(first.secciones_fisicas) || 1);
-      const sectionSize = Math.ceil(groupPorts.length / sectionCount);
+      const sectionCount = Math.max(1, Math.min(groupPorts.length, Number(first.secciones_fisicas) || 1));
+      const base = Math.floor(groupPorts.length / sectionCount);
+      const extra = groupPorts.length % sectionCount;
+      let offset = 0;
       const sections = [];
 
       for (let index = 0; index < sectionCount; index++) {
-        const sectionPorts = groupPorts.slice(index * sectionSize, (index + 1) * sectionSize);
+        const amount = base + (index < extra ? 1 : 0);
+        const sectionPorts = groupPorts.slice(offset, offset + amount);
+        offset += amount;
         if (!sectionPorts.length) continue;
-
-        sections.push(`<div class="mini-section" aria-label="Sección física ${index + 1}">
-          ${sectionPorts.map(port => `<button type="button" title="Puerto ${esc(port.numero_puerto)} · ${esc(port.estado)}" class="mini-port ${stateClass(port)}${pendingEditPort?.id===Number(port.id_puerto)?' selected':''}" data-action="edit-source-port" data-port-id="${esc(port.id_puerto)}" data-peer-port="${esc(port.id_puerto_conectado||'')}" data-peer-equipment="${esc(port.id_equipo_conectado||'')}" data-medium="${esc(port.medio||port.tipo_puerto||'UTP')}">${esc(port.numero_puerto)}</button>`).join('')}
-        </div>`);
+        const firstRow = Math.ceil(sectionPorts.length / 2);
+        const rows = [sectionPorts.slice(0, firstRow), sectionPorts.slice(firstRow)];
+        const rowMarkup = rows.filter(row => row.length).map(row =>
+          `<div class="mini-port-row">${row.map(port =>
+            `<button type="button" title="Puerto ${esc(port.numero_puerto)} · ${esc(port.estado)}" class="mini-port ${stateClass(port)}${pendingEditPort?.id===Number(port.id_puerto)?' selected':''}" data-action="edit-source-port" data-port-id="${esc(port.id_puerto)}" data-peer-port="${esc(port.id_puerto_conectado||'')}" data-peer-equipment="${esc(port.id_equipo_conectado||'')}" data-medium="${esc(port.medio||port.tipo_puerto||'UTP')}">${esc(port.numero_puerto)}</button>`
+          ).join('')}</div>`
+        ).join('');
+        sections.push(`<div class="mini-section" aria-label="Sección física ${index + 1}">${rowMarkup}</div>`);
       }
 
       return `<div class="mini-group">
