@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="assets/css/registro_visual_ajustes_fase2.css">
     <link rel="stylesheet" href="assets/css/ajustes_sugerencias.css">
     <link rel="stylesheet" href="assets/css/ajustes_fase_siguiente.css">
+    <link rel="stylesheet" href="assets/css/netmap_global.css">
+    <script src="assets/js/netmap_global.js" defer></script>
     <script src="assets/js/registro_visual.js" defer></script>
 </head>
 <body>
@@ -33,8 +35,8 @@
         </div>
     </section>
 
-    <details id="existingPanel" class="existing-panel">
-        <summary>Buscar un equipo ya registrado para enlazarlo</summary>
+    <section id="existingPanel" class="existing-panel">
+        <h2>Equipos existentes y enlaces</h2>
         <div class="searchrow">
             <input id="existingSearch" type="search" placeholder="Nombre, serial, IP, marca o modelo">
             <select id="existingSite">
@@ -55,7 +57,7 @@
         <p class="muted">Selecciona un equipo y después pulsa un puerto nuevo y un puerto de ese equipo para preparar el enlace. Se registrará al guardar.</p>
         <div id="existingResults" aria-live="polite"></div>
         <div id="existingPorts" class="existing-ports"></div>
-    </details>
+    </section>
 
     <form id="form-lote" novalidate>
         <div id="contenedor-tarjetas" class="cards"></div>
@@ -66,6 +68,10 @@
         </div>
     </form>
 </main>
+<div class="floating-navigation" aria-label="Navegación rápida">
+    <button type="button" id="scrollToPorts" title="Bajar al listado de puertos">↓ Puertos</button>
+    <button type="button" id="scrollToEditor" title="Subir al editor">↑ Editor</button>
+</div>
 <div id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

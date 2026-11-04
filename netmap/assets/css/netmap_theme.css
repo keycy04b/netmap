@@ -1,0 +1,138 @@
+/* Tema compartido y navegación uniforme de NetMap. */
+:root {
+    color-scheme: dark;
+    --nm-page: #0b1220;
+    --nm-panel: #121d2e;
+    --nm-panel-soft: #18263a;
+    --nm-text: #e8eef7;
+    --nm-muted-text: #a9b8cc;
+    --nm-border: #2b3d55;
+    --nm-control: #0d1727;
+    --nm-accent: #3988d8;
+}
+html[data-theme="light"] {
+    color-scheme: light;
+    --nm-page: #f3f6fa;
+    --nm-panel: #ffffff;
+    --nm-panel-soft: #f8fafc;
+    --nm-text: #172033;
+    --nm-muted-text: #64748b;
+    --nm-border: #dce3ec;
+    --nm-control: #ffffff;
+    --nm-accent: #2563eb;
+}
+html, body { min-height: 100%; }
+body { background: var(--nm-page); color: var(--nm-text); }
+.nm-nav {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    min-height: 58px;
+    padding: 10px clamp(14px, 3vw, 42px);
+    color: #eef5ff;
+    background: #101a2a;
+    border-bottom: 1px solid #293950;
+    box-shadow: 0 3px 14px #0002;
+}
+.nm-nav .nm-brand { color: #fff; font-weight: 850; letter-spacing: .2px; white-space: nowrap; }
+.nm-nav .nm-links { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; }
+.nm-nav a, .nm-nav button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 7px 10px;
+    border: 1px solid #354a65;
+    border-radius: 8px;
+    color: #e4efff;
+    background: #19283d;
+    text-decoration: none;
+    font: inherit;
+    font-size: .84rem;
+    font-weight: 650;
+    cursor: pointer;
+}
+.nm-nav a:hover, .nm-nav button:hover { background: #243b59; border-color: #5b7da5; }
+.nm-nav [aria-current="page"] { background: #244b73; border-color: #4e83b8; }
+.nm-nav .nm-theme-toggle { margin-left: auto; white-space: nowrap; }
+html[data-theme="dark"] body { background: var(--nm-page); color: var(--nm-text); }
+html[data-theme="dark"] .container,
+html[data-theme="dark"] .existing-panel,
+html[data-theme="dark"] .device-card,
+html[data-theme="dark"] .panel,
+html[data-theme="dark"] .preview,
+html[data-theme="dark"] .shared-net-controls,
+html[data-theme="dark"] .group-settings-item,
+html[data-theme="dark"] .port-presets {
+    color: var(--nm-text);
+    background: var(--nm-panel);
+    border-color: var(--nm-border);
+}
+html[data-theme="dark"] .filtros-container,
+html[data-theme="dark"] .cardhead,
+html[data-theme="dark"] .existing-device-head,
+html[data-theme="dark"] .identity-summary,
+html[data-theme="dark"] .existing-item,
+html[data-theme="dark"] .group,
+html[data-theme="dark"] .section {
+    color: var(--nm-text);
+    background: var(--nm-panel-soft);
+    border-color: var(--nm-border);
+}
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] .existing-item strong,
+html[data-theme="dark"] .existing-device-head strong,
+html[data-theme="dark"] .identity-summary strong,
+html[data-theme="dark"] .gtitle,
+html[data-theme="dark"] .port-presets > strong { color: var(--nm-text); }
+html[data-theme="dark"] p,
+html[data-theme="dark"] small,
+html[data-theme="dark"] label,
+html[data-theme="dark"] .muted,
+html[data-theme="dark"] .existing-item span,
+html[data-theme="dark"] .existing-device-head small { color: var(--nm-muted-text); }
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] .input-control,
+html[data-theme="dark"] .searchrow input,
+html[data-theme="dark"] .searchrow select {
+    color: var(--nm-text);
+    background: var(--nm-control);
+    border-color: var(--nm-border);
+}
+html[data-theme="dark"] table,
+html[data-theme="dark"] .tabla-puertos,
+html[data-theme="dark"] .tabla-puertos th,
+html[data-theme="dark"] .tabla-puertos td,
+html[data-theme="dark"] th,
+html[data-theme="dark"] td {
+    color: var(--nm-text);
+    background: var(--nm-panel);
+    border-color: var(--nm-border);
+}
+html[data-theme="dark"] .tabla-puertos th,
+html[data-theme="dark"] th { background: #1b2a40; }
+html[data-theme="dark"] .port-presets button,
+html[data-theme="dark"] .icon-suggestion {
+    color: var(--nm-text);
+    background: #1b2a40;
+    border-color: var(--nm-border);
+}
+html[data-theme="light"] .nm-nav { background: #fff; color: #172033; border-color: #dce3ec; }
+html[data-theme="light"] .nm-nav .nm-brand { color: #172033; }
+html[data-theme="light"] .nm-nav a,
+html[data-theme="light"] .nm-nav button { color: #25364d; background: #f2f5f9; border-color: #d6deea; }
+html[data-theme="light"] .nm-nav a:hover,
+html[data-theme="light"] .nm-nav button:hover { background: #e6edf7; }
+@media (max-width: 650px) {
+    .nm-nav { gap: 9px; padding: 10px 12px; }
+    .nm-nav .nm-links { order: 3; flex-basis: 100%; }
+    .nm-nav .nm-theme-toggle { margin-left: auto; }
+    .nm-nav a, .nm-nav button { font-size: .78rem; padding: 6px 8px; }
+}
