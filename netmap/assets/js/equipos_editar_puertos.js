@@ -104,17 +104,83 @@
       selectedTargets.get(id).ports=result;selectedTargets.get(id).loading=false;renderTargetPorts();drawEditLinks();
     }catch(error){selectedTargets.delete(id);renderTargetSearch();renderTargetPorts();alert(error.message);}
   }
-  function renderTargetPorts(){
-    const box=$('#editExistingPorts');
-    box.innerHTML=[...selectedTargets.entries()].map(([id,entry])=>{
-      if(entry.loading)return `<article class="target-card"><h3>${esc(entry.item.nombre_equipo||entry.item.nombre_tipo)} · Cargando…</h3></article>`;
-      return `<article class="target-card" data-target-id="${id}">
-        <header><strong>${esc(entry.item.nombre_equipo||entry.item.nombre_tipo)}</strong><button type="button" class="danger" data-action="target-remove" data-id="${id}">×</button></header>
-        <div class="target-port-groups">${entry.ports.map(p=>{
-          const cls=stateClass(p), linked=Number(p.esta_enlazado)===1;
-          return `<button type="button" class="mini-port ${cls}" data-action="target-port" data-equipment-id="${id}" data-port-id="${p.id_puerto}" data-peer-port="${p.id_puerto_conectado||''}" data-port-number="${p.numero_puerto}" data-medium="${p.medio||p.tipo_puerto||'UTP'}" ${editMode!=='state' && cls!=='available'?'disabled':''} title="${esc(p.alcance||'LAN')} · ${esc(p.medio||'UTP')}">#${p.numero_puerto}</button>`;
-        }).join('')}</div>
-      </article>`;
+  function renderTargetPorts() {
+    const box = $('#editExistingPorts');
+
+    box.innerHTML = [...selectedTargets.entries()].map(([id, entry]) => {
+      if (entry.loading) {
+        return `<article class="target-card"><h3>${esc(entry.item.nombre_equipo || entry.item.nombre_tipo)} · Cargando…</h3></article>`;
+      }
+
+      const groups = new Map();
+      entry.ports.forEach(port => {
+        const groupId = Number(port.grupo_puerto) || 1;
+        if (!groups.has(groupId)) groups.set(groupId, []);
+        groups.get(groupId).push(port);
+      });
+
+      const groupMarkup = [...groups.entries()].map(([groupId, groupPorts]) => {
+        const first = groupPorts[0];
+        const sectionCount = Math.max(1, Math.min(groupPorts.length, Number(first.secciones_fisicas) || 1));
+        const base = Math.floor(groupPorts.length / sectionCount);
+        const extra = groupPorts.length % sectionCount;
+        let offset = 0;
+
+        const sections = [];
+        for (let sectionIndex = 0; sectionIndex < sectionCount; sectionIndex++) {
+          const amount = base + (sectionIndex < extra ? 1 : 0);
+          const sectionPorts = groupPorts.slice(offset, offset + amount);
+          offset += amount;
+          if (!sectionPorts.length) continue;
+
+          const firstRow = Math.ceil(sectionPorts.length / 2);
+          const rows = [sectionPorts.slice(0, firstRow), sectionPorts.slice(firstRow)];
+          const rowMarkup = rows.filter(row => row.length).map(row => `
+            <div class="mini-port-row">
+              ${row.map(port => {
+                const cls = stateClass(port);
+                const disabled = editMode !== 'state' && cls !== 'available' ? 'disabled' : '';
+                const selected = pendingTargetPair?.portId === Number(port.id_puerto) ? ' selected' : '';
+                return `<button type="button"
+                  class="mini-port ${cls}${selected}"
+                  data-action="target-port"
+                  data-equipment-id="${id}"
+                  data-port-id="${port.id_puerto}"
+                  data-peer-port="${port.id_puerto_conectado || ''}"
+                  data-port-number="${port.numero_puerto}"
+                  data-medium="${port.medio || port.tipo_puerto || 'UTP'}"
+                  ${disabled}
+                  title="Puerto ${esc(port.numero_puerto)} · ${esc(port.estado)} · ${esc(port.alcance || 'LAN')} · ${esc(port.medio || 'UTP')}">
+                  ${esc(port.numero_puerto)}
+                </button>`;
+              }).join('')}
+            </div>
+          `).join('');
+
+          sections.push(`
+            <div class="mini-section" aria-label="Sección física ${sectionIndex + 1}">
+              ${rowMarkup}
+            </div>
+          `);
+        }
+
+        return `
+          <div class="mini-group">
+            <div class="mini-group-title">Grupo ${groupId} · ${esc(first.alcance || 'LAN')} · ${esc(first.tipo_puerto || 'RED')} · ${esc(first.medio || 'UTP')}</div>
+            <div class="mini-sections">${sections.join('')}</div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <article class="target-card" data-target-id="${id}">
+          <header>
+            <strong>${esc(entry.item.nombre_equipo || entry.item.nombre_tipo)}</strong>
+            <button type="button" class="danger" data-action="target-remove" data-id="${id}" aria-label="Quitar equipo">×</button>
+          </header>
+          <div class="target-port-groups">${groupMarkup || '<p class="muted">Este equipo no tiene puertos registrados.</p>'}</div>
+        </article>
+      `;
     }).join('');
   }
   function drawEditLinks(){
