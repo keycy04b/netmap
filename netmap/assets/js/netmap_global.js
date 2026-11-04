@@ -4,6 +4,7 @@
         ['Inicio','index.html'],
         ['Inventario','equipos_lista.php'],
         ['Registrar','equipos_agregar.php'],
+        ['Editar equipo','equipos_editar.php?id=1'],
         ['Editar puertos','equipos_editar_puertos.php'],
         ['Presets','ajustes_presets.php']
     ];
