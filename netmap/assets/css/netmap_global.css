@@ -38,3 +38,24 @@ body { background:var(--netmap-bg); color:var(--netmap-text); transition:backgro
 #existingPanel { position:relative; }
 #portsAnchor { scroll-margin-top:18px; }
 @media(max-width:650px){ .netmap-nav { gap:6px; padding:9px; } .netmap-nav a,.netmap-nav button { font-size:12px; padding:6px 8px; } .floating-navigation { right:9px; bottom:10px; } }
+
+/* Editor de equipo: portada visual y puertos superpuestos. */
+.device-image { position:relative!important; min-height:430px!important; overflow:hidden; justify-content:flex-start!important; padding:18px!important; }
+.device-image #deviceIcon { position:absolute; top:22px; left:50%; transform:translateX(-50%); width:min(82%,300px)!important; max-width:300px!important; height:210px!important; max-height:210px!important; object-fit:contain; z-index:1; }
+.device-image #miniPorts { position:absolute; z-index:2; left:12px; right:12px; bottom:12px; width:auto; max-height:245px; overflow:auto; padding:10px; background:rgba(12,20,35,.88); border:1px solid #718096; border-radius:12px; backdrop-filter:blur(7px); }
+.device-image .mini-group { background:#172438; }
+.device-image .mini-group-title { color:#e4edf8; }
+.device-image .mini-port { cursor:pointer; color:#fff; }
+.device-image .mini-port:disabled { cursor:not-allowed; opacity:.55; }
+.device-image .mini-port.selected { outline:3px solid #c4b5fd; outline-offset:2px; }
+#editExistingPorts { display:grid; gap:12px; margin-top:12px; }
+.target-card { border:1px solid var(--netmap-border); border-radius:12px; padding:12px; background:var(--netmap-surface); }
+.target-card header { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:0; background:transparent; color:inherit; }
+.target-port-groups { display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; }
+.target-port-groups .mini-port { min-width:38px; padding:7px; cursor:pointer; }
+.target-port-groups .mini-port:disabled { cursor:not-allowed; opacity:.48; }
+.result-row { display:flex; align-items:center; gap:8px; }
+.result-row .result { flex:1; }
+.target-selected { font-size:.8rem; color:#16865c; }
+.link-actions { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+.link-actions button.active { outline:3px solid #8b5cf6; }
