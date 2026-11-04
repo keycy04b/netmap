@@ -132,6 +132,16 @@
         }
         .badge-enlazado { background-color: #e8f8f5; color: #1abc9c; }
         .badge-libre { background-color: #fef9e7; color: #f39c12; }
+        .badge-estado {
+            display: inline-block;
+            margin: 2px 3px 2px 0;
+            background: #edf2f7;
+            color: #334155;
+            white-space: nowrap;
+        }
+        .badge-reservado { background: #f1eafe; color: #6941a5; }
+        .badge-danado { background: #fee2e2; color: #b42318; }
+        .badge-ocupado { background: #e2e8f0; color: #475569; }
        
         .fila-equipo { cursor: pointer; }
         .fila-equipo:hover { background-color: #f8fafc; }
@@ -242,9 +252,12 @@
             <div class="filtro-group">
                 <label>Estado</label>
                 <select id="filtro-estado" class="input-control" onchange="filtrarYMostrar()">
-                    <option value="">Todos</option>
-                    <option value="enlazado">Enlazados</option>
-                    <option value="libre">Libres</option>
+                    <option value="">Todos los estados</option>
+                    <option value="enlazado">Enlazado</option>
+                    <option value="disponible">Disponible</option>
+                    <option value="ocupado">Ocupado (sin enlace)</option>
+                    <option value="reservado">Reservado</option>
+                    <option value="danado">Dañado</option>
                 </select>
             </div>
             <div class="filtro-group">
@@ -374,10 +387,14 @@
                     && String(eq.numero_piso).toLowerCase() === pisoSel);
                 let matchTipo = !tipoSel || (eq.nombre_tipo && String(eq.nombre_tipo).toLowerCase() === tipoSel);
 
-                let esEnlazado = parseInt(eq.total_enlaces) > 0;
-                let matchEstado = true;
-                if (estadoSel === 'enlazado') matchEstado = esEnlazado;
-                if (estadoSel === 'libre') matchEstado = !esEnlazado;
+                const estadosEquipo = {
+                    enlazado: Number(eq.puertos_enlazados || 0),
+                    disponible: Number(eq.puertos_disponibles || 0),
+                    ocupado: Number(eq.puertos_ocupados || 0),
+                    reservado: Number(eq.puertos_reservados || 0),
+                    danado: Number(eq.puertos_danados || 0)
+                };
+                const matchEstado = !estadoSel || estadosEquipo[estadoSel] > 0;
 
                 const fechaCreacion = obtenerFechaComparable(eq.fecha_creacion);
                 const fechaModificacion = obtenerFechaComparable(eq.fecha_actualizacion);
@@ -442,9 +459,18 @@
             }
 
             equipos.forEach(eq => {
-                let estadoHtml = eq.total_enlaces > 0
-                    ? `<span class="badge badge-enlazado">Enlazado (${eq.total_enlaces})</span>`
-                    : `<span class="badge badge-libre">Libre</span>`;
+                const resumenEstados = [
+                    ['Enlazados', eq.puertos_enlazados],
+                    ['Disponibles', eq.puertos_disponibles],
+                    ['Ocupados', eq.puertos_ocupados],
+                    ['Reservados', eq.puertos_reservados],
+                    ['Dañados', eq.puertos_danados]
+                ].filter(([, cantidad]) => Number(cantidad || 0) > 0);
+                let estadoHtml = resumenEstados.length
+                    ? resumenEstados.map(([nombre, cantidad]) =>
+                        `<span class="badge badge-estado">${nombre}: ${cantidad}</span>`
+                      ).join(' ')
+                    : `<span class="badge badge-libre">Sin puertos registrados</span>`;
 
                 let nombreDisplay = eq.nombre_equipo ? eq.nombre_equipo : 'Sin nombre asignado';
 
@@ -560,13 +586,20 @@
                     </tr></thead><tbody>`;
 
                 puertos.forEach(p => {
+                    const enlazado = Number(p.esta_enlazado) === 1 || Boolean(p.equipo_destino);
+                    const estado = enlazado ? "ENLAZADO" : String(p.estado || "N/D").toUpperCase();
+                    const claseEstado = enlazado ? "badge-enlazado"
+                        : estado === "DISPONIBLE" ? "badge-libre"
+                        : estado === "RESERVADO" ? "badge-reservado"
+                        : estado === "DANADO" ? "badge-danado"
+                        : "badge-ocupado";
                     const destinoInfo = p.equipo_destino
                         ? `<span style="color:#27ae60; font-weight:600;">${p.equipo_destino}</span>`
-                        : `<span style="color:#94a3b8; font-style:italic;">Sin enlace (Libre)</span>`;
+                        : `<span style="color:#94a3b8; font-style:italic;">Sin enlace</span>`;
                     const puertoDestinoInfo = p.puerto_destino ? `Puerto #${p.puerto_destino}` : "-";
                     htmlPuertos += `<tr>
                         <td><strong>Puerto #${p.numero_puerto}</strong> <span class="badge" style="background:#e2e8f0; font-size:0.7rem;">${p.tipo_puerto || "N/D"}</span></td>
-                        <td><span class="badge" style="background:#f1f5f9; color:#334155;">${p.estado || "N/D"}</span></td>
+                        <td><span class="badge ${claseEstado}">${estado}</span></td>
                         <td>${destinoInfo}</td><td>${puertoDestinoInfo}</td>
                         <td>${formatearFecha(p.fecha_creacion) === "No disponible" ? "Pendiente de implementar" : formatearFecha(p.fecha_creacion)}</td>
                         <td>${formatearFecha(p.fecha_actualizacion) === "No disponible" ? "Pendiente de implementar" : formatearFecha(p.fecha_actualizacion)}</td>
@@ -608,8 +641,15 @@
         async function eliminarEquipo(id) {
             if (confirm("¿Estás seguro de eliminar este equipo? Se borrarán también sus puertos y conexiones asociadas.")) {
                 try {
-                    let res = await fetch(`api/eliminar_equipo.php?id=${id}`);
+                    let res = await fetch("api/eliminar_equipo.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                        body: JSON.stringify({ id_equipo: Number(id) })
+                    });
                     let resultado = await res.json();
+                    if (!res.ok || resultado.estado !== "ok") {
+                        throw new Error(resultado.mensaje || "No se pudo eliminar el equipo.");
+                    }
                     if (resultado.estado === "ok") {
                         alert(resultado.mensaje);
                         cargarListadoEquipos();
