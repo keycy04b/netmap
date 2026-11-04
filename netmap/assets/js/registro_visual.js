@@ -60,12 +60,25 @@
         const typeName = $('[name="id_tipo_equipo"]', card)?.selectedOptions[0]?.textContent || '';
         const typeId = $('[name="id_tipo_equipo"]', card)?.value;
         const configured = presetsPorTipo[typeId] || [];
-        if (configured.length) return [...new Set(configured.map(item => Number(item.cantidad)))].sort((a,b)=>a-b);
-        if (/computador|computadora|pc|laptop|portátil|estación/i.test(typeName)) return [1, 2, 3, 4];
-        if (/switch|conmutador|swiche/i.test(typeName)) return [8, 16, 24, 48];
-        if (/router|enrutador/i.test(typeName)) return [4, 8, 12, 16];
-        if (/servidor/i.test(typeName)) return [2, 4, 6, 8];
-        return [8, 16, 24, 48];
+        if (configured.length) {
+            return configured.map(item => ({
+                cantidad: Number(item.cantidad),
+                secciones: Number(item.secciones),
+                alcance: item.alcance,
+                medio: item.medio
+            }));
+        }
+        let counts = [8, 16, 24, 48];
+        if (/computador|computadora|pc|laptop|portátil|estación/i.test(typeName)) counts = [1, 2, 3, 4];
+        else if (/router|enrutador/i.test(typeName)) counts = [4, 8, 12, 16];
+        else if (/servidor/i.test(typeName)) counts = [2, 4, 6, 8];
+        const current = getGroups(card)[0] || {alcance:'LAN',medio:'UTP'};
+        return counts.map(cantidad => ({
+            cantidad,
+            secciones: cantidad < 12 ? 1 : Math.ceil(cantidad / 12),
+            alcance: current.alcance,
+            medio: current.medio
+        }));
     }
 
     function titleCaseFirst(value) {
@@ -303,7 +316,7 @@
         }).join('');
         $('.groups', card).innerHTML = visualGroups;
         const presets = suggestedPortCounts(card);
-        $('.group-settings', card).innerHTML = `<div class="port-presets"><strong>Sugerencias de puertos para este equipo:</strong><div>${presets.map(count => `<button type="button" data-action="preset-ports" data-count="${count}">${count}</button>`).join('')}</div></div>` + groups.map((group, index) => `
+        $('.group-settings', card).innerHTML = `<div class="port-presets"><strong>Sugerencias de puertos para este equipo:</strong><div>${presets.map(preset => `<button type="button" data-action="preset-ports" data-count="${preset.cantidad}" data-sections="${preset.secciones}" data-reach="${esc(preset.alcance)}" data-medium="${esc(preset.medio)}" title="${esc(preset.alcance)} · ${esc(preset.medio)} · ${preset.secciones} sección(es)">${preset.cantidad} · ${preset.medio === 'FIBRA' ? 'Fibra' : 'UTP'} · ${preset.alcance}</button>`).join('')}</div></div>` + groups.map((group, index) => `
             <div class="group-settings-item" data-settings-group="${index}">
                 <div class="group-settings-head">
                     <strong>Grupo ${index + 1} · ${group.medio === 'FIBRA' ? 'Fibra óptica' : 'Ethernet / UTP'}</strong>
@@ -935,9 +948,10 @@
             const group = groups[groupIndex];
             if (!group) return;
             const count = Math.max(1, Math.min(128, Number(button.dataset.count) || 1));
-            const oldCount = Number(group.cantidad);
             group.cantidad = count;
-            group.secciones = count < 12 ? 1 : Math.max(1, Math.ceil(count / 12));
+            group.secciones = Math.max(1, Math.min(count, Number(button.dataset.sections) || (count < 12 ? 1 : Math.ceil(count / 12))));
+            if (['LAN','WAN'].includes(button.dataset.reach)) group.alcance = button.dataset.reach;
+            if (['UTP','FIBRA'].includes(button.dataset.medium)) group.medio = button.dataset.medium;
             Object.keys(group.states || {}).forEach(port => { if (Number(port) > count) delete group.states[port]; });
             setGroups(card, groups);
             renderCard(card);
