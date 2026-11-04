@@ -18,6 +18,7 @@
     };
 
     let catalogos = { tipos_equipo: [], sedes: [], pisos: [] };
+    let presetsPorTipo = {};
     let nextId = 1;
     let dirty = false;
     let joint = false;
@@ -57,8 +58,11 @@
 
     function suggestedPortCounts(card) {
         const typeName = $('[name="id_tipo_equipo"]', card)?.selectedOptions[0]?.textContent || '';
+        const typeId = $('[name="id_tipo_equipo"]', card)?.value;
+        const configured = presetsPorTipo[typeId] || [];
+        if (configured.length) return [...new Set(configured.map(item => Number(item.cantidad)))].sort((a,b)=>a-b);
         if (/computador|computadora|pc|laptop|portátil|estación/i.test(typeName)) return [1, 2, 3, 4];
-        if (/switch|conmutador/i.test(typeName)) return [8, 16, 24, 48];
+        if (/switch|conmutador|swiche/i.test(typeName)) return [8, 16, 24, 48];
         if (/router|enrutador/i.test(typeName)) return [4, 8, 12, 16];
         if (/servidor/i.test(typeName)) return [2, 4, 6, 8];
         return [8, 16, 24, 48];
@@ -93,6 +97,17 @@
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             catalogos = await response.json();
             if (!Array.isArray(catalogos.tipos_equipo)) throw new Error(catalogos.mensaje || 'Respuesta de catálogos inválida.');
+            try {
+                const presetResponse = await fetch('api/gestionar_presets_puertos.php', {headers:{Accept:'application/json'}});
+                if (presetResponse.ok) {
+                    const presetData = await presetResponse.json();
+                    (presetData.presets || []).filter(item => Number(item.activo) === 1).forEach(item => {
+                        (presetsPorTipo[item.id_tipo_equipo] ||= []).push(item);
+                    });
+                }
+            } catch (presetError) {
+                console.warn('Se usarán sugerencias predeterminadas: ', presetError);
+            }
             $('#existingSite').insertAdjacentHTML('beforeend', options(catalogos.sedes || [], 'id_sede', 'nombre_sede'));
             $('#existingFloor').insertAdjacentHTML('beforeend', options(catalogos.pisos || [], 'id_piso', 'numero_piso'));
             addCard();
