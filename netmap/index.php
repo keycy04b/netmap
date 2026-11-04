@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/api/conexion.php';
+header('Content-Type: text/html; charset=utf-8');
 
 $sql = "SELECT e.id_equipo, e.nombre_equipo, e.marca, e.modelo, e.direccion_ip,
                e.numero_puertos, e.icono, t.nombre_tipo, t.ruta_icono,
