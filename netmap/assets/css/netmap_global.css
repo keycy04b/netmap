@@ -59,3 +59,7 @@ body { background:var(--netmap-bg); color:var(--netmap-text); transition:backgro
 .target-selected { font-size:.8rem; color:#16865c; }
 .link-actions { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
 .link-actions button.active { outline:3px solid #8b5cf6; }
+
+#editor { position:relative; }
+.edit-links-overlay { position:absolute; inset:0 auto auto 0; z-index:5; pointer-events:none; overflow:visible; }
+.edit-link-line { fill:none; stroke:#e23a3a; stroke-width:3; stroke-dasharray:7 5; vector-effect:non-scaling-stroke; }
