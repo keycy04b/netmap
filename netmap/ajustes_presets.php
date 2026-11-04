@@ -32,6 +32,16 @@ table{width:100%;border-collapse:collapse}td,th{padding:10px;text-align:left;bor
 <h1>Presets de puertos</h1>
 <p class="notice">Configura cantidades sugeridas por tipo de equipo, alcance, medio físico y secciones. Estos valores aparecerán en las tarjetas al registrar equipos.</p>
 <section class="panel">
+<h2>Tipos de equipo</h2>
+<form id="typeForm" style="display:grid;grid-template-columns:2fr 2fr auto;gap:10px;align-items:end">
+<label>Nombre del tipo<input name="nombre_tipo" maxlength="100" required placeholder="Ej. Punto de acceso"></label>
+<label>Ruta del icono<input name="ruta_icono" placeholder="assets/icons/access-point.svg"></label>
+<button type="submit">Agregar tipo</button>
+</form>
+<div style="overflow:auto;margin-top:12px"><table><thead><tr><th>Tipo</th><th>Icono</th><th></th></tr></thead><tbody id="typeRows"><tr><td colspan="3">Cargando…</td></tr></tbody></table></div>
+<p id="typeMessage" class="notice" aria-live="polite"></p>
+</section>
+<section class="panel">
 <h2>Agregar o actualizar sugerencia</h2>
 <form id="presetForm">
 <label>Tipo de equipo<select name="id_tipo_equipo" required><?php foreach($tipos as $tipo): ?><option value="<?= (int)$tipo['id_tipo_equipo'] ?>"><?= htmlspecialchars($tipo['nombre_tipo'],ENT_QUOTES,'UTF-8') ?></option><?php endforeach ?></select></label>
