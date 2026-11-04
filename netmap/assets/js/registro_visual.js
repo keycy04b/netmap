@@ -531,6 +531,7 @@
         }
         links.push({ source, destination });
         pendingSource = null;
+        pendingExistingSource = null;
         $$('.port.selected').forEach(port => port.classList.remove('selected'));
         links.forEach(link => {
             if (link.source.kind === 'new') {
@@ -553,7 +554,8 @@
         if (index < 0) return;
         links.splice(index, 1);
         pendingSource = null;
-        $$('.port.selected').forEach(port => port.classList.remove('selected'));
+        pendingExistingSource = null;
+        $('.port.selected').forEach(port => port.classList.remove('selected'));
         for (const endpoint of [link.source, link.destination]) {
             if (endpoint.kind !== 'new') continue;
             const card = $(`.device-card[data-id="${endpoint.cardId}"]`);
@@ -998,13 +1000,16 @@
         } else if (action === 'link-mode') {
             if (pendingSource) { pendingSource = null; $$('.port.selected').forEach(port => port.classList.remove('selected')); }
             globalMode = 'link';
-            $$('.device-card').forEach(item => item.dataset.mode = 'link');
+            pendingExistingSource = null;
+            $('.device-card').forEach(item => item.dataset.mode = 'link');
             renderExistingPorts();
             toast('Modo Enlazar: selecciona un puerto disponible y luego su destino.');
         } else if (action === 'state-mode') {
             if (pendingSource) { pendingSource = null; $$('.port.selected').forEach(port => port.classList.remove('selected')); toast('Se canceló el enlace pendiente al cambiar de modo.'); }
             globalMode = 'state';
-            $$('.device-card').forEach(item => item.dataset.mode = 'state');
+            pendingExistingSource = null;
+            window.netmapExistingPairMode = false;
+            $('.device-card').forEach(item => item.dataset.mode = 'state');
             renderExistingPorts();
             toast('Modo Cambiar estado: pulsa un puerto para avanzar de estado.');
         } else if (action === 'port') {
@@ -1066,6 +1071,7 @@
     document.addEventListener('click', event => {
         if (!event.target.closest('#linkExistingPair')) return;
         window.netmapExistingPairMode = !window.netmapExistingPairMode;
+        globalMode = 'link';
         pendingExistingSource = null;
         pendingSource = null;
         $('#linkExistingPair').classList.toggle('active', window.netmapExistingPairMode);
