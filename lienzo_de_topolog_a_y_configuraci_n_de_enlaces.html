@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"error-container":"#ffdad6","primary-fixed-dim":"#b4c5ff","tertiary-fixed-dim":"#d0bcff","error":"#ba1a1a","outline-variant":"#c3c6d7","tertiary-container":"#7d4ce7","surface":"#f9f9ff","on-error":"#ffffff","on-primary-fixed":"#00174b","secondary-fixed-dim":"#4adad7","inverse-primary":"#b4c5ff","surface-container-lowest":"#ffffff","primary":"#004ac6","secondary":"#006a68","secondary-fixed":"#6cf7f3","surface-container-highest":"#d9e2fc","on-surface-variant":"#434655","surface-container-low":"#f1f3ff","outline":"#737686","surface-container":"#e9edff","surface-container-high":"#e1e8ff","on-secondary":"#ffffff","inverse-surface":"#273044","on-background":"#121b2e","on-secondary-fixed-variant":"#00504e","on-surface":"#121b2e","on-tertiary":"#ffffff","on-tertiary-container":"#f6edff","secondary-container":"#6cf7f3","on-primary-fixed-variant":"#003ea8","primary-container":"#2563eb","surface-tint":"#0053db","surface-dim":"#d1daf4","surface-bright":"#f9f9ff","on-primary":"#ffffff","primary-fixed":"#dbe1ff","inverse-on-surface":"#edf0ff","on-secondary-container":"#00706e","on-secondary-fixed":"#00201f","on-primary-container":"#eeefff","on-tertiary-fixed":"#23005c","surface-variant":"#d9e2fc","tertiary-fixed":"#e9ddff","tertiary":"#632ecd","background":"#f9f9ff","on-error-container":"#93000a","on-tertiary-fixed-variant":"#5516be"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{gutter:"1rem","space-lg":"1rem","space-sm":"0.5rem",margin:"1.5rem","space-xl":"1.5rem","space-md":"0.75rem","space-xs":"0.25rem"},fontFamily:{"headline-sm":["Inter"],"telemetry-mono":["JetBrains Mono"],"body-default":["Inter"],"headline-xl":["Inter"],"table-header":["Inter"],"headline-lg":["Inter"],"label-caps":["Inter"],"port-number":["JetBrains Mono"],"body-medium":["Inter"]},fontSize:{"headline-sm":["14px",{lineHeight:"18px",letterSpacing:"-0.005em",fontWeight:"700"}],"telemetry-mono":["12px",{lineHeight:"16px",letterSpacing:"0.01em",fontWeight:"500"}],"body-default":["13.5px",{lineHeight:"19px",fontWeight:"400"}],"headline-xl":["23px",{lineHeight:"28px",letterSpacing:"-0.02em",fontWeight:"800"}],"table-header":["12px",{lineHeight:"16px",letterSpacing:"0.04em",fontWeight:"700"}],"headline-lg":["17px",{lineHeight:"22px",letterSpacing:"-0.01em",fontWeight:"700"}],"label-caps":["11px",{lineHeight:"14px",letterSpacing:"0.04em",fontWeight:"700"}],"port-number":["9.5px",{lineHeight:"11px",letterSpacing:"-0.02em",fontWeight:"700"}],"body-medium":["13px",{lineHeight:"18px",fontWeight:"600"}]}}}};</script></head><body class="bg-background font-body-default text-body-default text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 w-full px-gutter flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-lg shrink-0"><div class="flex items-center gap-space-sm"><img alt="NetMap Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Xh2dlq-_4tZhELhaBA0Serrhyv9llC7a3SBv7KlTTYVzmVOKYw8ZjDc1nK4t6pmrjKjYUwM1-lw9pRTEuRZiFlqVSu7i-5zar3Vtbo7oC8hqi3u8KtYq66uYVIcyT5of5-c_qtc26t4BcaJd0ZvyZ_c5OOUrepL7bLyHCsa9uWBHZD2KPx2LzANCP5zmjTv6BMl0beIXPO20rGi0QkjHKrQlTI0hRFiodq2jmUedm6"/><span class="font-headline-lg text-headline-lg tracking-tight text-on-surface">NetMap</span><span class="font-telemetry-mono text-telemetry-mono px-space-sm py-0.5 rounded bg-surface-container text-on-surface-variant">netmap-integral-adjustments</span></div><nav class="hidden xl:flex items-center gap-space-xs" data-active-classes="bg-primary-container text-on-primary font-body-medium rounded-lg"><a class="px-space-md py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="mapa-de-topologia" href="#">Mapa de Topología</a><a class="px-space-md py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="equipos-e-inventario" href="#">Equipos e Inventario</a><a class="px-space-md py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="puertos-y-conexiones" href="#">Puertos y Conexiones</a><a class="px-space-md py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="configuracion-del-sistema" href="#">Configuración del Sistema</a></nav></div><div class="flex items-center gap-space-md shrink-0"><div class="hidden md:flex items-center gap-space-sm"><div class="flex items-center gap-space-xs px-space-md py-1 rounded-full bg-surface-container text-on-surface font-body-medium text-body-medium cursor-pointer hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[16px] text-on-surface-variant">domain</span><span>Sede / Rack</span><span class="material-symbols-outlined text-[16px] text-on-surface-variant">expand_more</span></div><div class="flex items-center gap-space-xs px-space-md py-1 rounded-full bg-surface-container text-on-surface font-telemetry-mono text-telemetry-mono"><span class="w-2 h-2 rounded-full bg-secondary"></span><span>Global: 99.8% Up</span></div></div><div class="flex items-center gap-space-sm"><button class="flex items-center gap-space-xs px-space-md py-1.5 rounded-lg bg-surface-container-high text-on-surface font-body-medium text-body-medium hover:bg-surface-container-highest transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">linear_scale</span><span class="hidden lg:inline">Modo Enlace</span></button><button class="flex items-center gap-space-xs px-space-md py-1.5 rounded-lg bg-primary-container text-on-primary font-body-medium text-body-medium shadow-[0_1px_4px_rgba(0,0,0,0.08)] hover:bg-primary transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">add</span><span class="hidden lg:inline">Nuevo Dispositivo</span></button></div><button aria-label="Notificaciones" class="relative p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error"></span></button><div class="flex items-center gap-space-sm pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-surface-container-highest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwgyFr1samFpvRFELHH0fRgGW7kkEOUCf0d9-cSAVw4yXJG106h4xrmtYa0M_ASv9HyvlvWljXT4tjAj-M9Ipw5cA2Yff2mF5wDH-crKlIXBPPUR7XhS-5n945Sd9Q8nUzXET-nt1SyKw7116Rd6GxjVStp3Ev98S4tcXUVG-M68Tay5RMjoAfkQJwkAuiRs1ofeaAY1Oo56w9pmCHNn361Mu7nTNuCjwDi466xbs"/><div class="hidden sm:flex flex-col"><span class="font-body-medium text-body-medium leading-none text-on-surface">NOC Admin</span><span class="font-label-caps text-label-caps uppercase text-on-surface-variant mt-0.5">Ingeniero</span></div></div></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-64 bg-surface-container-low z-40 flex flex-col justify-between py-space-lg overflow-y-auto"><div class="px-space-md flex flex-col gap-space-lg"><div><div class="px-space-md mb-space-sm font-label-caps text-label-caps uppercase text-on-surface-variant">Supervisión NOC</div><nav class="flex flex-col gap-1" data-active-classes="bg-surface-container-high text-on-surface font-body-medium rounded-lg"><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="mapa-de-topologia" href="#"><span class="material-symbols-outlined text-[20px]">hub</span><span>Topología Activa</span></a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="equipos-e-inventario" href="#"><span class="material-symbols-outlined text-[20px]">dns</span><span>Bastidores y Racks</span></a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="puertos-y-conexiones" href="#"><span class="material-symbols-outlined text-[20px]">settings_ethernet</span><span>Matriz de Conexión</span></a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="monitoreo-de-trafico" href="#"><span class="material-symbols-outlined text-[20px]">query_stats</span><span>Métricas y Telemetría</span></a></nav></div><div><div class="px-space-md mb-space-sm font-label-caps text-label-caps uppercase text-on-surface-variant">Infraestructura</div><nav class="flex flex-col gap-1" data-active-classes="bg-surface-container-high text-on-surface font-body-medium rounded-lg"><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="registro-de-equipos" href="#"><span class="material-symbols-outlined text-[20px]">memory</span><span>Registro de Hardware</span></a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="gestion-de-vlans" href="#"><span class="material-symbols-outlined text-[20px]">lan</span><span>Segmentación VLAN</span></a><a class="flex items-center gap-space-md px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="configuracion-del-sistema" href="#"><span class="material-symbols-outlined text-[20px]">tune</span><span>Parámetros de Red</span></a></nav></div></div><div class="px-space-md pt-space-md"><div class="p-space-md rounded-lg bg-surface-container flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Capacidad Rack</span><span class="font-telemetry-mono text-telemetry-mono text-primary font-bold">42U / 36U Ocupado</span></div><div class="w-full h-1.5 rounded-full bg-surface-container-highest overflow-hidden"><div class="h-full bg-primary rounded-full w-[85%]"></div></div><div class="flex items-center justify-between text-on-surface-variant font-telemetry-mono text-telemetry-mono mt-1"><span>DC-Alpha Core</span><span>85.7%</span></div></div></div></aside><div class="pl-64"><main class="w-full pt-16 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Cabecera Superior Contextual y Barra de Herramientas Flotante -->
+<section class="relative z-30 px-margin pt-space-lg pb-space-sm bg-surface">
+<!-- Fila 1: Título de Vista, Métricas Rápidas y Controles Principales -->
+<div class="flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-[24px]">hub</span>
+</div>
+<div>
+<div class="flex items-center gap-space-sm">
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Topología Lógica &amp; Física</h1>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-telemetry-mono text-telemetry-mono">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> En vivo: 18 Nodos
+            </span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface-variant">Lienzo interactivo de interconexión física, transceptores y matriz de parcheo.</p>
+</div>
+</div>
+<!-- Barra de Estado de Enlace Actual -->
+<div class="flex items-center gap-space-sm bg-surface-container-low px-space-md py-1.5 rounded-xl shadow-sm">
+<div class="flex items-center gap-2 pr-space-md">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Modo Actual:</span>
+<span class="font-body-medium text-body-medium text-primary font-bold flex items-center gap-1" id="currentModeLabel">
+<span class="material-symbols-outlined text-[16px]">cable</span> Trazado de Enlace Activo
+          </span>
+</div>
+<div class="h-4 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center gap-1 text-on-surface-variant font-telemetry-mono text-telemetry-mono">
+<span>Latencia Media:</span>
+<span class="text-on-surface font-bold">0.42 ms</span>
+</div>
+</div>
+</div>
+<!-- Barra de Herramientas y Filtros Desplegables (Clean UI) -->
+<div class="mt-space-md p-space-sm rounded-xl bg-surface-container flex flex-wrap items-center justify-between gap-space-sm shadow-sm">
+<!-- Selector de Modo Enlace y Tipo de Medio -->
+<div class="flex flex-wrap items-center gap-space-xs">
+<button class="flex items-center gap-space-xs px-3 py-1.5 rounded-lg bg-primary-container text-on-primary font-body-medium text-body-medium shadow-sm hover:bg-primary transition-all" id="toggleLinkModeBtn">
+<span class="material-symbols-outlined text-[18px]">add_link</span>
+<span>Modo Enlace</span>
+<span class="px-1.5 py-0.2 rounded bg-on-primary/20 text-on-primary font-telemetry-mono text-[10px]">ON</span>
+</button>
+<!-- Selector de Tipo de Cable / Medio -->
+<div class="relative inline-block text-left" id="cableTypeDropdownWrapper">
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-highest text-on-surface font-body-medium text-body-medium hover:bg-surface-container-high transition-colors" id="cableTypeBtn" type="button">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<span class="font-body-medium" id="cableTypeName">Fibra Óptica (10G/40G SFP+)</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">expand_more</span>
+</button>
+<!-- Menú Flotante Cable -->
+<div class="hidden absolute left-0 mt-1 w-80 rounded-xl bg-surface-container-lowest shadow-xl z-50 p-1.5" id="cableTypeMenu">
+<button class="w-full text-left p-2.5 rounded-lg hover:bg-surface-container flex items-start gap-2.5 transition-colors" onclick="selectCableType('fiber')" type="button">
+<div class="w-6 h-0.5 mt-2 bg-primary-container shrink-0"></div>
+<div>
+<div class="flex items-center justify-between">
+<span class="font-body-medium text-body-medium text-on-surface font-bold">Fibra Óptica Monomodo</span>
+<span class="font-telemetry-mono text-[10px] px-1.5 py-0.5 rounded bg-surface-container-high text-primary">SFP+ / QSFP</span>
+</div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mt-0.5">Línea continua azul (#2563eb). Enlace troncal troncal 10G/40G de ultra baja atenuación.</p>
+</div>
+</button>
+<button class="w-full text-left p-2.5 rounded-lg hover:bg-surface-container flex items-start gap-2.5 transition-colors mt-1" onclick="selectCableType('ethernet')" type="button">
+<div class="w-6 h-0.5 mt-2 bg-error shrink-0 border-b-2 border-dashed border-error"></div>
+<div>
+<div class="flex items-center justify-between">
+<span class="font-body-medium text-body-medium text-on-surface font-bold">Red Ethernet UTP Cat6A</span>
+<span class="font-telemetry-mono text-[10px] px-1.5 py-0.5 rounded bg-surface-container-high text-error">RJ45 1G/10G</span>
+</div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mt-0.5">Línea punteada roja (#ef4444). Cable de cobre estructurado para acceso y distribución.</p>
+</div>
+</button>
+</div>
+</div>
+<div class="h-5 w-[1px] bg-outline-variant/50 mx-1 hidden sm:block"></div>
+<!-- Indicador de Flujo Paso a Paso -->
+<div class="hidden lg:flex items-center gap-1.5 text-on-surface-variant font-telemetry-mono text-telemetry-mono px-2">
+<span class="w-5 h-5 rounded-full bg-primary-container text-on-primary text-[10px] flex items-center justify-center font-bold">1</span>
+<span class="text-primary font-bold">Origen: Core-Switch-01</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+<span class="w-5 h-5 rounded-full bg-secondary-container text-on-secondary-container text-[10px] flex items-center justify-center font-bold">2</span>
+<span class="text-secondary font-bold">Destino: Dist-Switch-B02</span>
+</div>
+</div>
+<!-- Filtros desplegables minimalistas para despejar el espacio -->
+<div class="flex items-center gap-space-xs">
+<!-- Dropdown Sede / Edificio -->
+<div class="relative">
+<button class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-container-low text-on-surface font-body-medium text-body-medium hover:bg-surface-container-highest transition-colors" id="sedeFilterBtn">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">apartment</span>
+<span class="hidden md:inline">Sede:</span>
+<span class="font-bold">DC-Alpha (Piso 2)</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">expand_more</span>
+</button>
+</div>
+<!-- Dropdown Capa de Red -->
+<div class="relative">
+<button class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-container-low text-on-surface font-body-medium text-body-medium hover:bg-surface-container-highest transition-colors" id="capaFilterBtn">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">layers</span>
+<span class="hidden md:inline">Capa:</span>
+<span class="font-bold">Todas las Capas</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">expand_more</span>
+</button>
+</div>
+<!-- Dropdown VLAN -->
+<div class="relative">
+<button class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-container-low text-on-surface font-body-medium text-body-medium hover:bg-surface-container-highest transition-colors" id="vlanFilterBtn">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">lan</span>
+<span class="hidden md:inline">VLAN:</span>
+<span class="font-bold">Troncales (Trunk)</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">expand_more</span>
+</button>
+</div>
+<!-- Dropdown Etiquetas / Visualización -->
+<div class="relative">
+<button class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-container-low text-on-surface font-body-medium text-body-medium hover:bg-surface-container-highest transition-colors" id="viewFilterBtn">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">visibility</span>
+<span class="hidden xl:inline">Etiquetas:</span>
+<span class="font-bold">Detalladas</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">expand_more</span>
+</button>
+</div>
+<!-- Reset Zoom / Centrar -->
+<button class="p-1.5 rounded-lg bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors" title="Centrar topología">
+<span class="material-symbols-outlined text-[18px]">filter_center_focus</span>
+</button>
+</div>
+</div>
+</section>
+<!-- LIENZO DE TOPOLOGÍA INTERACTIVO (CANVAS CON REJILLA Y NODOS HARDWARE) -->
+<section class="relative w-full overflow-hidden bg-[#0c1220] min-h-[700px] select-none">
+<!-- Patrón de fondo: Matriz de puntos sutil (20px grid) -->
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(#38bdf8 1px, transparent 1px); background-size: 24px 24px;"></div>
+<!-- Leyenda Flotante En Lienzo (Inferior Izquierda) -->
+<div class="absolute bottom-4 left-4 z-20 p-space-sm rounded-xl bg-inverse-surface/90 backdrop-blur-md text-inverse-on-surface shadow-xl flex items-center gap-space-md">
+<div class="flex items-center gap-2">
+<div class="w-6 h-1 bg-primary-container rounded"></div>
+<span class="font-telemetry-mono text-telemetry-mono text-xs">Fibra 10G/40G SFP+ (Línea Continua)</span>
+</div>
+<div class="h-3 w-[1px] bg-outline"></div>
+<div class="flex items-center gap-2">
+<div class="w-6 h-0.5 border-b-2 border-dashed border-error"></div>
+<span class="font-telemetry-mono text-telemetry-mono text-xs">Ethernet RJ45 (Línea Discontinua)</span>
+</div>
+<div class="h-3 w-[1px] bg-outline"></div>
+<div class="flex items-center gap-1.5 font-telemetry-mono text-[11px] text-secondary-fixed">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed animate-ping"></span>
+<span>Auto-Sync CDP/LLDP</span>
+</div>
+</div>
+<!-- Controles de Navegación del Lienzo (Inferior Derecha) -->
+<div class="absolute bottom-4 right-4 z-20 flex flex-col gap-1 bg-inverse-surface/80 backdrop-blur-md p-1 rounded-xl shadow-lg">
+<button class="w-8 h-8 rounded-lg text-inverse-on-surface hover:bg-inverse-surface flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+<button class="w-8 h-8 rounded-lg text-inverse-on-surface hover:bg-inverse-surface flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<button class="w-8 h-8 rounded-lg text-inverse-on-surface hover:bg-inverse-surface flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[18px]">fit_screen</span>
+</button>
+</div>
+<!-- CAPA SVG DE CONEXIONES Y ENLACES (Bézier + Stroke Types) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none z-10" id="topologySvgLines">
+<defs>
+<!-- Filtros y Gradientes para Cables -->
+<filter height="140%" id="glowBlue" width="140%" x="-20%" y="-20%">
+<fedropshadow dx="0" dy="0" flood-color="#2563eb" flood-opacity="0.8" stddeviation="3"></fedropshadow>
+</filter>
+<filter height="140%" id="glowRed" width="140%" x="-20%" y="-20%">
+<fedropshadow dx="0" dy="0" flood-color="#ef4444" flood-opacity="0.7" stddeviation="2"></fedropshadow>
+</filter>
+</defs>
+<!-- 1. Enlace Fibra Óptica Existente: Edge-Router-GW a Core-Switch-01 -->
+<path d="M 230 190 C 230 310, 480 200, 520 280" fill="none" filter="url(#glowBlue)" stroke="#2563eb" stroke-width="3"></path>
+<!-- Badge de Estado del Enlace 1 -->
+<g class="pointer-events-auto cursor-pointer" transform="translate(350, 240)">
+<rect fill="#141f31" height="24" rx="12" stroke="#2563eb" stroke-width="1" width="90" x="-45" y="-12"></rect>
+<text fill="#93c5fd" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="0" y="4">40G SFP28 🟢</text>
+</g>
+<!-- 2. NUEVO ENLACE PROPUESTO (ORIGEN -> DESTINO): Core-Switch-01 a Dist-Switch-B02 -->
+<!-- Trazado activo con animación pulsante / highlight -->
+<path class="animate-pulse" d="M 640 330 C 760 330, 800 240, 920 230" fill="none" filter="url(#glowBlue)" id="activeWirePath" stroke="#2563eb" stroke-dasharray="10 4" stroke-width="4"></path>
+<!-- Badge de Enlace en Configuración -->
+<g class="pointer-events-auto cursor-pointer" transform="translate(775, 275)">
+<rect fill="#004ac6" height="28" rx="14" stroke="#b4c5ff" stroke-width="1.5" width="120" x="-60" y="-14"></rect>
+<text fill="#ffffff" font-family="JetBrains Mono" font-size="10.5" font-weight="700" text-anchor="middle" x="0" y="4">⚡ Enlazando 10G SFP+</text>
+</g>
+<!-- 3. Enlace Ethernet RJ45: Core-Switch-01 a Access-SW-Piso3 (Línea punteada roja) -->
+<path d="M 580 390 C 580 500, 390 480, 370 560" fill="none" filter="url(#glowRed)" stroke="#ef4444" stroke-dasharray="6,6" stroke-width="2.5"></path>
+<g class="pointer-events-auto" transform="translate(470, 480)">
+<rect fill="#141f31" height="22" rx="11" stroke="#ef4444" stroke-width="1" width="84" x="-42" y="-11"></rect>
+<text fill="#fca5a5" font-family="JetBrains Mono" font-size="9.5" text-anchor="middle" x="0" y="4">1G Cat6A 🟢</text>
+</g>
+<!-- 4. Enlace Ethernet RJ45: Dist-Switch-B02 a Servidor-HyperV-01 (Línea punteada roja) -->
+<path d="M 980 290 C 980 430, 890 470, 850 560" fill="none" filter="url(#glowRed)" stroke="#ef4444" stroke-dasharray="6,6" stroke-width="2.5"></path>
+<g class="pointer-events-auto" transform="translate(930, 430)">
+<rect fill="#141f31" height="22" rx="11" stroke="#ef4444" stroke-width="1" width="88" x="-44" y="-11"></rect>
+<text fill="#fca5a5" font-family="JetBrains Mono" font-size="9.5" text-anchor="middle" x="0" y="4">LACP 2x10G 🟢</text>
+</g>
+</svg>
+<!-- CAPA DE NODOS DE HARDWARE FÍSICOS (Posicionados en el lienzo) -->
+<div class="relative w-full h-[700px] pointer-events-auto">
+<!-- NODO 1: Edge-Router-GW -->
+<div class="absolute left-[130px] top-[120px] w-64 rounded-xl bg-surface-container-lowest/95 backdrop-blur-md shadow-xl p-3 cursor-pointer hover:shadow-2xl transition-all group">
+<div class="flex items-center justify-between pb-2">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Edge-Router-GW</span>
+</div>
+<span class="font-telemetry-mono text-[10px] px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">BGP Core</span>
+</div>
+<p class="font-label-caps text-label-caps text-on-surface-variant truncate">MikroTik Cloud Core CCR2004</p>
+<div class="mt-2 pt-2 flex items-center justify-between text-on-surface-variant font-telemetry-mono text-[11px] bg-surface-container-low px-2 py-1 rounded">
+<span>IP: 192.168.0.1</span>
+<span class="text-secondary font-bold">UP 142d</span>
+</div>
+</div>
+<!-- NODO 2: Core-Switch-01 (SELECCIONADO COMO ORIGEN - Halo Pulsante Azul) -->
+<div class="absolute left-[450px] top-[260px] w-72 rounded-xl bg-surface-container-lowest shadow-2xl p-3.5 ring-4 ring-primary-container shadow-[0_0_30px_rgba(37,99,235,0.4)] transition-all animate-pulse">
+<div class="flex items-center justify-between pb-1.5">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary-container animate-ping"></span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-extrabold">Core-Switch-01</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-primary text-on-primary font-label-caps text-[10px] font-bold tracking-wider">ORIGEN</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface-variant">Cisco Catalyst 9500 (48x 10G SFP+)</p>
+<div class="mt-2.5 bg-surface-container-high p-2 rounded-lg space-y-1">
+<div class="flex items-center justify-between font-telemetry-mono text-telemetry-mono">
+<span class="text-on-surface-variant">Dirección IP:</span>
+<span class="text-on-surface font-bold">192.168.1.1</span>
+</div>
+<div class="flex items-center justify-between font-telemetry-mono text-telemetry-mono">
+<span class="text-on-surface-variant">Puerto Elegido:</span>
+<span class="text-primary font-bold">Te1/0/24 (Disponible)</span>
+</div>
+</div>
+<!-- Indicador táctil de transceptores -->
+<div class="mt-2 flex items-center justify-between text-[11px] font-telemetry-mono text-secondary">
+<span>24/48 Puertos Ocupados</span>
+<span class="bg-secondary/10 px-1.5 py-0.5 rounded">Temp: 39°C</span>
+</div>
+</div>
+<!-- NODO 3: Dist-Switch-B02 (SELECCIONADO COMO DESTINO - Halo Activo Cyan/Azul) -->
+<div class="absolute left-[880px] top-[180px] w-72 rounded-xl bg-surface-container-lowest shadow-2xl p-3.5 ring-4 ring-secondary-container shadow-[0_0_28px_rgba(108,247,243,0.3)] transition-all">
+<div class="flex items-center justify-between pb-1.5">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-secondary"></span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-extrabold">Dist-Switch-B02</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-secondary text-on-secondary font-label-caps text-[10px] font-bold tracking-wider">DESTINO</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface-variant">Ubiquiti Pro Aggregation (28x SFP+)</p>
+<div class="mt-2.5 bg-surface-container-high p-2 rounded-lg space-y-1">
+<div class="flex items-center justify-between font-telemetry-mono text-telemetry-mono">
+<span class="text-on-surface-variant">Dirección IP:</span>
+<span class="text-on-surface font-bold">192.168.1.12</span>
+</div>
+<div class="flex items-center justify-between font-telemetry-mono text-telemetry-mono">
+<span class="text-on-surface-variant">Puerto Destino:</span>
+<span class="text-secondary font-bold">SFP+ Port 12 (Libre)</span>
+</div>
+</div>
+<div class="mt-2 flex items-center justify-between text-[11px] font-telemetry-mono text-secondary">
+<span>12/28 Puertos Enlace</span>
+<span class="bg-secondary/10 px-1.5 py-0.5 rounded">RPS Normal</span>
+</div>
+</div>
+<!-- NODO 4: Access-SW-Piso3 -->
+<div class="absolute left-[260px] top-[530px] w-64 rounded-xl bg-surface-container-lowest/95 backdrop-blur-md shadow-xl p-3 cursor-pointer hover:shadow-2xl transition-all">
+<div class="flex items-center justify-between pb-1">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Access-SW-Piso3</span>
+</div>
+<span class="font-telemetry-mono text-[10px] px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">Acceso</span>
+</div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Cisco Catalyst 2960X 24P PoE</p>
+<div class="mt-2 pt-2 flex items-center justify-between text-on-surface-variant font-telemetry-mono text-[11px] bg-surface-container-low px-2 py-1 rounded">
+<span>IP: 192.168.10.5</span>
+<span class="text-on-surface">PoE: 180W / 370W</span>
+</div>
+</div>
+<!-- NODO 5: Servidor-HyperV-01 -->
+<div class="absolute left-[750px] top-[530px] w-64 rounded-xl bg-surface-container-lowest/95 backdrop-blur-md shadow-xl p-3 cursor-pointer hover:shadow-2xl transition-all">
+<div class="flex items-center justify-between pb-1">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Servidor-HyperV-01</span>
+</div>
+<span class="font-telemetry-mono text-[10px] px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">Compute</span>
+</div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Dell PowerEdge R750 (2U)</p>
+<div class="mt-2 pt-2 flex items-center justify-between text-on-surface-variant font-telemetry-mono text-[11px] bg-surface-container-low px-2 py-1 rounded">
+<span>IP: 192.168.20.100</span>
+<span class="text-secondary font-bold">16 VMs Activas</span>
+</div>
+</div>
+</div>
+<!-- VENTANA MODAL FLOTANTE / DIÁLOGO EN PRIMER PLANO: CONFIGURACIÓN Y COMPATIBILIDAD DE ENLACE -->
+<div class="absolute inset-x-4 top-6 max-w-4xl mx-auto z-40 bg-surface-container-lowest rounded-2xl shadow-2xl p-space-lg" id="linkConfigModal">
+<!-- Encabezado del Modal -->
+<div class="flex items-center justify-between pb-space-md bg-surface-container-low -mx-space-lg -mt-space-lg px-space-lg pt-space-md rounded-t-2xl">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-[24px]">electrical_services</span>
+</div>
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Establecer Nuevo Enlace de Red</h2>
+<p class="font-body-medium text-body-medium text-on-surface-variant">Verificación de interfaces transceptoras, numeración de puerto y configuración 802.1Q.</p>
+</div>
+</div>
+<!-- Indicador de Medio Seleccionado -->
+<div class="flex items-center gap-2 bg-surface-container-highest px-3 py-1.5 rounded-lg">
+<span class="w-3 h-3 rounded-full bg-primary-container"></span>
+<span class="font-telemetry-mono text-telemetry-mono text-primary font-bold">Fibra Óptica (SFP+ Monomodo)</span>
+<span class="text-on-surface-variant text-xs">| Línea Azul Continua</span>
+</div>
+</div>
+<!-- Cuerpo del Modal: 2 Columnas de Hardware Compactas (Origen vs Destino) -->
+<div class="mt-space-md grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- COLUMNA IZQUIERDA: EQUIPO ORIGEN -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-caps text-label-caps uppercase text-primary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">login</span> Extremo Origen
+              </span>
+<span class="font-telemetry-mono text-[11px] px-2 py-0.5 rounded bg-surface-container-highest text-on-surface">Rack Alpha-U14</span>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded-lg shadow-sm">
+<div class="font-headline-sm text-headline-sm text-on-surface">Core-Switch-01</div>
+<div class="font-telemetry-mono text-telemetry-mono text-on-surface-variant">IP: 192.168.1.1 • Cisco Catalyst 9500</div>
+</div>
+<!-- Selector Desplegable de Puerto Origen -->
+<div class="mt-space-md">
+<label class="block font-label-caps text-label-caps uppercase text-on-surface-variant mb-1">Puerto de Salida Físico (Origen)</label>
+<div class="relative">
+<select class="w-full px-3 py-2 rounded-lg bg-surface-container-lowest text-on-surface font-telemetry-mono text-telemetry-mono shadow-sm focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer" id="originPortSelect">
+<option selected="" value="Te1/0/24">Puerto 24 [Te1/0/24 - SFP+ 10G - Disponible 🟢]</option>
+<option disabled="" value="Te1/0/25">Puerto 25 [Te1/0/25 - Ocupado Uplink 🔴]</option>
+<option value="Te1/0/26">Puerto 26 [Te1/0/26 - SFP+ 10G - Disponible 🟢]</option>
+<option value="Fo1/0/1">Puerto 49 [Fo1/0/1 - QSFP+ 40G - Disponible 🟢]</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant pointer-events-none text-[18px]">expand_more</span>
+</div>
+</div>
+<!-- Especificación del Transceptor Detectado -->
+<div class="mt-space-sm p-2 rounded-lg bg-surface-container flex items-center justify-between text-on-surface-variant font-telemetry-mono text-[11px]">
+<span>Módulo: Cisco SFP-10G-LR</span>
+<span class="text-secondary font-bold">1310nm / 10km</span>
+</div>
+</div>
+<div class="mt-space-md pt-2 border-t border-outline-variant/30 flex items-center justify-between font-telemetry-mono text-[11px]">
+<span class="text-on-surface-variant">Potencia Tx:</span>
+<span class="text-secondary font-bold">-2.4 dBm (Óptima)</span>
+</div>
+</div>
+<!-- COLUMNA DERECHA: EQUIPO DESTINO -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-caps text-label-caps uppercase text-secondary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">logout</span> Extremo Destino
+              </span>
+<span class="font-telemetry-mono text-[11px] px-2 py-0.5 rounded bg-surface-container-highest text-on-surface">Rack Beta-U22</span>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded-lg shadow-sm">
+<div class="font-headline-sm text-headline-sm text-on-surface">Dist-Switch-B02</div>
+<div class="font-telemetry-mono text-telemetry-mono text-on-surface-variant">IP: 192.168.1.12 • Ubiquiti Pro Aggregation</div>
+</div>
+<!-- Selector Desplegable de Puerto Destino -->
+<div class="mt-space-md">
+<label class="block font-label-caps text-label-caps uppercase text-on-surface-variant mb-1">Puerto de Entrada Físico (Destino)</label>
+<div class="relative">
+<select class="w-full px-3 py-2 rounded-lg bg-surface-container-lowest text-on-surface font-telemetry-mono text-telemetry-mono shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary appearance-none cursor-pointer" id="destPortSelect">
+<option selected="" value="SFP_12">Puerto 12 [SFP+ 10G Cage - Disponible 🟢]</option>
+<option value="SFP_13">Puerto 13 [SFP+ 10G Cage - Disponible 🟢]</option>
+<option disabled="" value="SFP_14">Puerto 14 [SFP+ 10G - Patching Error ⚠️]</option>
+<option value="SFP_28">Puerto 28 [SFP28 25G Cage - Disponible 🟢]</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant pointer-events-none text-[18px]">expand_more</span>
+</div>
+</div>
+<!-- Badge de Compatibilidad Cruzada de Hardware -->
+<div class="mt-space-sm p-2 rounded-lg bg-secondary-container/40 flex items-center justify-between text-on-secondary-container font-telemetry-mono text-[11px]">
+<span class="flex items-center gap-1 font-bold">
+<span class="material-symbols-outlined text-[14px] text-secondary">verified</span>
+                Compatible: SFP+ 10Gbps Full Duplex
+              </span>
+<span class="text-secondary font-bold">Auto-MDIX</span>
+</div>
+</div>
+<div class="mt-space-md pt-2 border-t border-outline-variant/30 flex items-center justify-between font-telemetry-mono text-[11px]">
+<span class="text-on-surface-variant">Atenuación Estimada:</span>
+<span class="text-secondary font-bold">0.85 dB / 120m</span>
+</div>
+</div>
+</div>
+<!-- Configuración Lógica Adicional (Menús Desplegables Limpios) -->
+<div class="mt-space-md p-space-md rounded-xl bg-surface-container grid grid-cols-1 sm:grid-cols-3 gap-space-md">
+<!-- 1. Asignación de VLAN -->
+<div>
+<label class="block font-label-caps text-label-caps uppercase text-on-surface-variant mb-1">Asignación VLAN / Segmento</label>
+<div class="relative">
+<select class="w-full px-3 py-1.5 rounded-lg bg-surface-container-lowest text-on-surface font-body-medium text-body-medium shadow-sm focus:outline-none appearance-none cursor-pointer">
+<option selected="">VLAN 100 - Tráfico Gestión NOC</option>
+<option>VLAN 200 - Almacenamiento iSCSI / SAN</option>
+<option>VLAN 300 - Clúster Servidores Hyper-V</option>
+<option>VLAN 999 - Enlace Troncal Nativo</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2 text-on-surface-variant pointer-events-none text-[16px]">expand_more</span>
+</div>
+</div>
+<!-- 2. Modo de Puerto -->
+<div>
+<label class="block font-label-caps text-label-caps uppercase text-on-surface-variant mb-1">Modo de Operación</label>
+<div class="relative">
+<select class="w-full px-3 py-1.5 rounded-lg bg-surface-container-lowest text-on-surface font-body-medium text-body-medium shadow-sm focus:outline-none appearance-none cursor-pointer">
+<option selected="">Trunk 802.1Q (Etiquetado VLAN múltiple)</option>
+<option>Access (Acceso sin etiquetado exclusivo)</option>
+<option>QinQ (Tunneling 802.1ad)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2 text-on-surface-variant pointer-events-none text-[16px]">expand_more</span>
+</div>
+</div>
+<!-- 3. Monitoreo y Agregación LACP -->
+<div>
+<label class="block font-label-caps text-label-caps uppercase text-on-surface-variant mb-1">LACP &amp; Monitoreo BFD</label>
+<div class="relative">
+<select class="w-full px-3 py-1.5 rounded-lg bg-surface-container-lowest text-on-surface font-body-medium text-body-medium shadow-sm focus:outline-none appearance-none cursor-pointer">
+<option selected="">Activo (LACP 802.3ad + LLDP Telemetry)</option>
+<option>Deshabilitado (Enlace Independiente)</option>
+<option>Pasivo LACP (Esperando negociación)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2 text-on-surface-variant pointer-events-none text-[16px]">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Pie de Acciones del Modal -->
+<div class="mt-space-lg flex items-center justify-between pt-space-sm">
+<button class="px-space-md py-2 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface font-body-medium text-body-medium transition-colors" onclick="closeLinkModal()" type="button">
+          Cancelar y Descartar
+        </button>
+<div class="flex items-center gap-space-sm">
+<button class="px-space-md py-2 rounded-lg bg-surface-container-highest text-on-surface font-body-medium text-body-medium hover:bg-surface-container-high transition-colors flex items-center gap-1.5" onclick="simulateTestLoop()" type="button">
+<span class="material-symbols-outlined text-[18px]">network_check</span>
+<span>Verificar Continuidad</span>
+</button>
+<button class="px-space-lg py-2 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-body-medium text-body-medium font-bold shadow-md transition-all flex items-center gap-2" onclick="confirmLink()" type="button">
+<span class="material-symbols-outlined text-[18px]">cable</span>
+<span>Confirmar y Trazar Enlace</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Panel Resumen de Conexiones Activas en Pie de Página -->
+<section class="p-margin bg-surface">
+<div class="flex flex-wrap items-center justify-between gap-space-md pb-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-sm text-headline-sm text-on-surface">Matriz de Enlaces Recientes</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container font-telemetry-mono text-[11px] text-on-surface-variant">4 Enlaces Físicos Registrados</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Formato de Exportación:</span>
+<button class="px-2.5 py-1 rounded bg-surface-container-low text-on-surface font-telemetry-mono text-telemetry-mono hover:bg-surface-container">JSON Topo</button>
+<button class="px-2.5 py-1 rounded bg-surface-container-low text-on-surface font-telemetry-mono text-telemetry-mono hover:bg-surface-container">Cisco Running-Config</button>
+</div>
+</div>
+<!-- Tabla rápida de enlaces físicos -->
+<div class="overflow-x-auto rounded-xl shadow-sm bg-surface-container-lowest">
+<table class="w-full text-left font-body-default text-body-default">
+<thead class="bg-surface-container-low text-on-surface-variant font-table-header text-table-header uppercase">
+<tr>
+<th class="px-4 py-3">Tipo de Medio</th>
+<th class="px-4 py-3">Dispositivo Origen</th>
+<th class="px-4 py-3">Puerto Origen</th>
+<th class="px-4 py-3">Dispositivo Destino</th>
+<th class="px-4 py-3">Puerto Destino</th>
+<th class="px-4 py-3">Capacidad</th>
+<th class="px-4 py-3">VLAN ID</th>
+<th class="px-4 py-3 text-right">Estado</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low font-telemetry-mono text-telemetry-mono text-on-surface">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-3 flex items-center gap-2">
+<span class="w-3 h-1 bg-primary-container rounded"></span>
+<span class="font-bold text-primary">Fibra Óptica</span>
+</td>
+<td class="px-4 py-3 font-bold">Core-Switch-01</td>
+<td class="px-4 py-3">Te1/0/24 (SFP+)</td>
+<td class="px-4 py-3 font-bold">Dist-Switch-B02</td>
+<td class="px-4 py-3">SFP+ Port 12</td>
+<td class="px-4 py-3">10 Gbps FDX</td>
+<td class="px-4 py-3">Trunk (100,200)</td>
+<td class="px-4 py-3 text-right text-secondary font-bold">🟢 En Sincronización</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-3 flex items-center gap-2">
+<span class="w-3 h-1 bg-primary-container rounded"></span>
+<span class="font-bold text-primary">Fibra Óptica</span>
+</td>
+<td class="px-4 py-3 font-bold">Edge-Router-GW</td>
+<td class="px-4 py-3">sfp-sfpplus1</td>
+<td class="px-4 py-3 font-bold">Core-Switch-01</td>
+<td class="px-4 py-3">Fo1/0/1</td>
+<td class="px-4 py-3">40 Gbps QSFP+</td>
+<td class="px-4 py-3">Trunk Nativo</td>
+<td class="px-4 py-3 text-right text-secondary font-bold">🟢 Enlace Activo</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-3 flex items-center gap-2">
+<span class="w-3 h-0.5 border-b border-dashed border-error"></span>
+<span class="font-bold text-error">Ethernet RJ45</span>
+</td>
+<td class="px-4 py-3 font-bold">Core-Switch-01</td>
+<td class="px-4 py-3">Gi1/0/48</td>
+<td class="px-4 py-3 font-bold">Access-SW-Piso3</td>
+<td class="px-4 py-3">Gi1/0/1</td>
+<td class="px-4 py-3">1 Gbps Cat6A</td>
+<td class="px-4 py-3">VLAN 10</td>
+<td class="px-4 py-3 text-right text-secondary font-bold">🟢 Enlace Activo</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-3 flex items-center gap-2">
+<span class="w-3 h-0.5 border-b border-dashed border-error"></span>
+<span class="font-bold text-error">Ethernet RJ45</span>
+</td>
+<td class="px-4 py-3 font-bold">Dist-Switch-B02</td>
+<td class="px-4 py-3">Eth-LAG-1</td>
+<td class="px-4 py-3 font-bold">Servidor-HyperV-01</td>
+<td class="px-4 py-3">NIC-Te1 / Te2</td>
+<td class="px-4 py-3">20 Gbps (Bonded)</td>
+<td class="px-4 py-3">VLAN 300</td>
+<td class="px-4 py-3 text-right text-secondary font-bold">🟢 Enlace Activo</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Script interactivo vanilla para desplegables y acciones de enlace -->
+<script>
+    // Manejo de Menú de Selección de Tipo de Cable
+    const cableBtn = document.getElementById('cableTypeBtn');
+    const cableMenu = document.getElementById('cableTypeMenu');
+    const cableTypeName = document.getElementById('cableTypeName');
+    const activeWire = document.getElementById('activeWirePath');
+
+    let currentCable = 'fiber';
+
+    cableBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cableMenu?.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', () => {
+      cableMenu?.classList.add('hidden');
+    });
+
+    function selectCableType(type) {
+      currentCable = type;
+      if (type === 'fiber') {
+        cableTypeName.innerText = 'Fibra Óptica (10G/40G SFP+)';
+        if (activeWire) {
+          activeWire.setAttribute('stroke', '#2563eb');
+          activeWire.setAttribute('stroke-dasharray', '10 4');
+          activeWire.setAttribute('filter', 'url(#glowBlue)');
+        }
+      } else {
+        cableTypeName.innerText = 'Red Ethernet (1G/10G RJ45)';
+        if (activeWire) {
+          activeWire.setAttribute('stroke', '#ef4444');
+          activeWire.setAttribute('stroke-dasharray', '6 6');
+          activeWire.setAttribute('filter', 'url(#glowRed)');
+        }
+      }
+      cableMenu?.classList.add('hidden');
+    }
+
+    function closeLinkModal() {
+      const modal = document.getElementById('linkConfigModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function confirmLink() {
+      alert('¡Enlace establecido exitosamente entre Core-Switch-01 (Te1/0/24) y Dist-Switch-B02 (Puerto 12)! Mapeo registrado en la base de datos de topología.');
+      closeLinkModal();
+    }
+
+    function simulateTestLoop() {
+      alert('Prueba BER (Bit Error Rate) y reflectometría OTDR: Continua sin pérdidas (0.00% pérdida de paquetes, latencia 0.28ms).');
+    }
+  </script>
+</div></main></div></body></html>
