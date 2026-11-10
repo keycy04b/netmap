@@ -45,3 +45,42 @@
 #contenedor-tarjetas.combined .medium-utp { box-shadow:0 0 0 2px rgba(236,72,153,.65),0 0 15px rgba(236,72,153,.22); }
 #contenedor-tarjetas.combined .medium-fiber { box-shadow:0 0 0 2px rgba(45,212,191,.75),0 0 17px rgba(45,212,191,.25); }
 @media(max-width:650px){.existing-device-head{align-items:flex-start;flex-direction:column}.existing-port-grid{gap:4px}.existing-device-card .port{width:28px;height:27px}}
+
+
+/* Barra única de acciones compartidas bajo las tarjetas seleccionadas. */
+.selection-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 12px 0 4px;
+    padding: 11px 13px;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    background: #eaf0f8;
+}
+.selection-toolbar-title {
+    color: #24364f;
+    font-size: 12px;
+    font-weight: 800;
+}
+.selection-toolbar .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.is-embedded {
+    background: #080d18;
+}
+.is-embedded .device-card,
+.is-embedded #existingPanel {
+    box-shadow: 0 7px 22px rgba(0,0,0,.2);
+}
+@media(max-width:600px) {
+    .selection-toolbar { align-items: stretch; flex-direction: column; }
+    .selection-toolbar .toolbar { display: grid; grid-template-columns: 1fr 1fr; }
+}
+
+/* Las acciones de puertos se concentran en la barra compartida inferior. */
+.device-card .previewactions { display: none !important; }

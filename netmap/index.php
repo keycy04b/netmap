@@ -77,6 +77,7 @@ $conexion->close();
     <section class="welcome">
         <div><h1>Panel principal</h1><p>Resumen de los equipos registrados en tu infraestructura.</p></div>
         <div class="quick-actions">
+            <a href="topologia.php">Abrir topología</a>
             <a href="equipos_agregar.php">＋ Registrar equipo</a>
             <a href="equipos_lista.php">Ver inventario</a>
             <a href="ubicaciones.php">Administrar ubicaciones</a>
@@ -112,7 +113,8 @@ $conexion->close();
     </section>
     <section id="lienzo-red">
         <h2>Diagrama de red</h2>
-        <p>El espacio de visualización queda preparado para la siguiente etapa: distribuir las tarjetas, mostrar enlaces y organizar la infraestructura por sede y piso.</p>
+        <p>La vista de topología ya consulta los equipos y enlaces registrados, permite moverlos, organizar automáticamente su distribución y exportar el mapa.</p>
+        <p><a href="topologia.php">Abrir mapa de topología →</a></p>
     </section>
 </main>
 <script src="assets/js/netmap_global.js" defer></script>

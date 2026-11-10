@@ -1190,6 +1190,15 @@
             if (!response.ok || result.estado !== 'ok') throw new Error(result.mensaje || 'No se pudieron guardar los equipos.');
             dirty = false;
             $('#formStatus').textContent = 'Guardado correctamente.';
+            if (window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'netmap:registro-guardado',
+                    mensaje: result.mensaje || 'Registro guardado correctamente.',
+                    equipos_registrados: result.equipos_registrados || 0,
+                    enlaces_registrados: result.enlaces_registrados || 0
+                }, window.location.origin);
+                return;
+            }
             alert(result.mensaje || 'Equipos registrados correctamente.');
             if (activeCards.length) location.href = 'equipos_lista.php';
             else {

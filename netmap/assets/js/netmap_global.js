@@ -3,6 +3,7 @@
 
     const links = [
         ['Inicio', 'index.php'],
+        ['Topología', 'topologia.php'],
         ['Inventario', 'equipos_lista.php'],
         ['Registrar', 'equipos_agregar.php'],
         ['Editar puertos', 'equipos_editar_puertos.php'],
