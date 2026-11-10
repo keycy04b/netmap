@@ -442,8 +442,26 @@
 @media print {
     @page { size: landscape; margin: 10mm; }
     body, .topology-page { background: #fff !important; color: #111 !important; }
-    .topology-header, .topology-heading, .topology-toolbar, .topology-summary,
-    .map-legend, .topology-status, .registration-overlay { display: none !important; }
+    .netmap-nav, .topology-header, .topology-toolbar, .map-legend,
+    .topology-status, .registration-overlay { display: none !important; }
+    .topology-heading {
+        display: flex !important;
+        padding: 0 0 8px;
+        margin: 0 0 8px;
+        border: 0;
+        background: #fff !important;
+        color: #111 !important;
+    }
+    .topology-heading p { color: #444 !important; }
+    .topology-summary {
+        display: flex !important;
+        padding: 0 0 8px;
+        margin: 0 0 8px;
+        border: 0;
+        background: #fff !important;
+        color: #333 !important;
+    }
+    .topology-summary strong { color: #111 !important; }
     .topology-main { width: 100%; margin: 0; }
     .topology-workspace { display: block; border: 0; }
     .map-viewport { overflow: visible; min-height: 0; background: #fff !important; }
