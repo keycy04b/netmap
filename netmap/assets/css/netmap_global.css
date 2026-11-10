@@ -1,0 +1,259 @@
+/* Estilos compartidos NetMap: navegación, modo oscuro y utilidades. */
+:root { --netmap-bg:#f3f6fa; --netmap-surface:#fff; --netmap-text:#172033; --netmap-muted:#64748b; --netmap-border:#dce3ec; }
+body { background:var(--netmap-bg); color:var(--netmap-text); transition:background .2s,color .2s; }
+.netmap-nav { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 18px; background:#111b2d; color:#fff; border-bottom:1px solid #2d3a50; }
+.netmap-nav .brand { font-weight:850; margin-right:10px; color:#fff; text-decoration:none; }
+.netmap-nav a,.netmap-nav button { color:#e5edf9; text-decoration:none; border:1px solid #52627a; background:#1c2a40; border-radius:8px; padding:7px 10px; font:inherit; cursor:pointer; }
+.netmap-nav a:hover,.netmap-nav button:hover { background:#2b405e; }
+.netmap-nav .spacer { flex:1; }
+.netmap-dark { --netmap-bg:#0b1220; --netmap-surface:#141f31; --netmap-text:#e8edf5; --netmap-muted:#a5b2c5; --netmap-border:#2b3b52; color-scheme:dark; }
+.netmap-dark body { background:var(--netmap-bg)!important; color:var(--netmap-text)!important; }
+.netmap-dark .container,.netmap-dark .panel,.netmap-dark .existing-panel,.netmap-dark .device-card,.netmap-dark .preview,.netmap-dark .filtros-container,.netmap-dark .existing-device-head { background:var(--netmap-surface)!important; color:var(--netmap-text)!important; border-color:var(--netmap-border)!important; }
+.netmap-dark input,.netmap-dark select,.netmap-dark textarea { background:#0d1728!important; color:#edf3fb!important; border-color:#40516a!important; }
+.netmap-dark table,.netmap-dark td,.netmap-dark th { color:var(--netmap-text); border-color:var(--netmap-border); }
+.netmap-dark th,.netmap-dark .cardhead,.netmap-dark .puertos-detalles { background:#18263a!important; color:var(--netmap-text)!important; }
+.netmap-dark .existing-item,.netmap-dark .group-settings-item,.netmap-dark .icon-preview,.netmap-dark .icon-drop { background:#172438!important; color:var(--netmap-text)!important; border-color:var(--netmap-border)!important; }
+.netmap-dark .existing-item strong,.netmap-dark .existing-item span,.netmap-dark .existing-device-head strong,.netmap-dark .existing-device-head small { color:var(--netmap-text)!important; }
+.netmap-dark .section { background:#0b1423!important; border-color:#43536a!important; }
+.netmap-dark .group { background:#172438!important; }
+.netmap-dark .badge { filter:brightness(.82); }
+.page { position:relative; }
+.existing-panel { display:block; }
+.existing-panel > h2 { margin:0 0 12px; }
+#existingResults:empty { display:none; }
+#existingResults { display:grid; gap:7px; margin-top:12px; }
+.floating-navigation { position:fixed; right:18px; bottom:18px; z-index:1000; display:grid; gap:8px; }
+.floating-navigation button { border:1px solid #51647e; border-radius:999px; padding:10px 14px; background:#172a43; color:#fff; box-shadow:0 4px 16px #0003; cursor:pointer; font-weight:700; }
+.shared-net-controls { position:relative; z-index:6; display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; margin:12px 0; padding:12px; border:1px solid var(--netmap-border); border-radius:12px; background:var(--netmap-surface); }
+.shared-actions { display:flex; gap:8px; flex-wrap:wrap; }
+.shared-actions button.active { outline:3px solid #8b5cf6; }
+.existing-device-card { position:relative; z-index:1; }
+.existing-device-head { display:flex; align-items:center; gap:12px; }
+.existing-device-head > div { flex:1; min-width:0; }
+.existing-remove { width:32px; height:32px; flex:0 0 32px; border:0; border-radius:50%; background:#fee2e2; color:#b42318; font-size:22px; font-weight:800; cursor:pointer; }
+.existing-ports { position:relative; }
+.draft-wires { position:absolute; inset:0 auto auto 0; z-index:5; pointer-events:none; overflow:visible; }
+.draft-wire { fill:none; stroke:#e23a3a; stroke-width:2.8; stroke-dasharray:7 5; vector-effect:non-scaling-stroke; }
+.draft-wire.wire-fiber { stroke:#2563eb; stroke-dasharray:none; }
+#existingPanel { position:relative; }
+#portsAnchor { scroll-margin-top:18px; }
+@media(max-width:650px){ .netmap-nav { gap:6px; padding:9px; } .netmap-nav a,.netmap-nav button { font-size:12px; padding:6px 8px; } .floating-navigation { right:9px; bottom:10px; } }
+
+/* Editor de equipo: portada visual y puertos superpuestos. */
+.device-image { position:relative!important; min-height:430px!important; overflow:hidden; justify-content:flex-start!important; padding:18px!important; }
+.device-image #deviceIcon { position:absolute; top:22px; left:50%; transform:translateX(-50%); width:min(82%,300px)!important; max-width:300px!important; height:210px!important; max-height:210px!important; object-fit:contain; z-index:1; }
+.device-image #miniPorts { position:absolute; z-index:2; left:12px; right:12px; bottom:12px; width:auto; max-height:245px; overflow:auto; padding:10px; background:rgba(12,20,35,.88); border:1px solid #718096; border-radius:12px; backdrop-filter:blur(7px); }
+.device-image .mini-group { background:#172438; }
+.device-image .mini-group-title { color:#e4edf8; }
+.device-image .mini-port { cursor:pointer; color:#fff; }
+.device-image .mini-port:disabled { cursor:not-allowed; opacity:.55; }
+.device-image .mini-port.selected { outline:3px solid #c4b5fd; outline-offset:2px; }
+#editExistingPorts { display:grid; gap:12px; margin-top:12px; }
+.target-card { border:1px solid var(--netmap-border); border-radius:12px; padding:12px; background:var(--netmap-surface); }
+.target-card header { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:0; background:transparent; color:inherit; }
+.target-port-groups { display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; }
+.target-port-groups .mini-port { min-width:38px; padding:7px; cursor:pointer; }
+.target-port-groups .mini-port:disabled { cursor:not-allowed; opacity:.48; }
+.result-row { display:flex; align-items:center; gap:8px; }
+.result-row .result { flex:1; }
+.target-selected { font-size:.8rem; color:#16865c; }
+.link-actions { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+.link-actions button.active { outline:3px solid #8b5cf6; }
+
+#editor { position:relative; }
+.edit-links-overlay { position:absolute; inset:0 auto auto 0; z-index:5; pointer-events:none; overflow:visible; }
+.edit-link-line { fill:none; stroke:#e23a3a; stroke-width:3; stroke-dasharray:7 5; vector-effect:non-scaling-stroke; }
+
+.device-image #devicePlaceholder { position:absolute; top:28px; left:50%; transform:translateX(-50%); width:250px; height:185px; display:grid; place-content:center; justify-items:center; gap:8px; color:#94a3b8; font-size:5rem; border:2px dashed #607089; border-radius:18px; background:linear-gradient(145deg,#172438,#0b1423); }
+.device-image #devicePlaceholder small { font-size:14px; color:#c3cfde; }
+
+html.netmap-dark header:not(.netmap-nav) { background:#111b2d!important; color:#e8edf5!important; border-color:#2b3b52!important; }
+html.netmap-dark #lienzo-red { background:#0b1220!important; }
+html.netmap-dark .equipo-card { background:#141f31!important; border-color:#34465f!important; color:#e8edf5!important; }
+html.netmap-dark .equipo-titulo { color:#e8edf5!important; }
+html.netmap-dark .equipo-sub { color:#a5b2c5!important; }
+
+.device-image .mini-sections { display:flex; flex-direction:column; gap:8px; }
+.device-image .mini-section { display:flex; flex-direction:column; flex:0 0 auto; gap:5px; min-width:0; }
+.device-image .mini-port-row { display:flex; flex-wrap:nowrap; justify-content:center; gap:5px; }
+.device-image .mini-port-row .mini-port { flex:1 1 0; min-width:25px; max-width:42px; }
+
+.netmap-dark .device-image { background:#0b1423!important; border-color:#34465f!important; }
+.netmap-dark .device-image .mini-group { background:#101a2a!important; border-color:#34465f!important; }
+.netmap-dark .device-image .mini-section { background:#0b1423!important; border-color:#34465f!important; }
+.netmap-dark .device-image .mini-group-title { color:#e2e8f0!important; }
+.netmap-dark .device-image .mini-port { color:#fff!important; }
+.netmap-dark .device-image .mini-port.available { background:#207a54!important; }
+.netmap-dark .device-image .mini-port.linked { background:#9a5d21!important; }
+.netmap-dark .device-image .mini-port.occupied { background:#596579!important; }
+.netmap-dark .device-image .mini-port.reserved { background:#7355a5!important; }
+.netmap-dark .device-image .mini-port.damaged { background:#a63c47!important; }
+
+
+/* Navegación común: jerarquía, estado activo y adaptación a pantallas pequeñas. */
+.netmap-nav a[aria-current="page"] {
+    background: #315477;
+    border-color: #8bb8e5;
+    color: #ffffff;
+    box-shadow: inset 0 -2px 0 #93c5fd;
+}
+.netmap-nav .brand {
+    font-size: 1.05rem;
+    letter-spacing: .02em;
+}
+.netmap-nav {
+    position: relative;
+    z-index: 30;
+    box-shadow: 0 3px 14px #0002;
+}
+.netmap-nav .spacer { min-width: 12px; }
+
+/* Editor: portada amplia y grupos físicos en una banda desplazable. */
+.device-image {
+    min-height: 560px !important;
+    background: linear-gradient(145deg, #1a2a40, #0b1423) !important;
+}
+.device-image #deviceIcon {
+    top: 18px !important;
+    width: min(92%, 390px) !important;
+    max-width: 390px !important;
+    height: 285px !important;
+    max-height: 285px !important;
+    object-fit: contain !important;
+}
+.device-image #devicePlaceholder {
+    top: 30px !important;
+    width: min(82%, 330px) !important;
+    height: 230px !important;
+}
+.device-image #miniPorts {
+    max-height: 300px !important;
+    bottom: 12px !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+}
+.device-image .mini-sections {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    overflow-x: auto !important;
+    padding: 2px 2px 7px;
+}
+.device-image .mini-section {
+    display: flex !important;
+    flex: 0 0 auto !important;
+    flex-direction: column !important;
+    min-width: 0;
+    padding: 7px !important;
+}
+.device-image .mini-section::before {
+    content: attr(aria-label);
+    color: #b9c9dc;
+    font-size: .65rem;
+    font-weight: 700;
+    text-align: center;
+}
+.device-image .mini-port-row {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: center;
+    gap: 5px !important;
+}
+.device-image .mini-port-row .mini-port {
+    flex: 0 0 29px !important;
+    min-width: 29px !important;
+    max-width: 29px !important;
+    min-height: 27px;
+    padding: 4px 1px !important;
+}
+.device-image .mini-group {
+    min-width: max-content;
+}
+.device-image .mini-group-title {
+    position: sticky;
+    left: 0;
+}
+.device-image .mini-port {
+    font-weight: 800;
+    font-size: .7rem !important;
+}
+.device-image .mini-port:hover {
+    outline: 2px solid #dbeafe;
+    outline-offset: 1px;
+}
+@media (max-width: 850px) {
+    .device-image { min-height: 520px !important; }
+    .device-image #miniPorts { max-height: 275px !important; }
+}
+@media (max-width: 520px) {
+    .netmap-nav { align-items: stretch; }
+    .netmap-nav .brand { flex-basis: 100%; }
+    .device-image { min-height: 490px !important; }
+    .device-image #deviceIcon { height: 230px !important; max-height: 230px !important; }
+    .device-image #miniPorts { max-height: 255px !important; }
+}
+
+
+/* Vista de equipos destino: conserva grupos y secciones sin bloquear el modo de estados. */
+.target-port-groups {
+    display: grid !important;
+    gap: 12px !important;
+}
+.target-port-groups .mini-group {
+    min-width: 0;
+    background: #172438;
+    border-color: #40536d;
+}
+.target-port-groups .mini-group-title {
+    color: #e4edf8;
+}
+.target-port-groups .mini-sections {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 9px;
+}
+.target-port-groups .mini-section {
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: column;
+    gap: 5px;
+    padding: 7px;
+    background: #0b1423;
+    border: 1px dashed #52647d;
+    border-radius: 7px;
+}
+.target-port-groups .mini-section::before {
+    content: attr(aria-label);
+    color: #b9c9dc;
+    font-size: .65rem;
+    font-weight: 700;
+    text-align: center;
+}
+.target-port-groups .mini-port-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+}
+.target-port-groups .mini-port-row .mini-port {
+    flex: 0 0 34px;
+    min-width: 34px;
+    min-height: 30px;
+    padding: 4px 2px;
+}
+.link-actions button.active {
+    outline: 3px solid #8b5cf6;
+    box-shadow: 0 0 0 2px #8b5cf633;
+}
+.target-port-groups .mini-port:disabled {
+    cursor: not-allowed;
+    opacity: .55;
+    filter: grayscale(.35);
+}
+.target-port-groups .mini-port:not(:disabled) {
+    cursor: pointer;
+    opacity: 1;
+}
