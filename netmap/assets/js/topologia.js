@@ -392,7 +392,10 @@
     function closeRegistration(reload = false) {
         $('#registrationOverlay').hidden = true;
         document.body.classList.remove('modal-open');
-        if (reload) loadTopology();
+        if (reload) {
+            $('#registrationFrame').src = 'about:blank';
+            loadTopology();
+        }
     }
 
     function exportSvg() {
@@ -427,16 +430,26 @@
             if (!a || !b) return '';
             const pa = livePosition.get(Number(a.id_equipo)) || { x: Number(a.posicion_x) || 0, y: Number(a.posicion_y) || 0 };
             const pb = livePosition.get(Number(b.id_equipo)) || { x: Number(b.posicion_x) || 0, y: Number(b.posicion_y) || 0 };
-            const aIsLeft = pa.x <= pb.x;
-            const x1 = aIsLeft ? pa.x + 238 : pa.x;
-            const x2 = aIsLeft ? pb.x : pb.x + 238;
-            const y1 = pa.y + 56;
-            const y2 = pb.y + 56;
-            const mid = (x1 + x2) / 2;
+            let pathData;
+            if (Math.abs(pa.x - pb.x) < 80) {
+                const upper = pa.y <= pb.y ? pa : pb;
+                const lower = upper === pa ? pb : pa;
+                const laneX = Math.max(pa.x, pb.x) + 270 + (index % 4) * 14;
+                pathData = 'M ' + (upper.x + 119) + ' ' + (upper.y + 112) +
+                    ' H ' + laneX + ' V ' + lower.y + ' H ' + (lower.x + 119);
+            } else {
+                const aIsLeft = pa.x < pb.x;
+                const x1 = aIsLeft ? pa.x + 238 : pa.x;
+                const x2 = aIsLeft ? pb.x : pb.x + 238;
+                const y1 = pa.y + 56;
+                const y2 = pb.y + 56;
+                const mid = (x1 + x2) / 2;
+                pathData = 'M ' + x1 + ' ' + y1 + ' H ' + mid + ' V ' + y2 + ' H ' + x2;
+            }
             const fiber = String(link.medio_origen || '').toUpperCase().includes('FIBRA');
             const color = fiber ? '#38bdf8' : '#fb7185';
             const dash = fiber ? '' : ' stroke-dasharray="8 6"';
-            return '<path d="M ' + x1 + ' ' + y1 + ' H ' + mid + ' V ' + y2 + ' H ' + x2 +
+            return '<path d="' + pathData +
                 '" fill="none" stroke="' + color + '" stroke-width="3"' + dash + '/>';
         }).join('');
 
