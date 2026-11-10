@@ -142,8 +142,9 @@
     }
 
     function sizeStage(equipment) {
-        const maxX = equipment.reduce((max, item) => Math.max(max, Number(item.posicion_x) || 0), 0);
-        const maxY = equipment.reduce((max, item) => Math.max(max, Number(item.posicion_y) || 0), 0);
+        const liveNodes = [...nodesBox.querySelectorAll('.topo-node')];
+        const maxX = liveNodes.reduce((max, node) => Math.max(max, (parseFloat(node.style.left) || 0) + 300), 0);
+        const maxY = liveNodes.reduce((max, node) => Math.max(max, (parseFloat(node.style.top) || 0) + 180), 0);
         const width = Math.max(viewport.clientWidth, maxX + 420, 1200);
         const height = Math.max(viewport.clientHeight, maxY + 260, 900);
         stage.style.width = width + 'px';
@@ -165,17 +166,33 @@
             const destination = nodes.get(Number(link.id_equipo_destino));
             if (!origin || !destination) return;
 
-            const a = nodeCenter(origin);
-            const b = nodeCenter(destination);
-            const sameColumn = Math.abs(a.x - b.x) < 80;
-            let pathData;
+            const a = {
+                left: parseFloat(origin.style.left) || 0,
+                top: parseFloat(origin.style.top) || 0
+            };
+            const b = {
+                left: parseFloat(destination.style.left) || 0,
+                top: parseFloat(destination.style.top) || 0
+            };
+            let x1, y1, x2, y2, pathData;
 
-            if (sameColumn) {
-                const lane = Math.max(18, Math.min(a.y, b.y) - 35 - (index % 5) * 13);
-                pathData = 'M ' + a.x + ' ' + a.y + ' V ' + lane + ' H ' + b.x + ' V ' + b.y;
+            if (Math.abs(a.left - b.left) < 80) {
+                const upper = a.top <= b.top ? { node: origin, pos: a } : { node: destination, pos: b };
+                const lower = upper.node === origin ? { node: destination, pos: b } : { node: origin, pos: a };
+                x1 = upper.pos.left + 119;
+                y1 = upper.pos.top + 112;
+                x2 = lower.pos.left + 119;
+                y2 = lower.pos.top;
+                const laneX = Math.max(a.left, b.left) + 270 + (index % 4) * 14;
+                pathData = 'M ' + x1 + ' ' + y1 + ' H ' + laneX + ' V ' + y2 + ' H ' + x2;
             } else {
-                const midX = (a.x + b.x) / 2;
-                pathData = 'M ' + a.x + ' ' + a.y + ' H ' + midX + ' V ' + b.y + ' H ' + b.x;
+                const aIsLeft = a.left < b.left;
+                x1 = aIsLeft ? a.left + 238 : a.left;
+                x2 = aIsLeft ? b.left : b.left + 238;
+                y1 = a.top + 56;
+                y2 = b.top + 56;
+                const midX = (x1 + x2) / 2;
+                pathData = 'M ' + x1 + ' ' + y1 + ' H ' + midX + ' V ' + y2 + ' H ' + x2;
             }
 
             const medium = String(link.medio_origen || link.medio_destino || '').toUpperCase();
@@ -333,6 +350,13 @@
             if (!response.ok || result.estado !== 'ok') {
                 throw new Error(result.mensaje || 'No se pudo guardar la distribución.');
             }
+            positions.forEach(position => {
+                const equipment = state.equipos.find(item => Number(item.id_equipo) === position.id_equipo);
+                if (equipment) {
+                    equipment.posicion_x = position.x;
+                    equipment.posicion_y = position.y;
+                }
+            });
         } catch (error) {
             status('No se pudo guardar la distribución: ' + error.message);
             throw error;
@@ -375,12 +399,17 @@
         const equipment = filteredEquipment();
         const ids = new Set(equipment.map(item => Number(item.id_equipo)));
         const links = filteredLinks(ids);
-        const width = Math.max(1200, ...equipment.map(item => (Number(item.posicion_x) || 0) + 330));
-        const height = Math.max(700, ...equipment.map(item => (Number(item.posicion_y) || 0) + 190));
+        const livePosition = new Map([...nodesBox.querySelectorAll('.topo-node')].map(node => [
+            Number(node.dataset.id),
+            { x: parseFloat(node.style.left) || 0, y: parseFloat(node.style.top) || 0 }
+        ]));
+        const width = Math.max(1200, ...equipment.map(item => (livePosition.get(Number(item.id_equipo))?.x || 0) + 330));
+        const height = Math.max(700, ...equipment.map(item => (livePosition.get(Number(item.id_equipo))?.y || 0) + 190));
         const nodeById = new Map(equipment.map(item => [Number(item.id_equipo), item]));
         const nodeMarkup = equipment.map(item => {
-            const x = Number(item.posicion_x) || 0;
-            const y = Number(item.posicion_y) || 0;
+            const live = livePosition.get(Number(item.id_equipo)) || { x: Number(item.posicion_x) || 0, y: Number(item.posicion_y) || 0 };
+            const x = live.x;
+            const y = live.y;
             const title = escapeHtml(item.nombre_mostrar);
             const meta = escapeHtml([item.nombre_tipo, item.direccion_ip].filter(Boolean).join(' · '));
             return '<g transform="translate(' + x + ' ' + y + ')">' +
@@ -396,10 +425,13 @@
             const a = nodeById.get(Number(link.id_equipo_origen));
             const b = nodeById.get(Number(link.id_equipo_destino));
             if (!a || !b) return '';
-            const x1 = (Number(a.posicion_x) || 0) + 119;
-            const y1 = (Number(a.posicion_y) || 0) + 56;
-            const x2 = (Number(b.posicion_x) || 0) + 119;
-            const y2 = (Number(b.posicion_y) || 0) + 56;
+            const pa = livePosition.get(Number(a.id_equipo)) || { x: Number(a.posicion_x) || 0, y: Number(a.posicion_y) || 0 };
+            const pb = livePosition.get(Number(b.id_equipo)) || { x: Number(b.posicion_x) || 0, y: Number(b.posicion_y) || 0 };
+            const aIsLeft = pa.x <= pb.x;
+            const x1 = aIsLeft ? pa.x + 238 : pa.x;
+            const x2 = aIsLeft ? pb.x : pb.x + 238;
+            const y1 = pa.y + 56;
+            const y2 = pb.y + 56;
             const mid = (x1 + x2) / 2;
             const fiber = String(link.medio_origen || '').toUpperCase().includes('FIBRA');
             const color = fiber ? '#38bdf8' : '#fb7185';
