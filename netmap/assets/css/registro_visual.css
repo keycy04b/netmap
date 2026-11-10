@@ -81,3 +81,6 @@
     .selection-toolbar { align-items: stretch; flex-direction: column; }
     .selection-toolbar .toolbar { display: grid; grid-template-columns: 1fr 1fr; }
 }
+
+/* Las acciones de puertos se concentran en la barra compartida inferior. */
+.device-card .previewactions { display: none !important; }
