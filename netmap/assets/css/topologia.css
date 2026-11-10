@@ -1,0 +1,453 @@
+:root {
+    --topo-canvas: #080f1d;
+    --topo-grid: rgba(100, 130, 170, .18);
+    --topo-card: #111d30;
+    --topo-card-border: #2a3b55;
+    --topo-text: #e7eef9;
+    --topo-muted: #9aabc2;
+    --topo-blue: #38bdf8;
+}
+
+.topology-page {
+    min-height: 100vh;
+    background: #080d18;
+    color: var(--topo-text);
+    font-family: Inter, system-ui, sans-serif;
+}
+
+.topology-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    border-bottom: 1px solid #22314a;
+    background: #0e1727;
+}
+
+.topology-header a {
+    color: #b8d8ff;
+    text-decoration: none;
+}
+
+.topology-main {
+    width: min(1800px, 96%);
+    margin: 22px auto 36px;
+}
+
+.topology-heading,
+.topology-toolbar,
+.topology-summary,
+.topology-workspace {
+    border: 1px solid #22314a;
+    border-radius: 14px;
+    background: #0e1727;
+}
+
+.topology-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 17px 20px;
+    margin-bottom: 12px;
+}
+
+.topology-heading h1 {
+    margin: 0 0 5px;
+    font-size: clamp(1.35rem, 2.3vw, 1.9rem);
+}
+
+.topology-heading p,
+.registration-dialog-head p {
+    margin: 0;
+    color: var(--topo-muted);
+    font-size: .85rem;
+}
+
+.topology-filters,
+.topology-toolbar,
+.toolbar-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.topology-filters label {
+    display: grid;
+    gap: 4px;
+    color: var(--topo-muted);
+    font-size: .72rem;
+}
+
+.topology-filters select,
+.topology-toolbar button,
+.map-empty button {
+    min-height: 36px;
+    border: 1px solid #30435f;
+    border-radius: 8px;
+    padding: 7px 11px;
+    background: #142239;
+    color: var(--topo-text);
+    font: inherit;
+    font-size: .78rem;
+    cursor: pointer;
+}
+
+.topology-toolbar {
+    justify-content: space-between;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+}
+
+.topology-toolbar button:hover,
+.map-empty button:hover {
+    border-color: #38bdf8;
+    background: #1a3452;
+}
+
+.topology-toolbar button.primary,
+.map-empty button {
+    border-color: #1685c3;
+    background: #087bb7;
+    color: white;
+    font-weight: 700;
+}
+
+.topology-summary {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    padding: 10px 15px;
+    margin-bottom: 12px;
+    color: var(--topo-muted);
+    font: 12px/1.4 "JetBrains Mono", monospace;
+}
+
+.topology-summary strong {
+    color: #eaf4ff;
+}
+
+.topology-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 190px;
+    min-height: 620px;
+    overflow: hidden;
+}
+
+.map-viewport {
+    position: relative;
+    min-width: 0;
+    min-height: 620px;
+    overflow: auto;
+    background-color: var(--topo-canvas);
+    background-image: radial-gradient(var(--topo-grid) 1px, transparent 1px);
+    background-size: 24px 24px;
+    overscroll-behavior: contain;
+}
+
+.map-stage {
+    position: relative;
+    min-width: 1200px;
+    min-height: 900px;
+    isolation: isolate;
+}
+
+.map-links,
+.map-nodes {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.map-links {
+    z-index: 1;
+    overflow: visible;
+    pointer-events: none;
+}
+
+.map-links path {
+    fill: none;
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, .85));
+}
+
+.map-links path.fiber {
+    stroke: #38bdf8;
+}
+
+.map-links path.ethernet {
+    stroke: #fb7185;
+    stroke-dasharray: 8 6;
+}
+
+.map-links text {
+    fill: #dbeafe;
+    stroke: #08111f;
+    stroke-width: 4px;
+    paint-order: stroke;
+    font: 11px "JetBrains Mono", monospace;
+}
+
+.map-nodes {
+    z-index: 2;
+    pointer-events: none;
+}
+
+.topo-node {
+    position: absolute;
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 10px;
+    width: 238px;
+    min-height: 112px;
+    padding: 12px;
+    border: 1px solid var(--topo-card-border);
+    border-radius: 13px;
+    background: linear-gradient(145deg, #17263d, #0e192b);
+    color: var(--topo-text);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .35);
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    pointer-events: auto;
+}
+
+.topo-node:active {
+    cursor: grabbing;
+}
+
+.topo-node:hover,
+.topo-node.is-dragging {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, .18), 0 14px 30px rgba(0, 0, 0, .45);
+}
+
+.topo-node-visual {
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    border: 1px solid #344b6b;
+    border-radius: 11px;
+    background: #0b1423;
+}
+
+.topo-node-visual img {
+    width: 46px;
+    height: 46px;
+    object-fit: contain;
+}
+
+.topo-node-copy {
+    min-width: 0;
+}
+
+.topo-node-copy strong {
+    display: block;
+    overflow: hidden;
+    margin-bottom: 4px;
+    color: #f1f7ff;
+    font-size: .83rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.topo-node-copy span {
+    display: block;
+    overflow: hidden;
+    color: var(--topo-muted);
+    font-size: .68rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.topo-node-meta {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding-top: 7px;
+    border-top: 1px solid #2a3b55;
+    color: #a9bdd6;
+    font: 10px "JetBrains Mono", monospace;
+}
+
+.topo-node-meta .has-links {
+    color: #67e8f9;
+}
+
+.map-empty {
+    position: absolute;
+    z-index: 5;
+    inset: 0;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 9px;
+    min-height: 400px;
+    color: var(--topo-text);
+    text-align: center;
+    pointer-events: auto;
+}
+
+.map-empty[hidden] {
+    display: none;
+}
+
+.map-empty p {
+    margin: 0 0 8px;
+    color: var(--topo-muted);
+    font-size: .85rem;
+}
+
+.map-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    padding: 17px 13px;
+    border-left: 1px solid #22314a;
+    background: #0b1422;
+    color: var(--topo-muted);
+    font-size: .72rem;
+}
+
+.map-legend strong {
+    color: var(--topo-text);
+    font-size: .82rem;
+}
+
+.legend-line,
+.legend-dot {
+    display: inline-block;
+    flex: 0 0 auto;
+    margin-right: 7px;
+    vertical-align: middle;
+}
+
+.legend-line {
+    width: 24px;
+    border-top: 3px solid;
+}
+
+.legend-line.fiber { border-color: #38bdf8; }
+.legend-line.ethernet { border-color: #fb7185; border-top-style: dashed; }
+
+.legend-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+}
+
+.legend-dot.linked { background: #38bdf8; }
+.legend-dot.free { background: #94a3b8; }
+
+.map-legend p {
+    margin-top: auto;
+    line-height: 1.5;
+}
+
+.topology-status {
+    min-height: 22px;
+    margin: 9px 3px;
+    color: #93a8c4;
+    font-size: .76rem;
+}
+
+.registration-overlay {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 2vh 2vw;
+    background: rgba(2, 6, 15, .82);
+    backdrop-filter: blur(7px);
+}
+
+.registration-overlay[hidden] {
+    display: none;
+}
+
+.registration-dialog {
+    display: flex;
+    flex-direction: column;
+    width: min(1500px, 96vw);
+    height: 96vh;
+    overflow: hidden;
+    border: 1px solid #344b6b;
+    border-radius: 15px;
+    background: #0e1727;
+    box-shadow: 0 25px 90px rgba(0, 0, 0, .6);
+}
+
+.registration-dialog-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 16px;
+    border-bottom: 1px solid #263a56;
+}
+
+.registration-dialog-head strong {
+    display: block;
+    margin-bottom: 3px;
+    color: #edf6ff;
+    font-size: .9rem;
+}
+
+.registration-dialog-head button {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #405573;
+    border-radius: 8px;
+    background: #182a42;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.registration-dialog iframe {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    border: 0;
+    background: #080d18;
+}
+
+@media (max-width: 900px) {
+    .topology-workspace { grid-template-columns: 1fr; }
+    .map-legend { flex-direction: row; flex-wrap: wrap; border-top: 1px solid #22314a; border-left: 0; }
+    .map-legend p { flex-basis: 100%; margin: 0; }
+    .topology-toolbar { align-items: flex-start; flex-direction: column; }
+}
+
+@media (max-width: 600px) {
+    .topology-main { width: 100%; margin: 10px auto 20px; }
+    .topology-heading { border-radius: 0; }
+    .topology-toolbar { border-radius: 0; }
+    .topology-filters { width: 100%; }
+    .topology-filters label { flex: 1; }
+    .topology-summary { border-radius: 0; }
+    .topology-workspace { border-radius: 0; }
+    .map-viewport { min-height: 70vh; }
+    .registration-overlay { padding: 0; }
+    .registration-dialog { width: 100vw; height: 100dvh; border-radius: 0; }
+}
+
+@media print {
+    @page { size: landscape; margin: 10mm; }
+    body, .topology-page { background: #fff !important; color: #111 !important; }
+    .topology-header, .topology-heading, .topology-toolbar, .topology-summary,
+    .map-legend, .topology-status, .registration-overlay { display: none !important; }
+    .topology-main { width: 100%; margin: 0; }
+    .topology-workspace { display: block; border: 0; }
+    .map-viewport { overflow: visible; min-height: 0; background: #fff !important; }
+    .map-stage { min-width: 0; background: #fff !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .topo-node { break-inside: avoid; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .map-links path { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
