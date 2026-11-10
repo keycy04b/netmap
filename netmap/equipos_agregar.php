@@ -1,5 +1,6 @@
 <?php
 // NetMap: registro de equipos, iconos, grupos de puertos y enlaces.
+$modoInsertado = isset($_GET['embed']) && $_GET['embed'] === '1';
 ?>
 <!doctype html>
 <html lang="es">
@@ -15,8 +16,19 @@
     <link rel="stylesheet" href="assets/css/netmap_global.css">
     <script src="assets/js/netmap_global.js" defer></script>
     <script src="assets/js/registro_visual.js" defer></script>
+    <style>
+        .is-embedded .netmap-nav,
+        .is-embedded .app-header,
+        .is-embedded .floating-navigation { display: none !important; }
+        .is-embedded .page { width: 100%; max-width: none; margin: 0; padding: 12px; }
+        .is-embedded .page-heading { margin-bottom: 10px; }
+        .is-embedded .page-heading h1 { font-size: 19px; }
+        .is-embedded .page-heading p { font-size: 12px; }
+        .is-embedded .selection-toolbar { margin: 10px 0; }
+        .is-embedded .bottom { position: sticky; bottom: 0; z-index: 15; padding: 10px; margin: 10px -12px 0; background: rgba(8, 15, 29, .96); border-top: 1px solid #334155; }
+    </style>
 </head>
-<body>
+<body class="<?= $modoInsertado ? 'is-embedded' : '' ?>">
 <header class="app-header">
     <strong>◈ NetMap</strong>
     <span>Registro de equipos</span>
@@ -29,11 +41,25 @@
             <h1>Registrar equipos</h1>
             <p>Completa los datos, elige el icono y configura los puertos.</p>
         </div>
-        <div class="toolbar">
-            <button type="button" id="toggleView">Vista previa conjunta</button>
-            <button type="button" id="toggleExisting">Buscar equipo para enlazar</button>
-        </div>
     </section>
+
+    <form id="form-lote" novalidate>
+        <div id="contenedor-tarjetas" class="cards"></div>
+
+        <div class="selection-toolbar" aria-label="Acciones para los equipos seleccionados">
+            <span class="selection-toolbar-title">Acciones de equipos y conexiones</span>
+            <div class="toolbar">
+                <button type="button" id="toggleView">Vista previa conjunta</button>
+                <button type="button" id="toggleExisting">Enlazar equipos existentes</button>
+            </div>
+        </div>
+
+        <div class="bottom">
+            <button type="button" id="btn-add-card">＋ Añadir otro equipo</button>
+            <span id="formStatus" aria-live="polite">Cargando catálogos…</span>
+            <button type="submit" class="primary" id="btnSave">Guardar equipos y enlaces</button>
+        </div>
+    </form>
 
     <section id="existingPanel" class="existing-panel">
         <h2>Equipos existentes y enlaces</h2>
@@ -54,19 +80,10 @@
             </select>
             <button type="button" id="searchExisting">Buscar</button>
         </div>
-        <p class="muted">Selecciona un equipo y después pulsa un puerto nuevo y un puerto de ese equipo para preparar el enlace. Se registrará al guardar.</p>
+        <p class="muted">Selecciona uno o varios equipos. Puedes enlazar puertos de equipos nuevos con equipos existentes o conectar entre sí equipos que ya estaban registrados. También puedes guardar un equipo nuevo sin crear enlaces.</p>
         <div id="existingResults" aria-live="polite"></div>
         <div id="existingPorts" class="existing-ports"></div>
     </section>
-
-    <form id="form-lote" novalidate>
-        <div id="contenedor-tarjetas" class="cards"></div>
-        <div class="bottom">
-            <button type="button" id="btn-add-card">＋ Añadir otro equipo</button>
-            <span id="formStatus" aria-live="polite">Cargando catálogos…</span>
-            <button type="submit" class="primary" id="btnSave">Guardar equipos</button>
-        </div>
-    </form>
 </main>
 <div class="floating-navigation" aria-label="Navegación rápida">
     <button type="button" id="scrollToPorts" title="Bajar al listado de puertos">↓ Puertos</button>
