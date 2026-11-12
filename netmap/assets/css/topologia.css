@@ -498,3 +498,7 @@
 .topology-page.theme-light .registration-dialog-head { border-color:#dce3ec; }
 .topology-page.theme-light .registration-dialog-head p { color:#64748b; }
 .topology-page.theme-light .registration-dialog-head button { background:#e2e8f0; color:#172033; }
+
+.map-links path { pointer-events:stroke; cursor:pointer; }
+.topology-toolbar #btnCanvasLink { border-color:#1685c3; }
+.topology-toolbar #btnCancelCanvasLink { border-color:#dc6b6b; color:#fecaca; }
