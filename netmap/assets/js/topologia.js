@@ -259,7 +259,7 @@
     }
 
     function beginDrag(event) {
-        if (event.button !== 0) return;
+        if (event.button !== 0 || state.linkMode) return;
         const node = event.currentTarget;
         const rect = node.getBoundingClientRect();
         const stageRect = stage.getBoundingClientRect();
