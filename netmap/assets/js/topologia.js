@@ -113,6 +113,12 @@
         equipment.forEach(item => nodesBox.appendChild(createNode(item)));
         sizeStage(equipment);
         drawLinks(links);
+        state.inspectPinned.forEach(key => {
+            const parts = key.split(':');
+            const type = parts[0], id = Number(parts[1]);
+            const element = type === 'node' ? nodesBox.querySelector('.topo-node[data-id="' + id + '"]') : linksSvg.querySelector('[data-link-id="' + id + '"]');
+            if (element) element.classList.add('inspect-pinned', 'inspect-active');
+        });
     }
 
     function createNode(item) {
