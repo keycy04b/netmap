@@ -7,7 +7,10 @@
         enlaces: [],
         zoom: 1,
         drag: null,
-        saveTimer: null
+        saveTimer: null,
+        inspectPinned: new Set(),
+        linkMode: false,
+        linkSourceId: null
     };
 
     const stage = $('#mapStage');
@@ -134,10 +137,16 @@
             Number(item.puertos_enlazados || 0) + ' enlazados</span></div>';
 
         node.addEventListener('pointerdown', beginDrag);
+        node.addEventListener('mouseenter', () => setInspectHover('node', Number(item.id_equipo), true));
+        node.addEventListener('mouseleave', () => setInspectHover('node', Number(item.id_equipo), false));
+        node.addEventListener('click', event => {
+            if (state.linkMode) { event.stopPropagation(); chooseCanvasLinkNode(Number(item.id_equipo)); return; }
+            toggleInspect('node', Number(item.id_equipo), node);
+        });
         node.addEventListener('dblclick', () => {
             window.location.href = 'equipos_editar_puertos.php?id=' + encodeURIComponent(item.id_equipo);
         });
-        node.title = 'Arrastra para mover · Doble clic para editar puertos';
+        node.title = 'Pasa el cursor para resaltar · Clic para fijar o quitar · Arrastra para mover · Doble clic para editar';
         return node;
     }
 
@@ -200,6 +209,11 @@
             path.setAttribute('d', pathData);
             path.setAttribute('class', medium.includes('FIBRA') ? 'fiber' : 'ethernet');
             path.dataset.linkId = link.id_enlace;
+            path.dataset.linkId = String(link.id_enlace);
+            path.addEventListener('mouseenter', () => setInspectHover('link', Number(link.id_enlace), true));
+            path.addEventListener('mouseleave', () => setInspectHover('link', Number(link.id_enlace), false));
+            path.addEventListener('click', event => { event.stopPropagation(); toggleInspect('link', Number(link.id_enlace), path); });
+            path.style.pointerEvents = 'stroke';
             linksSvg.appendChild(path);
 
             const label = document.createElementNS(NS, 'text');
@@ -211,6 +225,31 @@
         });
     }
 
+    function setInspectHover(type, id, active) {
+        const selector = type === 'node' ? '.topo-node[data-id="' + id + '"]' : '[data-link-id="' + id + '"]';
+        const element = type === 'node' ? nodesBox.querySelector(selector) : linksSvg.querySelector(selector);
+        if (!element) return;
+        element.classList.toggle('inspect-hover', active);
+        element.classList.toggle('inspect-active', active || state.inspectPinned.has(type + ':' + id));
+    }
+    function toggleInspect(type, id, element) {
+        const key = type + ':' + id;
+        if (state.inspectPinned.has(key)) state.inspectPinned.delete(key); else state.inspectPinned.add(key);
+        element.classList.toggle('inspect-pinned', state.inspectPinned.has(key));
+        element.classList.toggle('inspect-active', state.inspectPinned.has(key));
+    }
+    function chooseCanvasLinkNode(id) {
+        if (!state.linkSourceId) { state.linkSourceId = id; nodesBox.querySelector('.topo-node[data-id="' + id + '"]')?.classList.add('link-source'); status('Origen seleccionado. Ahora elige el equipo destino.'); return; }
+        if (state.linkSourceId === id) { status('El origen y el destino deben ser equipos distintos.'); return; }
+        const pending = { ids: [state.linkSourceId, id], type: $('#canvasLinkType').value };
+        state.linkMode = false; state.linkSourceId = null;
+        nodesBox.querySelectorAll('.topo-node').forEach(node => node.classList.remove('link-source'));
+        $('#btnCancelCanvasLink').hidden = true;
+        openRegistration('existing-link', pending);
+        status('Selecciona los puertos en «Equipos existentes» y guarda el enlace.');
+    }
+    function startCanvasLinkMode() { state.linkMode = true; state.linkSourceId = null; nodesBox.querySelectorAll('.topo-node').forEach(node => node.classList.remove('link-source')); $('#btnCancelCanvasLink').hidden = false; status('Selecciona equipo origen y luego equipo destino.'); }
+    function cancelCanvasLinkMode() { state.linkMode = false; state.linkSourceId = null; nodesBox.querySelectorAll('.topo-node').forEach(node => node.classList.remove('link-source')); $('#btnCancelCanvasLink').hidden = true; status('Selección cancelada.'); }
     function nodeCenter(node) {
         const left = parseFloat(node.style.left) || 0;
         const top = parseFloat(node.style.top) || 0;
@@ -380,13 +419,15 @@
         });
     }
 
-    function openRegistration() {
+    function openRegistration(mode = 'new', linkData = null) {
         $('#registrationOverlay').hidden = false;
         const frame = $('#registrationFrame');
         if (frame.src === 'about:blank' || !frame.src.includes('equipos_agregar.php')) {
-            frame.src = 'equipos_agregar.php?embed=1';
+            frame.src = 'equipos_agregar.php?embed=1' + (mode === 'existing-link' ? '&mode=existing-link' : '');
         }
         document.body.classList.add('modal-open');
+        $('#registrationModeNote').hidden = mode !== 'existing-link';
+        if (mode === 'existing-link') { frame.onload = () => frame.contentWindow.postMessage({type:'netmap:preselect-existing-link',equipmentIds:linkData.ids,medium:linkData.type},window.location.origin); } else { frame.onload = null; }
     }
 
     function closeRegistration(reload = false) {
@@ -469,8 +510,10 @@
         status('Imagen SVG preparada.');
     }
 
-    $('#btnNewEquipment').addEventListener('click', openRegistration);
-    $('#btnEmptyRegister').addEventListener('click', openRegistration);
+    $('#btnNewEquipment').addEventListener('click', () => openRegistration());
+    $('#btnCanvasLink').addEventListener('click', startCanvasLinkMode);
+    $('#btnCancelCanvasLink').addEventListener('click', cancelCanvasLinkMode);
+    $('#btnEmptyRegister').addEventListener('click', () => openRegistration());
     $('#btnCloseRegistration').addEventListener('click', () => closeRegistration(false));
     $('#registrationOverlay').addEventListener('click', event => {
         if (event.target === $('#registrationOverlay')) closeRegistration(false);
