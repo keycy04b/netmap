@@ -527,7 +527,6 @@
     $('#btnZoomReset').addEventListener('click', () => setZoom(1));
     $('#btnCenter').addEventListener('click', centerMap);
     $('#btnRefresh').addEventListener('click', loadTopology);
-    $('#btnTheme').addEventListener('click', () => { const light = document.body.classList.toggle('theme-light'); $('#btnTheme').textContent = light ? '☾ Modo oscuro' : '☀ Modo claro'; });
     $('#btnExportSvg').addEventListener('click', exportSvg);
     $('#btnExportPdf').addEventListener('click', () => window.print());
     $('#filterSite').addEventListener('change', () => {
