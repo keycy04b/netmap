@@ -469,3 +469,36 @@
     .topo-node { break-inside: avoid; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     .map-links path { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 }
+
+/* Interacción de inspección: resalta temporalmente o fija varias tarjetas y enlaces. */
+.topo-node.inspect-active { z-index: 8; border-color: #facc15; box-shadow: 0 0 0 3px #facc1566, 0 16px 38px #0009; transform: translateY(-2px); }
+.topo-node.inspect-pinned { border-color: #facc15; }
+.topo-node.link-source { border-color:#22c55e; box-shadow:0 0 0 4px #22c55e66; }
+.map-links path.inspect-active { stroke:#facc15!important; stroke-width:7!important; filter:drop-shadow(0 0 7px #facc15); }
+.topology-toolbar select { min-height:36px; border:1px solid #30435f; border-radius:8px; padding:7px 11px; background:#142239; color:var(--topo-text); }
+.registration-mode-note { margin:0; padding:9px 16px; background:#172a43; color:#dbeafe; font-size:12px; }
+.topology-page.theme-light { --topo-canvas:#eef2f7; --topo-grid:rgba(71,85,105,.15); --topo-card:#fff; --topo-card-border:#cbd5e1; --topo-text:#172033; --topo-muted:#64748b; background:#f3f6fa; color:#172033; }
+.topology-page.theme-light .topology-heading,
+.topology-page.theme-light .topology-toolbar,
+.topology-page.theme-light .topology-summary,
+.topology-page.theme-light .topology-workspace { background:#fff; border-color:#dce3ec; }
+.topology-page.theme-light .topology-toolbar button,
+.topology-page.theme-light .topology-toolbar select,
+.topology-page.theme-light .topology-filters select { background:#f8fafc; color:#172033; border-color:#cbd5e1; }
+.topology-page.theme-light .topo-node { background:linear-gradient(145deg,#fff,#edf2f8); color:#172033; }
+.topology-page.theme-light .topo-node-copy strong { color:#172033; }
+.topology-page.theme-light .topo-node-copy span,
+.topology-page.theme-light .topo-node-meta { color:#475569; }
+.topology-page.theme-light .topo-node-visual { background:#f1f5f9; border-color:#cbd5e1; }
+.topology-page.theme-light .map-legend { background:#f8fafc; border-color:#dce3ec; color:#475569; }
+.topology-page.theme-light .map-legend strong { color:#172033; }
+.topology-page.theme-light .map-links text { fill:#172033; stroke:#fff; }
+.topology-page.theme-light .registration-dialog { background:#fff; border-color:#cbd5e1; }
+.topology-page.theme-light .registration-dialog-head strong { color:#172033; }
+.topology-page.theme-light .registration-dialog-head { border-color:#dce3ec; }
+.topology-page.theme-light .registration-dialog-head p { color:#64748b; }
+.topology-page.theme-light .registration-dialog-head button { background:#e2e8f0; color:#172033; }
+
+.map-links path { pointer-events:stroke; cursor:pointer; }
+.topology-toolbar #btnCanvasLink { border-color:#1685c3; }
+.topology-toolbar #btnCancelCanvasLink { border-color:#dc6b6b; color:#fecaca; }

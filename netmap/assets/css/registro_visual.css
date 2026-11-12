@@ -84,3 +84,32 @@
 
 /* Las acciones de puertos se concentran en la barra compartida inferior. */
 .device-card .previewactions { display: none !important; }
+
+/* Tema oscuro completo: componentes del registro mantienen contraste legible. */
+html.netmap-dark body, html.netmap-dark .is-embedded { background:#080d18!important; color:#e8edf5!important; }
+html.netmap-dark .page, html.netmap-dark .page-heading, html.netmap-dark .existing-panel { color:#e8edf5!important; }
+html.netmap-dark .device-card, html.netmap-dark .existing-device-card { background:#111d30!important; color:#e8edf5!important; border-color:#34465f!important; }
+html.netmap-dark .device-card h2, html.netmap-dark .device-card h3, html.netmap-dark .device-card label,
+html.netmap-dark .existing-panel h2, html.netmap-dark .selection-toolbar-title { color:#e8edf5!important; }
+html.netmap-dark .selection-toolbar { background:#172438!important; border-color:#40516a!important; }
+html.netmap-dark .selection-toolbar button, html.netmap-dark .device-card button,
+html.netmap-dark .existing-panel button, html.netmap-dark .bottom button {
+ background:#263a55!important; color:#f8fafc!important; border:1px solid #526783!important;
+}
+html.netmap-dark .selection-toolbar button.primary, html.netmap-dark .bottom button.primary,
+html.netmap-dark #btnSave { background:#1769aa!important; color:#fff!important; border-color:#38a4ed!important; }
+html.netmap-dark .device-card input, html.netmap-dark .device-card select, html.netmap-dark .device-card textarea,
+html.netmap-dark .existing-panel input, html.netmap-dark .existing-panel select {
+ background:#0b1423!important; color:#f1f5f9!important; border-color:#40516a!important;
+}
+html.netmap-dark .existing-device-card .existing-device-head,
+html.netmap-dark .existing-device-card .existing-device-head strong,
+html.netmap-dark .existing-device-card .existing-device-head small { color:#e8edf5!important; }
+html.netmap-dark .existing-device-rack { background:#0b1423!important; }
+html.netmap-dark .existing-device-card .group { background:#172438!important; color:#e8edf5!important; }
+html.netmap-dark .existing-device-card .group-title, html.netmap-dark .existing-device-card .group label { color:#e8edf5!important; }
+html.netmap-dark .existing-device-card .port { color:#fff!important; }
+html.netmap-dark .bottom { background:#0b1423!important; border-color:#34465f!important; }
+html.netmap-dark .bottom span, html.netmap-dark .muted, html.netmap-dark .existing-panel p { color:#a5b2c5!important; }
+html.netmap-dark #toast { background:#263a55!important; color:#fff!important; border-color:#64748b!important; }
+html.netmap-dark .icon-preview, html.netmap-dark .icon-drop { color:#e8edf5!important; }

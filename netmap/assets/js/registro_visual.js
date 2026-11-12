@@ -28,6 +28,7 @@
     let globalMode = 'link';
     let pendingSource = null;
     let pendingExistingSource = null;
+    let forcedExistingMedium = 'any';
     let links = [];
     let toastTimer = null;
 
@@ -802,6 +803,10 @@
         const portId = Number(button.dataset.portId);
         if (window.netmapExistingPairMode && globalMode === 'link' && !pendingSource && !pendingExistingSource) {
             if (button.dataset.state !== 'available' || button.disabled) { toast('Solo puedes iniciar desde un puerto disponible.'); return; }
+            const sourcePortForMode = entry.ports.find(p => Number(p.id_puerto) === portId);
+            const sourceMediumForMode = String(sourcePortForMode?.medio || sourcePortForMode?.tipo_puerto || 'UTP').toUpperCase();
+            if (forcedExistingMedium === 'fiber' && !sourceMediumForMode.includes('FIBRA')) { toast('Selecciona un puerto de fibra óptica para este enlace.'); return; }
+            if (forcedExistingMedium === 'ethernet' && sourceMediumForMode.includes('FIBRA')) { toast('Selecciona un puerto Ethernet / UTP para este enlace.'); return; }
             pendingExistingSource = {equipmentId, portId};
             renderExistingPorts();
             toast('Origen seleccionado. Elige un puerto disponible de otro equipo existente.');
@@ -838,6 +843,8 @@
             const sourceMedium = String(sourcePort?.medio || sourcePort?.tipo_puerto || 'UTP').toUpperCase();
             const targetMedium = String(button.dataset.medium || 'UTP').toUpperCase();
             if (sourceMedium.includes('FIBRA') !== targetMedium.includes('FIBRA')) { toast('Los medios físicos deben coincidir.'); return; }
+            if (forcedExistingMedium === 'fiber' && !targetMedium.includes('FIBRA')) { toast('El destino también debe ser fibra óptica.'); return; }
+            if (forcedExistingMedium === 'ethernet' && targetMedium.includes('FIBRA')) { toast('El destino también debe ser Ethernet / UTP.'); return; }
             addLink({kind:'existing',equipmentId:pendingExistingSource.equipmentId,portId:pendingExistingSource.portId},{kind:'existing',equipmentId,portId,port:Number(button.dataset.portNumber)});
             pendingExistingSource = null;
             renderExistingPorts();
@@ -1217,6 +1224,22 @@
         }
     });
 
+    window.addEventListener('message', async event => {
+        if (event.origin !== window.location.origin || event.data?.type !== 'netmap:preselect-existing-link') return;
+        try {
+            await searchExisting();
+            const ids = (event.data.equipmentIds || []).map(Number);
+            for (const id of ids) if (!selectedExistingList.has(id)) await selectExisting(id);
+            forcedExistingMedium = ['fiber','ethernet'].includes(event.data.medium) ? event.data.medium : 'any';
+            globalMode = 'link'; pendingSource = null; pendingExistingSource = null;
+            window.netmapExistingPairMode = true;
+            $('.device-card').forEach(card => card.dataset.mode = 'link');
+            const pairButton = $('#linkExistingPair');
+            if (pairButton) { pairButton.classList.add('active'); pairButton.textContent = 'Cancelar enlace entre existentes'; }
+            $('#existingPanel').scrollIntoView({behavior:'smooth',block:'start'});
+            toast('Equipos del canvas cargados. Elige puerto origen y destino. Medio: ' + (forcedExistingMedium === 'fiber' ? 'fibra' : forcedExistingMedium === 'ethernet' ? 'Ethernet' : 'a elegir'));
+        } catch (error) { toast('No se pudieron preparar los equipos: ' + error.message); }
+    });
     window.addEventListener('beforeunload', event => {
         if (dirty) {
             event.preventDefault();

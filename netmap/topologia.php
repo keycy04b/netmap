@@ -40,6 +40,9 @@ $conexion->close();
         <section class="topology-toolbar" aria-label="Herramientas del mapa">
             <div class="toolbar-group">
                 <button type="button" class="primary" id="btnNewEquipment">＋ Registrar equipo</button>
+                <button type="button" id="btnCanvasLink">↔ Enlazar equipos del mapa</button>
+                <select id="canvasLinkType" aria-label="Tipo de enlace"><option value="any">Enlace (elegir medio)</option><option value="ethernet">Red / Ethernet</option><option value="fiber">Fibra óptica</option></select>
+                <button type="button" id="btnCancelCanvasLink" hidden>Cancelar selección</button>
                 <button type="button" id="btnAutoArrange" title="Distribuye los equipos y guarda sus posiciones">✣ Organizar automáticamente</button>
                 <button type="button" id="btnSaveLayout">Guardar distribución</button>
             </div>
@@ -91,6 +94,7 @@ $conexion->close();
                 </div>
                 <button type="button" id="btnCloseRegistration" aria-label="Cerrar ventana">×</button>
             </header>
+            <p class="registration-mode-note" id="registrationModeNote" hidden>Conexión entre equipos existentes: selecciona los puertos de origen y destino en «Equipos existentes» y guarda el enlace.</p>
             <iframe id="registrationFrame" title="Formulario de registro de equipos" src="about:blank"></iframe>
         </section>
     </div>
