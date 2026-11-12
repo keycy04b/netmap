@@ -54,7 +54,6 @@ $conexion->close();
                 <button type="button" id="btnExportSvg">Exportar imagen SVG</button>
                 <button type="button" id="btnExportPdf">Exportar PDF</button>
                 <button type="button" id="btnRefresh">Actualizar</button>
-                <button type="button" id="btnTheme">☀ Modo claro</button>
             </div>
         </section>
 
