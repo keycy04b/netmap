@@ -39,6 +39,7 @@
 
         const apply = dark => {
             document.documentElement.classList.toggle('netmap-dark', dark);
+            document.body.classList.toggle('theme-light', !dark);
 
             const button = document.getElementById('netmapThemeToggle');
             if (button) {
