@@ -173,13 +173,14 @@
       }).join('');
 
       return `
-        <article class="target-card" data-target-id="${id}">
-          <header>
+        <details class="target-card target-details" data-target-id="${id}">
+          <summary>
             <strong>${esc(entry.item.nombre_equipo || entry.item.nombre_tipo)}</strong>
-            <button type="button" class="danger" data-action="target-remove" data-id="${id}" aria-label="Quitar equipo">×</button>
-          </header>
+            <span>${entry.ports.length} puertos · desplegar</span>
+          </summary>
+          <button type="button" class="danger target-remove" data-action="target-remove" data-id="${id}" aria-label="Quitar equipo">× Quitar</button>
           <div class="target-port-groups">${groupMarkup || '<p class="muted">Este equipo no tiene puertos registrados.</p>'}</div>
-        </article>
+        </details>
       `;
     }).join('');
   }
