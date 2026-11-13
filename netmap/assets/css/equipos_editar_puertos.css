@@ -236,3 +236,26 @@ th {
     .panel { padding: 13px; }
      .mini-sections { flex-direction: column; }
 }
+
+/* Resultados compactos y estados suaves, coherentes con el listado general. */
+.search-results { gap: 5px; max-height: 260px; overflow: auto; }
+.result {
+    align-items: center;
+    min-height: 46px;
+    padding: 8px 11px;
+    border: 1px solid #dce3ec;
+    border-radius: 9px;
+    background: #f8fafc;
+    color: #172033;
+}
+.result span { color: #64748b; }
+.status.available { color: #176b43; background: #dcfce7; }
+.status.linked { color: #176b78; background: #d9f3f2; }
+.status.occupied { color: #475569; background: #e8edf3; }
+.status.reserved { color: #6941a5; background: #eee5fb; }
+.status.damaged { color: #a33a45; background: #fde4e7; }
+.available { color: #176b43; background: #dcfce7; }
+.linked { color: #176b78; background: #d9f3f2; }
+.occupied { color: #475569; background: #e8edf3; }
+.reserved { color: #6941a5; background: #eee5fb; }
+.damaged { color: #a33a45; background: #fde4e7; }
