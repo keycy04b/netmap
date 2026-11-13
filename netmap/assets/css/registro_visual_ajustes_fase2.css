@@ -67,7 +67,7 @@ html.netmap-dark .icon-editor {
     color: #e8edf5 !important;
 }
 html.netmap-dark .icon-suggestion img,
-html.netmap-dark .icon-preview img {
+html.netmap-dark .device-card[data-icon-mode="suggestion"] .icon-preview img {
     filter: brightness(0) invert(1);
     opacity: .96;
 }
