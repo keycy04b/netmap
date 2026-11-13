@@ -140,10 +140,11 @@
             '</div>' +
             '<div class="topo-node-meta"><span>' + Number(item.total_puertos || 0) + ' puertos</span>' +
             '<span class="' + (Number(item.puertos_enlazados) > 0 ? 'has-links' : '') + '">' +
-            Number(item.puertos_enlazados || 0) + ' enlazados</span></div>';
+            Number(item.puertos_enlazados || 0) + ' enlazados</span></div>' +
+            '<div class="topo-node-capabilities">' + escapeHtml(item.tipos_conectividad || 'Conectividad sin especificar') + '</div>';
 
         node.addEventListener('pointerdown', beginDrag);
-        node.addEventListener('mouseenter', () => setInspectHover('node', Number(item.id_equipo), true));
+        node.addEventListener('mouseenter', event => setInspectHover('node', Number(item.id_equipo), true, event));
         node.addEventListener('mouseleave', () => setInspectHover('node', Number(item.id_equipo), false));
         node.addEventListener('click', event => {
             if (state.linkMode) { event.stopPropagation(); chooseCanvasLinkNode(Number(item.id_equipo)); return; }
@@ -176,7 +177,11 @@
             [Number(node.dataset.id), node]
         ));
 
-        links.forEach((link, index) => {
+        const pairCounts = new Map();
+        links.forEach(link => {
+            const pairKey = [Number(link.id_equipo_origen), Number(link.id_equipo_destino)].sort((x, y) => x - y).join(':');
+            const laneIndex = pairCounts.get(pairKey) || 0;
+            pairCounts.set(pairKey, laneIndex + 1);
             const origin = nodes.get(Number(link.id_equipo_origen));
             const destination = nodes.get(Number(link.id_equipo_destino));
             if (!origin || !destination) return;
@@ -198,7 +203,7 @@
                 y1 = upper.pos.top + 112;
                 x2 = lower.pos.left + 119;
                 y2 = lower.pos.top;
-                const laneX = Math.max(a.left, b.left) + 270 + (index % 4) * 14;
+                const laneX = Math.max(a.left, b.left) + 270 + laneIndex * 24;
                 pathData = 'M ' + x1 + ' ' + y1 + ' H ' + laneX + ' V ' + y2 + ' H ' + x2;
             } else {
                 const aIsLeft = a.left < b.left;
@@ -206,7 +211,8 @@
                 x2 = aIsLeft ? b.left : b.left + 238;
                 y1 = a.top + 56;
                 y2 = b.top + 56;
-                const midX = (x1 + x2) / 2;
+                const laneOffset = (laneIndex - 0.5) * 22;
+                const midX = (x1 + x2) / 2 + laneOffset;
                 pathData = 'M ' + x1 + ' ' + y1 + ' H ' + midX + ' V ' + y2 + ' H ' + x2;
             }
 
@@ -223,12 +229,67 @@
             linksSvg.appendChild(path);
 
             const label = document.createElementNS(NS, 'text');
-            label.setAttribute('x', String((a.x + b.x) / 2));
-            label.setAttribute('y', String((a.y + b.y) / 2 - 8));
+            label.setAttribute('x', String((x1 + x2) / 2));
+            label.setAttribute('y', String((y1 + y2) / 2 - 9 - laneIndex * 12));
             label.setAttribute('text-anchor', 'middle');
             label.textContent = 'P' + link.puerto_origen + ' ↔ P' + link.puerto_destino;
             linksSvg.appendChild(label);
         });
+    }
+
+    function inspector() {
+        let panel = document.getElementById('topologyInspector');
+        if (!panel) {
+            panel = document.createElement('aside');
+            panel.id = 'topologyInspector';
+            panel.className = 'topology-inspector';
+            panel.setAttribute('role', 'status');
+            document.querySelector('.topology-page')?.appendChild(panel);
+        }
+        return panel;
+    }
+
+    function showInspector(type, id, pinned = false) {
+        const panel = inspector();
+        let title = '', rows = [];
+        if (type === 'node') {
+            const item = state.equipos.find(value => Number(value.id_equipo) === Number(id));
+            if (!item) return;
+            title = item.nombre_mostrar || 'Equipo';
+            rows = [
+                ['IP', item.direccion_ip || 'Sin IP'],
+                ['Tipo', item.nombre_tipo || '—'],
+                ['Ubicación', (item.nombre_sede || 'Sin sede') + ' · Piso ' + (item.numero_piso || '—')],
+                ['Puertos', Number(item.total_puertos || 0)],
+                ['Enlazados', Number(item.puertos_enlazados || 0)],
+                ['Dañados', Number(item.puertos_danados || 0)],
+                ['Conectividad', item.tipos_conectividad || 'Sin datos']
+            ];
+        } else {
+            const link = state.enlaces.find(value => Number(value.id_enlace) === Number(id));
+            if (!link) return;
+            const source = state.equipos.find(value => Number(value.id_equipo) === Number(link.id_equipo_origen));
+            const target = state.equipos.find(value => Number(value.id_equipo) === Number(link.id_equipo_destino));
+            title = 'Enlace #' + id;
+            rows = [
+                ['Origen', source?.nombre_mostrar || ('Equipo #' + link.id_equipo_origen)],
+                ['Puerto origen', link.puerto_origen],
+                ['Destino', target?.nombre_mostrar || ('Equipo #' + link.id_equipo_destino)],
+                ['Puerto destino', link.puerto_destino],
+                ['Medio', link.medio_origen || link.medio_destino || '—'],
+                ['Conexión', (link.medio_origen || '') === 'FIBRA' || (link.medio_destino || '') === 'FIBRA' ? 'Fibra óptica' : 'Ethernet']
+            ];
+        }
+        panel.innerHTML = '<strong>' + escapeHtml(title) + (pinned ? ' · Fijado' : '') + '</strong>' +
+            rows.map(([label, value]) => '<div><span>' + escapeHtml(label) + '</span><b>' + escapeHtml(value) + '</b></div>').join('');
+        panel.hidden = false;
+        panel.dataset.key = type + ':' + id;
+    }
+
+    function hideInspector(type, id) {
+        const panel = document.getElementById('topologyInspector');
+        if (!panel || panel.dataset.key !== type + ':' + id) return;
+        if (!state.inspectPinned.has(type + ':' + id)) panel.hidden = true;
     }
 
     function setInspectHover(type, id, active) {
@@ -237,12 +298,21 @@
         if (!element) return;
         element.classList.toggle('inspect-hover', active);
         element.classList.toggle('inspect-active', active || state.inspectPinned.has(type + ':' + id));
+        if (active) showInspector(type, id, state.inspectPinned.has(type + ':' + id));
+        else hideInspector(type, id);
     }
     function toggleInspect(type, id, element) {
         const key = type + ':' + id;
-        if (state.inspectPinned.has(key)) state.inspectPinned.delete(key); else state.inspectPinned.add(key);
-        element.classList.toggle('inspect-pinned', state.inspectPinned.has(key));
-        element.classList.toggle('inspect-active', state.inspectPinned.has(key));
+        if (state.inspectPinned.has(key)) {
+            state.inspectPinned.delete(key);
+            element.classList.remove('inspect-pinned');
+            element.classList.toggle('inspect-active', element.classList.contains('inspect-hover'));
+            hideInspector(type, id);
+        } else {
+            state.inspectPinned.add(key);
+            element.classList.add('inspect-pinned', 'inspect-active');
+            showInspector(type, id, true);
+        }
     }
     function chooseCanvasLinkNode(id) {
         if (!state.linkSourceId) { state.linkSourceId = id; nodesBox.querySelector('.topo-node[data-id="' + id + '"]')?.classList.add('link-source'); status('Origen seleccionado. Ahora elige el equipo destino.'); return; }
