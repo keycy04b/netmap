@@ -502,3 +502,63 @@
 .map-links path { pointer-events:stroke; cursor:pointer; }
 .topology-toolbar #btnCanvasLink { border-color:#1685c3; }
 .topology-toolbar #btnCancelCanvasLink { border-color:#dc6b6b; color:#fecaca; }
+
+
+/* Capacidades de conectividad visibles desde la tarjeta del equipo. */
+.topo-node-capabilities {
+    grid-column: 1 / -1;
+    padding-top: 6px;
+    border-top: 1px solid #2a3b55;
+    color: #b8d8ee;
+    font-size: 10px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+.topo-node.inspect-active { z-index: 8; }
+
+/* Ficha flotante de inspección para equipos y enlaces. */
+.topology-inspector {
+    position: fixed;
+    z-index: 100;
+    right: 18px;
+    bottom: 18px;
+    width: min(340px, calc(100vw - 36px));
+    max-height: min(48vh, 360px);
+    overflow: auto;
+    padding: 14px 16px;
+    border: 1px solid #48617f;
+    border-radius: 13px;
+    background: rgba(12, 25, 43, .97);
+    color: #e8f1fb;
+    box-shadow: 0 14px 38px rgba(0,0,0,.38);
+    backdrop-filter: blur(10px);
+}
+.topology-inspector[hidden] { display: none !important; }
+.topology-inspector > strong {
+    display: block;
+    margin-bottom: 9px;
+    color: #fff;
+    font-size: 14px;
+}
+.topology-inspector > div {
+    display: grid;
+    grid-template-columns: minmax(90px, .75fr) minmax(0, 1.4fr);
+    gap: 10px;
+    padding: 5px 0;
+    border-top: 1px solid rgba(148,163,184,.18);
+    font-size: 11px;
+}
+.topology-inspector > div span { color: #9fb2c9; }
+.topology-inspector > div b { color: #edf6ff; font-weight: 650; overflow-wrap: anywhere; }
+.topology-page.theme-light .topology-inspector {
+    background: rgba(255,255,255,.98);
+    border-color: #cbd5e1;
+    color: #172033;
+}
+.topology-page.theme-light .topology-inspector > strong,
+.topology-page.theme-light .topology-inspector > div b { color: #172033; }
+.topology-page.theme-light .topology-inspector > div span { color: #64748b; }
+.map-links text { paint-order: stroke; }
+@media (max-width: 600px) {
+    .topology-inspector { right: 10px; bottom: 10px; width: calc(100vw - 20px); }
+}
