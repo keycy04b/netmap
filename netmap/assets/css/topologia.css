@@ -562,3 +562,17 @@
 @media (max-width: 600px) {
     .topology-inspector { right: 10px; bottom: 10px; width: calc(100vw - 20px); }
 }
+
+.topo-node-capabilities {
+    display: grid;
+    gap: 3px;
+}
+.topo-node-capabilities span {
+    display: block;
+    color: #b8d8ee;
+    font-size: 10px;
+    line-height: 1.3;
+}
+.topo-node-capabilities b { color: #e6f4ff; }
+.topology-page.theme-light .topo-node-capabilities span { color: #475569; }
+.topology-page.theme-light .topo-node-capabilities b { color: #172033; }
