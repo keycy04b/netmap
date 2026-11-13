@@ -45,14 +45,16 @@ $sqlEquipos = "
          FROM puertos pd
          WHERE pd.id_equipo = e.id_equipo
            AND UPPER(REPLACE(pd.estado, 'Ñ', 'N')) IN ('DANADO', 'DAÑADO')) AS puertos_danados,
-        (SELECT GROUP_CONCAT(DISTINCT CONCAT(
-                    UPPER(COALESCE(NULLIF(pt.alcance, ''), 'LAN')),
-                    ' · ',
+        (SELECT GROUP_CONCAT(DISTINCT UPPER(COALESCE(NULLIF(pt.alcance, ''), 'LAN'))
+                ORDER BY pt.alcance SEPARATOR ' · ')
+         FROM puertos pt
+         WHERE pt.id_equipo = e.id_equipo) AS alcances_puertos,
+        (SELECT GROUP_CONCAT(DISTINCT
                     CASE WHEN UPPER(COALESCE(pt.medio, 'UTP')) = 'FIBRA'
                          THEN 'Fibra óptica' ELSE 'Ethernet' END
-                ) ORDER BY pt.alcance, pt.medio SEPARATOR ' | ')
+                ORDER BY pt.medio SEPARATOR ' · ')
          FROM puertos pt
-         WHERE pt.id_equipo = e.id_equipo) AS tipos_conectividad
+         WHERE pt.id_equipo = e.id_equipo) AS medios_puertos
     FROM equipos e
     LEFT JOIN tipos_equipo t ON t.id_tipo_equipo = e.id_tipo_equipo
     LEFT JOIN pisos p ON p.id_piso = e.id_piso
@@ -111,7 +113,8 @@ while ($row = $resultEquipos->fetch_assoc()) {
     $row['total_puertos'] = (int)$row['total_puertos'];
     $row['puertos_enlazados'] = (int)$row['puertos_enlazados'];
     $row['puertos_danados'] = (int)$row['puertos_danados'];
-    $row['tipos_conectividad'] = (string)($row['tipos_conectividad'] ?? '');
+    $row['alcances_puertos'] = (string)($row['alcances_puertos'] ?? '');
+    $row['medios_puertos'] = (string)($row['medios_puertos'] ?? '');
     $equipos[] = $row;
 }
 
