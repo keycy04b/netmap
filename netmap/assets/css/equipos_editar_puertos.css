@@ -259,3 +259,29 @@ th {
 .occupied { color: #475569; background: #e8edf3; }
 .reserved { color: #6941a5; background: #eee5fb; }
 .damaged { color: #a33a45; background: #fde4e7; }
+
+
+/* Buscador compacto: los resultados ocupan poco espacio y se despliegan bajo demanda. */
+#searchEquipment { margin-bottom: 7px; }
+.search-results { max-height: 220px; padding-right: 3px; }
+.result-row { display: grid; gap: 4px; }
+.result {
+    min-height: 42px;
+    align-items: center;
+    padding: 7px 10px;
+    background: #f8fafc;
+    color: #172033;
+    border-color: #dce3ec;
+}
+.result b { font-size: .86rem; }
+.result span { color: #64748b; font-size: .75rem; }
+.target-card {
+    margin: 7px 0;
+    padding: 9px 11px;
+    border: 1px solid #dce3ec;
+    border-radius: 10px;
+    background: #fff;
+}
+.target-card h3 { margin: 0 0 7px; font-size: .9rem; }
+.target-card .mini-group { padding: 7px; margin-top: 6px; }
+.target-card .mini-sections { gap: 5px; }
