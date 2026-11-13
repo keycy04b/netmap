@@ -141,7 +141,10 @@
             '<div class="topo-node-meta"><span>' + Number(item.total_puertos || 0) + ' puertos</span>' +
             '<span class="' + (Number(item.puertos_enlazados) > 0 ? 'has-links' : '') + '">' +
             Number(item.puertos_enlazados || 0) + ' enlazados</span></div>' +
-            '<div class="topo-node-capabilities">' + escapeHtml(item.tipos_conectividad || 'Conectividad sin especificar') + '</div>';
+            '<div class="topo-node-capabilities">' +
+                '<span><b>Alcance:</b> ' + escapeHtml(item.alcances_puertos || '—') + '</span>' +
+                '<span><b>Medio:</b> ' + escapeHtml(item.medios_puertos || '—') + '</span>' +
+            '</div>';
 
         node.addEventListener('pointerdown', beginDrag);
         node.addEventListener('mouseenter', event => setInspectHover('node', Number(item.id_equipo), true, event));
@@ -263,7 +266,8 @@
                 ['Puertos', Number(item.total_puertos || 0)],
                 ['Enlazados', Number(item.puertos_enlazados || 0)],
                 ['Dañados', Number(item.puertos_danados || 0)],
-                ['Conectividad', item.tipos_conectividad || 'Sin datos']
+                ['Alcance', item.alcances_puertos || 'Sin datos'],
+                ['Medio físico', item.medios_puertos || 'Sin datos']
             ];
         } else {
             const link = state.enlaces.find(value => Number(value.id_enlace) === Number(id));
