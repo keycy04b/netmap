@@ -199,18 +199,18 @@
             if (Math.abs(a.left - b.left) < 80) {
                 const upper = a.top <= b.top ? { node: origin, pos: a } : { node: destination, pos: b };
                 const lower = upper.node === origin ? { node: destination, pos: b } : { node: origin, pos: a };
-                x1 = upper.pos.left + 119;
-                y1 = upper.pos.top + 112;
-                x2 = lower.pos.left + 119;
+                x1 = upper.pos.left + (upper.node.offsetWidth || 238) / 2;
+                y1 = upper.pos.top + (upper.node.offsetHeight || 112);
+                x2 = lower.pos.left + (lower.node.offsetWidth || 238) / 2;
                 y2 = lower.pos.top;
                 const laneX = Math.max(a.left, b.left) + 270 + laneIndex * 24;
                 pathData = 'M ' + x1 + ' ' + y1 + ' H ' + laneX + ' V ' + y2 + ' H ' + x2;
             } else {
                 const aIsLeft = a.left < b.left;
-                x1 = aIsLeft ? a.left + 238 : a.left;
-                x2 = aIsLeft ? b.left : b.left + 238;
-                y1 = a.top + 56;
-                y2 = b.top + 56;
+                x1 = aIsLeft ? a.left + (origin.offsetWidth || 238) : a.left;
+                x2 = aIsLeft ? b.left : b.left + (destination.offsetWidth || 238);
+                y1 = a.top + (origin.offsetHeight || 112) / 2;
+                y2 = b.top + (destination.offsetHeight || 112) / 2;
                 const laneOffset = (laneIndex - 0.5) * 22;
                 const midX = (x1 + x2) / 2 + laneOffset;
                 pathData = 'M ' + x1 + ' ' + y1 + ' H ' + midX + ' V ' + y2 + ' H ' + x2;
