@@ -1008,7 +1008,7 @@
             if (pendingSource) { pendingSource = null; $$('.port.selected').forEach(port => port.classList.remove('selected')); }
             globalMode = 'link';
             pendingExistingSource = null;
-            $('.device-card').forEach(item => item.dataset.mode = 'link');
+            $$('.device-card').forEach(item => item.dataset.mode = 'link');
             renderExistingPorts();
             toast('Modo Enlazar: selecciona un puerto disponible y luego su destino.');
         } else if (action === 'state-mode') {
@@ -1016,7 +1016,7 @@
             globalMode = 'state';
             pendingExistingSource = null;
             window.netmapExistingPairMode = false;
-            $('.device-card').forEach(item => item.dataset.mode = 'state');
+            $$('.device-card').forEach(item => item.dataset.mode = 'state');
             renderExistingPorts();
             toast('Modo Cambiar estado: pulsa un puerto para avanzar de estado.');
         } else if (action === 'port') {
@@ -1123,7 +1123,7 @@
         else {
             if (action === 'link-mode') { globalMode = 'link'; toast('Modo Enlazar activado.'); }
             if (action === 'state-mode') { globalMode = 'state'; pendingSource = null; toast('Modo Cambiar estado activado.'); }
-            $$('.device-card').forEach(item => item.dataset.mode = globalMode);
+            $$$('.device-card').forEach(item => item.dataset.mode = globalMode);
             renderExistingPorts();
         }
     });
@@ -1233,7 +1233,7 @@
             forcedExistingMedium = ['fiber','ethernet'].includes(event.data.medium) ? event.data.medium : 'any';
             globalMode = 'link'; pendingSource = null; pendingExistingSource = null;
             window.netmapExistingPairMode = true;
-            $('.device-card').forEach(card => card.dataset.mode = 'link');
+            $$('.device-card').forEach(card => card.dataset.mode = 'link');
             const pairButton = $('#linkExistingPair');
             if (pairButton) { pairButton.classList.add('active'); pairButton.textContent = 'Cancelar enlace entre existentes'; }
             $('#existingPanel').scrollIntoView({behavior:'smooth',block:'start'});
