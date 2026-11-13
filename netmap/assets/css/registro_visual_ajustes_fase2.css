@@ -55,3 +55,51 @@
     .existing-item b { justify-self: start; }
     .existing-device-head strong { font-size: 19px; }
 }
+
+
+/* Correcciones de contraste del modo oscuro: no altera la estructura del registro. */
+html.netmap-dark .icon-suggestion,
+html.netmap-dark .icon-preview,
+html.netmap-dark .icon-drop,
+html.netmap-dark .icon-editor {
+    background-color: #172438 !important;
+    border-color: #526783 !important;
+    color: #e8edf5 !important;
+}
+html.netmap-dark .icon-suggestion img,
+html.netmap-dark .icon-preview img {
+    filter: brightness(0) invert(1);
+    opacity: .96;
+}
+html.netmap-dark .identity-summary,
+html.netmap-dark .identity-summary strong,
+html.netmap-dark .identity-summary span,
+html.netmap-dark .previewhead,
+html.netmap-dark .previewhead .identity-short,
+html.netmap-dark .gtitle,
+html.netmap-dark .gtitle small,
+html.netmap-dark .group-settings,
+html.netmap-dark .group-settings label,
+html.netmap-dark .group-settings strong,
+html.netmap-dark .legend,
+html.netmap-dark .legend span,
+html.netmap-dark .icon-tools > strong,
+html.netmap-dark .icon-status {
+    color: #e2eaf5 !important;
+}
+html.netmap-dark .identity-summary,
+html.netmap-dark .group,
+html.netmap-dark .section,
+html.netmap-dark .legend {
+    background-color: #172438 !important;
+    border-color: #40516a !important;
+}
+html.netmap-dark .icon-suggestion:hover,
+html.netmap-dark .icon-suggestion:focus-visible {
+    border-color: #60a5fa !important;
+    outline-color: #60a5fa;
+}
+html.netmap-dark .icon-drop.is-over {
+    background: #203b5d !important;
+    border-color: #60a5fa !important;
+}
